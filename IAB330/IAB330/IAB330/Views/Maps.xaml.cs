@@ -32,7 +32,7 @@ namespace IAB330.Views
 
             var location = new Location(locationget.Latitude, locationget.Longitude);
 
-            await Map.OpenAsync(location);
+            Map.OpenAsync(location);
 
             
 
