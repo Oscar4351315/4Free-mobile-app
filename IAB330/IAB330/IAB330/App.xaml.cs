@@ -1,6 +1,7 @@
 ﻿using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using Xamarin.Essentials;
 
 namespace IAB330
 {
@@ -10,7 +11,7 @@ namespace IAB330
         {
             InitializeComponent();
 
-            MainPage = new MainPage();
+            MainPage = new Views.Page1();
         }
 
         protected override void OnStart()
