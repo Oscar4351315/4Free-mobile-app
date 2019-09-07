@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 
 using Xamarin.Forms;
+using Xamarin.Forms.Maps;
 using Xamarin.Forms.Xaml;
 
-using Xamarin.Essentials;
+//using Xamarin.Essentials;
 
 
 namespace IAB330.Views
@@ -19,6 +20,17 @@ namespace IAB330.Views
         public Page1()
         {
             InitializeComponent();
+
+            var map = new Map()
+            {
+                MapType = MapType.Street,
+                IsShowingUser = true
+            };
+
+            var stack = new StackLayout { Spacing = 0 };
+            stack.Children.Add(map);
+
+            Content = stack;
         }
 
 
@@ -27,16 +39,13 @@ namespace IAB330.Views
         private async void ButtonOpenCoords_Clicked(object sender, EventArgs e)
         {
 
-            var request = new GeolocationRequest(GeolocationAccuracy.Medium);
-            var locationget = await Geolocation.GetLocationAsync(request);
+            //var request = new GeolocationRequest(GeolocationAccuracy.Medium);
+            //var locationget = await Geolocation.GetLocationAsync(request);
 
-            var location = new Location(locationget.Latitude, locationget.Longitude);
+            //var location = new Location(locationget.Latitude, locationget.Longitude);
 
-            Map.OpenAsync(location);
+            //await Map.OpenAsync(location);
 
-            
-
-            //Console.WriteLine($"Latitude: {location.Latitude}, Longitude: {location.Longitude}, Altitude: {location.Altitude}");
 
             //LatitudeLabel.Text = $"{location.Latitude}";
             //LongitudeLabel.Text = $"{location.Longitude}";
