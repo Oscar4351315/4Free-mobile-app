@@ -9,26 +9,6 @@
         <ScrollView>
             <StackLayout Padding="10">
 
-
-                <Button Text="Get Your Coordinates" x:Name="ButtonOpenCoords"
-                        Clicked="ButtonOpenCoords_Clicked"/>
-
-                <Label Text="Latitude"
-                       TextColor="Gray"
-                       FontSize="30"/>
-
-                <Label x:Name="LatitudeLabel"
-                       FontSize="50"/>
-
-                <Label Text="Longitude"
-                       TextColor="Gray"
-                       FontSize="30"/>
-
-                <Label x:Name="LongitudeLabel"
-                       FontSize="50"/>
-                
-                
-
             </StackLayout>
         </ScrollView>
         

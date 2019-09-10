@@ -8,9 +8,8 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
 using Xamarin.Forms.Xaml;
-
-//using Xamarin.Essentials;
-
+using Xamarin.Essentials;
+using Plugin.Geolocator;
 
 namespace IAB330.Views
 {
@@ -20,39 +19,42 @@ namespace IAB330.Views
         public Page1()
         {
             InitializeComponent();
-
-            var map = new Map()
-            {
-                MapType = MapType.Street,
-                IsShowingUser = true
-            };
-
-            var stack = new StackLayout { Spacing = 0 };
-            stack.Children.Add(map);
-
-            Content = stack;
+            OpenMap();
         }
 
 
 
 
-        private async void ButtonOpenCoords_Clicked(object sender, EventArgs e)
+        private async void OpenMap()
         {
+            var location = CrossGeolocator.Current;
+            if (location.IsGeolocationEnabled && location.IsGeolocationAvailable)
+            {
+                //grabs the user's lat and lng
+                var position = await location.GetPositionAsync();
 
-            //var request = new GeolocationRequest(GeolocationAccuracy.Medium);
-            //var locationget = await Geolocation.GetLocationAsync(request);
+                //creates map, start on user's location, add it to a stacklayout
+                var map = new Xamarin.Forms.Maps.Map()
+                {
+                    MapType = MapType.Street,
+                    IsShowingUser = true
+                };
 
-            //var location = new Location(locationget.Latitude, locationget.Longitude);
+                map.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(position.Latitude, position.Longitude),
+                                                 Distance.FromMeters(100)));
 
-            //await Map.OpenAsync(location);
+                var stack = new StackLayout { Spacing = 0 };
+                stack.Children.Add(map);
+
+                Content = stack;
+            }
+            else {
+
+            }
 
 
-            //LatitudeLabel.Text = $"{location.Latitude}";
-            //LongitudeLabel.Text = $"{location.Longitude}";
+            
 
-
-
-            //await Map.OpenAsync(location.Latitude, location.Longitude);
         }
     }
 }

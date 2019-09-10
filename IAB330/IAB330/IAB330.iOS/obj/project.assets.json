@@ -188,6 +188,7 @@
         "type": "project",
         "framework": ".NETStandard,Version=v2.0",
         "dependencies": {
+          "Plugin.Permissions": "3.0.0.12",
           "Xam.Plugin.Geolocator": "4.5.0.6",
           "Xamarin.Essentials": "1.3.0",
           "Xamarin.Forms": "4.2.0.709249",
@@ -388,6 +389,7 @@
         "type": "project",
         "framework": ".NETStandard,Version=v2.0",
         "dependencies": {
+          "Plugin.Permissions": "3.0.0.12",
           "Xam.Plugin.Geolocator": "4.5.0.6",
           "Xamarin.Essentials": "1.3.0",
           "Xamarin.Forms": "4.2.0.709249",
@@ -588,6 +590,7 @@
         "type": "project",
         "framework": ".NETStandard,Version=v2.0",
         "dependencies": {
+          "Plugin.Permissions": "3.0.0.12",
           "Xam.Plugin.Geolocator": "4.5.0.6",
           "Xamarin.Essentials": "1.3.0",
           "Xamarin.Forms": "4.2.0.709249",
@@ -788,6 +791,7 @@
         "type": "project",
         "framework": ".NETStandard,Version=v2.0",
         "dependencies": {
+          "Plugin.Permissions": "3.0.0.12",
           "Xam.Plugin.Geolocator": "4.5.0.6",
           "Xamarin.Essentials": "1.3.0",
           "Xamarin.Forms": "4.2.0.709249",
@@ -1240,6 +1244,7 @@
   "projectFileDependencyGroups": {
     "Xamarin.iOS,Version=v1.0": [
       "IAB330 >= 1.0.0",
+      "Plugin.Permissions >= 3.0.0.12",
       "Xam.Plugin.Geolocator >= 4.5.0.6",
       "Xamarin.Essentials >= 1.3.0",
       "Xamarin.Forms >= 4.2.0.709249",
@@ -1288,6 +1293,10 @@
     "frameworks": {
       "xamarinios10": {
         "dependencies": {
+          "Plugin.Permissions": {
+            "target": "Package",
+            "version": "[3.0.0.12, )"
+          },
           "Xam.Plugin.Geolocator": {
             "target": "Package",
             "version": "[4.5.0.6, )"
