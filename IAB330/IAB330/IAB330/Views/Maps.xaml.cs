@@ -49,7 +49,7 @@ namespace IAB330.Views
                 Content = stack;
             }
             else {
-
+                ///// Request permission and enable it
             }
 
 
