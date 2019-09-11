@@ -31,5 +31,6 @@ namespace IAB330.Droid
 
             base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
         }
+
     }
 }
