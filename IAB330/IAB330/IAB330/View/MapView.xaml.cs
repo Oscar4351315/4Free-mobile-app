@@ -39,7 +39,7 @@ namespace IAB330.Views
                     MapType = MapType.Street,
                     IsShowingUser = true
                 };
-
+                
                 map.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(position.Latitude, position.Longitude),
                                                  Distance.FromMeters(100)));
 
