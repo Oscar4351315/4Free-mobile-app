@@ -12,19 +12,19 @@
   <ItemGroup>
     <PackageReference Include="Plugin.Permissions" Version="3.0.0.12" />
     <PackageReference Include="Xam.Plugin.Geolocator" Version="4.5.0.6" />
-    <PackageReference Include="Xamarin.Forms" Version="4.2.0.709249" />
+    <PackageReference Include="Xamarin.Forms" Version="4.2.0.778463" />
     <PackageReference Include="Xamarin.Essentials" Version="1.3.0" />
-    <PackageReference Include="Xamarin.Forms.Maps" Version="4.2.0.709249" />
+    <PackageReference Include="Xamarin.Forms.Maps" Version="4.2.0.778463" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Views\Maps.xaml.cs">
-      <DependentUpon>Maps.xaml</DependentUpon>
+    <Compile Update="Views\MapView.xaml.cs">
+      <DependentUpon>MapView.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="Views\Maps.xaml">
+    <EmbeddedResource Update="Views\MapView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>

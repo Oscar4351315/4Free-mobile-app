@@ -1,24 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\marku\\Documents\\IAB_330\\freestuffgit\\IAB330\\IAB330\\IAB330.iOS\\IAB330.iOS.csproj": {}
+    "D:\\Documents\\IAB330\\IAB330\\IAB330\\IAB330.iOS\\IAB330.iOS.csproj": {}
   },
   "projects": {
-    "C:\\Users\\marku\\Documents\\IAB_330\\freestuffgit\\IAB330\\IAB330\\IAB330.iOS\\IAB330.iOS.csproj": {
+    "D:\\Documents\\IAB330\\IAB330\\IAB330\\IAB330.iOS\\IAB330.iOS.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\marku\\Documents\\IAB_330\\freestuffgit\\IAB330\\IAB330\\IAB330.iOS\\IAB330.iOS.csproj",
+        "projectUniqueName": "D:\\Documents\\IAB330\\IAB330\\IAB330\\IAB330.iOS\\IAB330.iOS.csproj",
         "projectName": "IAB330.iOS",
-        "projectPath": "C:\\Users\\marku\\Documents\\IAB_330\\freestuffgit\\IAB330\\IAB330\\IAB330.iOS\\IAB330.iOS.csproj",
-        "packagesPath": "C:\\Users\\marku\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\marku\\Documents\\IAB_330\\freestuffgit\\IAB330\\IAB330\\IAB330.iOS\\obj\\",
+        "projectPath": "D:\\Documents\\IAB330\\IAB330\\IAB330\\IAB330.iOS\\IAB330.iOS.csproj",
+        "packagesPath": "C:\\Users\\Steven\\.nuget\\packages\\",
+        "outputPath": "D:\\Documents\\IAB330\\IAB330\\IAB330\\IAB330.iOS\\obj\\",
         "projectStyle": "PackageReference",
         "skipContentFileWrite": true,
         "fallbackFolders": [
           "C:\\Microsoft\\Xamarin\\NuGet\\"
         ],
         "configFilePaths": [
-          "C:\\Users\\marku\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Steven\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
         ],
@@ -32,8 +32,8 @@
         "frameworks": {
           "xamarinios10": {
             "projectReferences": {
-              "C:\\Users\\marku\\Documents\\IAB_330\\freestuffgit\\IAB330\\IAB330\\IAB330\\IAB330.csproj": {
-                "projectPath": "C:\\Users\\marku\\Documents\\IAB_330\\freestuffgit\\IAB330\\IAB330\\IAB330\\IAB330.csproj"
+              "D:\\Documents\\IAB330\\IAB330\\IAB330\\IAB330\\IAB330.csproj": {
+                "projectPath": "D:\\Documents\\IAB330\\IAB330\\IAB330\\IAB330\\IAB330.csproj"
               }
             }
           }
@@ -56,11 +56,11 @@
             },
             "Xamarin.Forms": {
               "target": "Package",
-              "version": "[4.2.0.709249, )"
+              "version": "[4.2.0.778463, )"
             },
             "Xamarin.Forms.Maps": {
               "target": "Package",
-              "version": "[4.2.0.709249, )"
+              "version": "[4.2.0.778463, )"
             }
           }
         }
@@ -77,21 +77,21 @@
         }
       }
     },
-    "C:\\Users\\marku\\Documents\\IAB_330\\freestuffgit\\IAB330\\IAB330\\IAB330\\IAB330.csproj": {
+    "D:\\Documents\\IAB330\\IAB330\\IAB330\\IAB330\\IAB330.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\marku\\Documents\\IAB_330\\freestuffgit\\IAB330\\IAB330\\IAB330\\IAB330.csproj",
+        "projectUniqueName": "D:\\Documents\\IAB330\\IAB330\\IAB330\\IAB330\\IAB330.csproj",
         "projectName": "IAB330",
-        "projectPath": "C:\\Users\\marku\\Documents\\IAB_330\\freestuffgit\\IAB330\\IAB330\\IAB330\\IAB330.csproj",
-        "packagesPath": "C:\\Users\\marku\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\marku\\Documents\\IAB_330\\freestuffgit\\IAB330\\IAB330\\IAB330\\obj\\",
+        "projectPath": "D:\\Documents\\IAB330\\IAB330\\IAB330\\IAB330\\IAB330.csproj",
+        "packagesPath": "C:\\Users\\Steven\\.nuget\\packages\\",
+        "outputPath": "D:\\Documents\\IAB330\\IAB330\\IAB330\\IAB330\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Microsoft\\Xamarin\\NuGet\\",
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\marku\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Steven\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
         ],
@@ -136,11 +136,11 @@
             },
             "Xamarin.Forms": {
               "target": "Package",
-              "version": "[4.2.0.709249, )"
+              "version": "[4.2.0.778463, )"
             },
             "Xamarin.Forms.Maps": {
               "target": "Package",
-              "version": "[4.2.0.709249, )"
+              "version": "[4.2.0.778463, )"
             }
           },
           "imports": [

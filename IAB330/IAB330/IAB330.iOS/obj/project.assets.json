@@ -47,7 +47,7 @@
           "lib/xamarinios10/Xamarin.Essentials.dll": {}
         }
       },
-      "Xamarin.Forms/4.2.0.709249": {
+      "Xamarin.Forms/4.2.0.778463": {
         "type": "package",
         "compile": {
           "lib/Xamarin.iOS10/Xamarin.Forms.Core.dll": {},
@@ -170,10 +170,10 @@
           "build/Xamarin.Forms.targets": {}
         }
       },
-      "Xamarin.Forms.Maps/4.2.0.709249": {
+      "Xamarin.Forms.Maps/4.2.0.778463": {
         "type": "package",
         "dependencies": {
-          "Xamarin.Forms": "4.2.0.709249"
+          "Xamarin.Forms": "4.2.0.778463"
         },
         "compile": {
           "lib/Xamarin.iOS10/Xamarin.Forms.Maps.dll": {},
@@ -191,8 +191,8 @@
           "Plugin.Permissions": "3.0.0.12",
           "Xam.Plugin.Geolocator": "4.5.0.6",
           "Xamarin.Essentials": "1.3.0",
-          "Xamarin.Forms": "4.2.0.709249",
-          "Xamarin.Forms.Maps": "4.2.0.709249"
+          "Xamarin.Forms": "4.2.0.778463",
+          "Xamarin.Forms.Maps": "4.2.0.778463"
         },
         "compile": {
           "bin/placeholder/IAB330.dll": {}
@@ -248,7 +248,7 @@
           "lib/xamarinios10/Xamarin.Essentials.dll": {}
         }
       },
-      "Xamarin.Forms/4.2.0.709249": {
+      "Xamarin.Forms/4.2.0.778463": {
         "type": "package",
         "compile": {
           "lib/Xamarin.iOS10/Xamarin.Forms.Core.dll": {},
@@ -371,10 +371,10 @@
           "build/Xamarin.Forms.targets": {}
         }
       },
-      "Xamarin.Forms.Maps/4.2.0.709249": {
+      "Xamarin.Forms.Maps/4.2.0.778463": {
         "type": "package",
         "dependencies": {
-          "Xamarin.Forms": "4.2.0.709249"
+          "Xamarin.Forms": "4.2.0.778463"
         },
         "compile": {
           "lib/Xamarin.iOS10/Xamarin.Forms.Maps.dll": {},
@@ -392,8 +392,8 @@
           "Plugin.Permissions": "3.0.0.12",
           "Xam.Plugin.Geolocator": "4.5.0.6",
           "Xamarin.Essentials": "1.3.0",
-          "Xamarin.Forms": "4.2.0.709249",
-          "Xamarin.Forms.Maps": "4.2.0.709249"
+          "Xamarin.Forms": "4.2.0.778463",
+          "Xamarin.Forms.Maps": "4.2.0.778463"
         },
         "compile": {
           "bin/placeholder/IAB330.dll": {}
@@ -449,7 +449,7 @@
           "lib/xamarinios10/Xamarin.Essentials.dll": {}
         }
       },
-      "Xamarin.Forms/4.2.0.709249": {
+      "Xamarin.Forms/4.2.0.778463": {
         "type": "package",
         "compile": {
           "lib/Xamarin.iOS10/Xamarin.Forms.Core.dll": {},
@@ -572,10 +572,10 @@
           "build/Xamarin.Forms.targets": {}
         }
       },
-      "Xamarin.Forms.Maps/4.2.0.709249": {
+      "Xamarin.Forms.Maps/4.2.0.778463": {
         "type": "package",
         "dependencies": {
-          "Xamarin.Forms": "4.2.0.709249"
+          "Xamarin.Forms": "4.2.0.778463"
         },
         "compile": {
           "lib/Xamarin.iOS10/Xamarin.Forms.Maps.dll": {},
@@ -593,8 +593,8 @@
           "Plugin.Permissions": "3.0.0.12",
           "Xam.Plugin.Geolocator": "4.5.0.6",
           "Xamarin.Essentials": "1.3.0",
-          "Xamarin.Forms": "4.2.0.709249",
-          "Xamarin.Forms.Maps": "4.2.0.709249"
+          "Xamarin.Forms": "4.2.0.778463",
+          "Xamarin.Forms.Maps": "4.2.0.778463"
         },
         "compile": {
           "bin/placeholder/IAB330.dll": {}
@@ -650,7 +650,7 @@
           "lib/xamarinios10/Xamarin.Essentials.dll": {}
         }
       },
-      "Xamarin.Forms/4.2.0.709249": {
+      "Xamarin.Forms/4.2.0.778463": {
         "type": "package",
         "compile": {
           "lib/Xamarin.iOS10/Xamarin.Forms.Core.dll": {},
@@ -773,10 +773,10 @@
           "build/Xamarin.Forms.targets": {}
         }
       },
-      "Xamarin.Forms.Maps/4.2.0.709249": {
+      "Xamarin.Forms.Maps/4.2.0.778463": {
         "type": "package",
         "dependencies": {
-          "Xamarin.Forms": "4.2.0.709249"
+          "Xamarin.Forms": "4.2.0.778463"
         },
         "compile": {
           "lib/Xamarin.iOS10/Xamarin.Forms.Maps.dll": {},
@@ -794,8 +794,8 @@
           "Plugin.Permissions": "3.0.0.12",
           "Xam.Plugin.Geolocator": "4.5.0.6",
           "Xamarin.Essentials": "1.3.0",
-          "Xamarin.Forms": "4.2.0.709249",
-          "Xamarin.Forms.Maps": "4.2.0.709249"
+          "Xamarin.Forms": "4.2.0.778463",
+          "Xamarin.Forms.Maps": "4.2.0.778463"
         },
         "compile": {
           "bin/placeholder/IAB330.dll": {}
@@ -956,10 +956,10 @@
         "xamarin.essentials.nuspec"
       ]
     },
-    "Xamarin.Forms/4.2.0.709249": {
-      "sha512": "3DWqPSn9kSKJW5mwjmICV/+4IpPQrequEN1VXUhsF0i9KKnfj49jFk9VbJnT9o2aesJAk00NED67XPbSmbxKjw==",
+    "Xamarin.Forms/4.2.0.778463": {
+      "sha512": "0dGuPOn9KrS65rmVgOrV5knDYHxWkWEm7c/CLp6AKSlvOpZ40+YrN+7oX5hHE6lpX+dizLCaOE/RvYS3ONy9/Q==",
       "type": "package",
-      "path": "xamarin.forms/4.2.0.709249",
+      "path": "xamarin.forms/4.2.0.778463",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -1198,14 +1198,14 @@
         "lib/uap10.0/Xamarin.Forms.Xaml.dll",
         "lib/uap10.0/Xamarin.Forms.Xaml.pdb",
         "lib/uap10.0/Xamarin.Forms.Xaml.xml",
-        "xamarin.forms.4.2.0.709249.nupkg.sha512",
+        "xamarin.forms.4.2.0.778463.nupkg.sha512",
         "xamarin.forms.nuspec"
       ]
     },
-    "Xamarin.Forms.Maps/4.2.0.709249": {
-      "sha512": "8M51wiiHj1PvwXDsihIFE48dBT4RFBvL+11xUYQLi0s2elwq52aAYwrsvC53rLNaJY4DpFM0Cra/0pWgSmUabA==",
+    "Xamarin.Forms.Maps/4.2.0.778463": {
+      "sha512": "PaTT+5hfEAEJakfUpGWGUtHRWJqvuHvtgbox9Y+H6aRyTbCvivqtmkVKQZaNboUzXtrQ3r1Ig7CHG9sS32ZSSw==",
       "type": "package",
-      "path": "xamarin.forms.maps/4.2.0.709249",
+      "path": "xamarin.forms.maps/4.2.0.778463",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -1231,7 +1231,7 @@
         "lib/uap10.0/Xamarin.Forms.Maps.UWP.dll",
         "lib/uap10.0/Xamarin.Forms.Maps.UWP.pri",
         "lib/uap10.0/Xamarin.Forms.Maps.dll",
-        "xamarin.forms.maps.4.2.0.709249.nupkg.sha512",
+        "xamarin.forms.maps.4.2.0.778463.nupkg.sha512",
         "xamarin.forms.maps.nuspec"
       ]
     },
@@ -1247,29 +1247,29 @@
       "Plugin.Permissions >= 3.0.0.12",
       "Xam.Plugin.Geolocator >= 4.5.0.6",
       "Xamarin.Essentials >= 1.3.0",
-      "Xamarin.Forms >= 4.2.0.709249",
-      "Xamarin.Forms.Maps >= 4.2.0.709249"
+      "Xamarin.Forms >= 4.2.0.778463",
+      "Xamarin.Forms.Maps >= 4.2.0.778463"
     ]
   },
   "packageFolders": {
-    "C:\\Users\\marku\\.nuget\\packages\\": {},
+    "C:\\Users\\Steven\\.nuget\\packages\\": {},
     "C:\\Microsoft\\Xamarin\\NuGet\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\marku\\Documents\\IAB_330\\freestuffgit\\IAB330\\IAB330\\IAB330.iOS\\IAB330.iOS.csproj",
+      "projectUniqueName": "D:\\Documents\\IAB330\\IAB330\\IAB330\\IAB330.iOS\\IAB330.iOS.csproj",
       "projectName": "IAB330.iOS",
-      "projectPath": "C:\\Users\\marku\\Documents\\IAB_330\\freestuffgit\\IAB330\\IAB330\\IAB330.iOS\\IAB330.iOS.csproj",
-      "packagesPath": "C:\\Users\\marku\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\marku\\Documents\\IAB_330\\freestuffgit\\IAB330\\IAB330\\IAB330.iOS\\obj\\",
+      "projectPath": "D:\\Documents\\IAB330\\IAB330\\IAB330\\IAB330.iOS\\IAB330.iOS.csproj",
+      "packagesPath": "C:\\Users\\Steven\\.nuget\\packages\\",
+      "outputPath": "D:\\Documents\\IAB330\\IAB330\\IAB330\\IAB330.iOS\\obj\\",
       "projectStyle": "PackageReference",
       "skipContentFileWrite": true,
       "fallbackFolders": [
         "C:\\Microsoft\\Xamarin\\NuGet\\"
       ],
       "configFilePaths": [
-        "C:\\Users\\marku\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Steven\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
       ],
@@ -1283,8 +1283,8 @@
       "frameworks": {
         "xamarinios10": {
           "projectReferences": {
-            "C:\\Users\\marku\\Documents\\IAB_330\\freestuffgit\\IAB330\\IAB330\\IAB330\\IAB330.csproj": {
-              "projectPath": "C:\\Users\\marku\\Documents\\IAB_330\\freestuffgit\\IAB330\\IAB330\\IAB330\\IAB330.csproj"
+            "D:\\Documents\\IAB330\\IAB330\\IAB330\\IAB330\\IAB330.csproj": {
+              "projectPath": "D:\\Documents\\IAB330\\IAB330\\IAB330\\IAB330\\IAB330.csproj"
             }
           }
         }
@@ -1307,11 +1307,11 @@
           },
           "Xamarin.Forms": {
             "target": "Package",
-            "version": "[4.2.0.709249, )"
+            "version": "[4.2.0.778463, )"
           },
           "Xamarin.Forms.Maps": {
             "target": "Package",
-            "version": "[4.2.0.709249, )"
+            "version": "[4.2.0.778463, )"
           }
         }
       }

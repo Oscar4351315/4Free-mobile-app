@@ -10,7 +10,6 @@ namespace IAB330
         public App()
         {
             InitializeComponent();
-
             MainPage = new Views.Page1();
         }
 
