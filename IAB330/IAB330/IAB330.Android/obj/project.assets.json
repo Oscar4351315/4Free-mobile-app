@@ -2316,24 +2316,24 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Oscar\\.nuget\\packages\\": {},
+    "C:\\Users\\marku\\.nuget\\packages\\": {},
     "C:\\Microsoft\\Xamarin\\NuGet\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Oscar\\Desktop\\iab330\\IAB330\\IAB330\\IAB330.Android\\IAB330.Android.csproj",
+      "projectUniqueName": "C:\\Users\\marku\\Documents\\IAB_330\\freestuffgit\\IAB330\\IAB330\\IAB330.Android\\IAB330.Android.csproj",
       "projectName": "IAB330.Android",
-      "projectPath": "C:\\Users\\Oscar\\Desktop\\iab330\\IAB330\\IAB330\\IAB330.Android\\IAB330.Android.csproj",
-      "packagesPath": "C:\\Users\\Oscar\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Oscar\\Desktop\\iab330\\IAB330\\IAB330\\IAB330.Android\\obj\\",
+      "projectPath": "C:\\Users\\marku\\Documents\\IAB_330\\freestuffgit\\IAB330\\IAB330\\IAB330.Android\\IAB330.Android.csproj",
+      "packagesPath": "C:\\Users\\marku\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\marku\\Documents\\IAB_330\\freestuffgit\\IAB330\\IAB330\\IAB330.Android\\obj\\",
       "projectStyle": "PackageReference",
       "skipContentFileWrite": true,
       "fallbackFolders": [
         "C:\\Microsoft\\Xamarin\\NuGet\\"
       ],
       "configFilePaths": [
-        "C:\\Users\\Oscar\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\marku\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
       ],
@@ -2347,8 +2347,8 @@
       "frameworks": {
         "monoandroid90": {
           "projectReferences": {
-            "C:\\Users\\Oscar\\Desktop\\iab330\\IAB330\\IAB330\\IAB330\\IAB330.csproj": {
-              "projectPath": "C:\\Users\\Oscar\\Desktop\\iab330\\IAB330\\IAB330\\IAB330\\IAB330.csproj"
+            "C:\\Users\\marku\\Documents\\IAB_330\\freestuffgit\\IAB330\\IAB330\\IAB330\\IAB330.csproj": {
+              "projectPath": "C:\\Users\\marku\\Documents\\IAB_330\\freestuffgit\\IAB330\\IAB330\\IAB330\\IAB330.csproj"
             }
           }
         }

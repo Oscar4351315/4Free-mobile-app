@@ -18,35 +18,38 @@ namespace IAB330.Views
     {
         public Page1()
         {
+            //var map = new Xamarin.Forms.Maps.Map();
             InitializeComponent();
-            OpenMap();
+            ControlMap();
         }
 
 
 
 
-        private async void OpenMap()
+        private async void ControlMap()
         {
+
             var location = CrossGeolocator.Current;
             if (location.IsGeolocationEnabled && location.IsGeolocationAvailable)
             {
                 //grabs the user's lat and lng
                 var position = await location.GetPositionAsync();
+               
 
                 //creates map, start on user's location, add it to a stacklayout
-                var map = new Xamarin.Forms.Maps.Map()
+                /*var map = new Xamarin.Forms.Maps.Map()
                 {
                     MapType = MapType.Street,
-                    IsShowingUser = true
-                };
+                    IsShowingUser = true                   
+                };*/
 
-                map.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(position.Latitude, position.Longitude),
+                myMap.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(position.Latitude, position.Longitude),
                                                  Distance.FromMeters(100)));
 
-                var stack = new StackLayout { Spacing = 0 };
-                stack.Children.Add(map);
+                //var stack = new StackLayout { Spacing = 0 };
+                //stack.Children.Add(map);
 
-                Content = stack;
+                //Content = stack;
             }
             else {
                 ///// Request permission and enable it

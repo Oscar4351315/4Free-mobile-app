@@ -1252,24 +1252,24 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Oscar\\.nuget\\packages\\": {},
+    "C:\\Users\\marku\\.nuget\\packages\\": {},
     "C:\\Microsoft\\Xamarin\\NuGet\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Oscar\\Desktop\\iab330\\IAB330\\IAB330\\IAB330.iOS\\IAB330.iOS.csproj",
+      "projectUniqueName": "C:\\Users\\marku\\Documents\\IAB_330\\freestuffgit\\IAB330\\IAB330\\IAB330.iOS\\IAB330.iOS.csproj",
       "projectName": "IAB330.iOS",
-      "projectPath": "C:\\Users\\Oscar\\Desktop\\iab330\\IAB330\\IAB330\\IAB330.iOS\\IAB330.iOS.csproj",
-      "packagesPath": "C:\\Users\\Oscar\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Oscar\\Desktop\\iab330\\IAB330\\IAB330\\IAB330.iOS\\obj\\",
+      "projectPath": "C:\\Users\\marku\\Documents\\IAB_330\\freestuffgit\\IAB330\\IAB330\\IAB330.iOS\\IAB330.iOS.csproj",
+      "packagesPath": "C:\\Users\\marku\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\marku\\Documents\\IAB_330\\freestuffgit\\IAB330\\IAB330\\IAB330.iOS\\obj\\",
       "projectStyle": "PackageReference",
       "skipContentFileWrite": true,
       "fallbackFolders": [
         "C:\\Microsoft\\Xamarin\\NuGet\\"
       ],
       "configFilePaths": [
-        "C:\\Users\\Oscar\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\marku\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
       ],
@@ -1283,8 +1283,8 @@
       "frameworks": {
         "xamarinios10": {
           "projectReferences": {
-            "C:\\Users\\Oscar\\Desktop\\iab330\\IAB330\\IAB330\\IAB330\\IAB330.csproj": {
-              "projectPath": "C:\\Users\\Oscar\\Desktop\\iab330\\IAB330\\IAB330\\IAB330\\IAB330.csproj"
+            "C:\\Users\\marku\\Documents\\IAB_330\\freestuffgit\\IAB330\\IAB330\\IAB330\\IAB330.csproj": {
+              "projectPath": "C:\\Users\\marku\\Documents\\IAB_330\\freestuffgit\\IAB330\\IAB330\\IAB330\\IAB330.csproj"
             }
           }
         }
