@@ -14,7 +14,7 @@ using Plugin.Permissions.Abstractions;
 using Plugin.Permissions;
 using Xamarin.Forms.PlatformConfiguration;
 
-namespace IAB330.Views
+namespace IAB330.View
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class MapsPage : ContentPage
