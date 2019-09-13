@@ -10,7 +10,8 @@ namespace IAB330
         public App()
         {
             InitializeComponent();
-            MainPage = new Views.Page1();
+
+            MainPage = new View.MapsPage();
         }
 
         protected override void OnStart()
