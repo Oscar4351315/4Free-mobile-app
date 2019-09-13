@@ -5,7 +5,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
              xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
-             x:Class="IAB330.Views.MapsPage">
+             x:Class="IAB330.View.MapsPage">
     <ContentPage.Content>
         <Grid>
             <Grid.RowDefinitions>
