@@ -17,9 +17,9 @@ using Xamarin.Forms.PlatformConfiguration;
 namespace IAB330.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class Page1 : ContentPage
+    public partial class MapsPage : ContentPage
     {
-        public Page1()
+        public MapsPage()
         {
             InitializeComponent();
             OpenMap();
@@ -38,7 +38,7 @@ namespace IAB330.Views
             {
                 if (await CrossPermissions.Current.ShouldShowRequestPermissionRationaleAsync(Permission.Location))
                 {
-                    await DisplayAlert("Need location", "Gunna need that location", "OK");
+                    await DisplayAlert("Need location", "Gunna need that location", "Quit"); //call function to open location settings
                     System.Diagnostics.Process.GetCurrentProcess().CloseMainWindow();
                 }
 
@@ -52,20 +52,10 @@ namespace IAB330.Views
                     //grabs the user's lat and lng
                     var position = await location.GetPositionAsync();
 
-                    //creates map, start on user's location, add it to a stacklayout
-                    var map = new Xamarin.Forms.Maps.Map()
-                    {
-                        MapType = MapType.Street,
-                        IsShowingUser = true
-                    };
-
-                    map.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(position.Latitude, position.Longitude),
+                    //move map to start on user's location
+                    myMap.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(position.Latitude, position.Longitude),
                                                      Distance.FromMeters(100)));
-
-                    var stack = new StackLayout { Spacing = 0 };
-                    stack.Children.Add(map);
-
-                    Content = stack;
+                    myMap.IsShowingUser = true;
                 }
             }
 
