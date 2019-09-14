@@ -4,23 +4,78 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
-             x:Class="IAB330.View.MapsPage">
-    <ContentPage.Content>
-        <Grid>
+             x:Class="IAB330.View.MapPage"
+             xmlns:vm="clr-namespace:IAB330.ViewModel"
+             xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"      
+             Title="{Binding Title}">
+
+    <ContentPage.BindingContext>
+        <vm:MapViewModel />
+    </ContentPage.BindingContext>
+
+    <!-- Styles -->
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Color x:Key="bgColour">White</Color>
+            <Style x:Key="statusControl" TargetType="Button">
+                <Setter Property="HorizontalOptions" Value="FillAndExpand" />
+                <Setter Property="VerticalOptions" Value="EndAndExpand" />
+                <Setter Property="HeightRequest" Value="50" />
+                <Setter Property="BackgroundColor" Value="{StaticResource bgColour}" />
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <!-- Body -->
+    <StackLayout>
+        <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
             <Grid.RowDefinitions>
-                <RowDefinition Height="10*"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="10" />
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <maps:Map x:Name="myMap" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" Grid.RowSpan="2" MapType="Street" />
-            <Button Text="|" Grid.Row="1" Grid.Column="0" />
-            <Button  Text="2" Grid.Row="1" Grid.Column="1" />
-            <Button Text="3" Grid.Row="1" Grid.Column="2" />
+
+            <!-- Map -->
+            <maps:Map x:Name="MyMap"
+                      Grid.Row="0" Grid.RowSpan="2"
+                      Grid.Column="0" Grid.ColumnSpan="7"
+                      MapType="Street" 
+                      IsShowingUser="true"/>
+
+            <!-- Tab Box-->
+            <BoxView HorizontalOptions="FillAndExpand"
+                     VerticalOptions="EndAndExpand"
+                     HeightRequest="50"
+                     Color="{StaticResource bgColour}"
+                     Grid.Row="1"
+                     Grid.Column="0" Grid.ColumnSpan="7" />
+
+            <!-- Settings Button -->
+            <Button ImageSource="icon_settings.png"
+                    Style="{StaticResource statusControl}"
+                    Grid.Row="1"
+                    Grid.Column="0" Grid.ColumnSpan="3"
+                    Command="{Binding PostOnButtonCommand}" />
+
+            <!-- Quick Access Button -->
+            <Button ImageSource="icon_quickaccess.png"
+                    Style="{StaticResource statusControl}"
+                    Grid.Row="1"
+                    Grid.Column="4" Grid.ColumnSpan="3"
+                    Command="{Binding PostOnButtonCommand}" />
+
+            <!-- Post Button -->
+            <Button ImageSource="icon_post.png"
+                    HorizontalOptions="Center" VerticalOptions="EndAndExpand"
+                    HeightRequest="80" WidthRequest="80"
+                    Margin="0, 0, 0, 5"
+                    BorderRadius="40" BorderWidth="1" BorderColor="SlateGray"
+                    BackgroundColor="{StaticResource bgColour}"
+                    Grid.Row="1"
+                    Grid.Column="2" Grid.ColumnSpan="3"
+                    Command="{Binding PostOnButtonCommand}" />
         </Grid>
-    </ContentPage.Content>
+    </StackLayout>
 </ContentPage>
