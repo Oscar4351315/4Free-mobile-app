@@ -28,7 +28,7 @@
             <!-- Post -->
             <!-- Base -->
             <Style x:Key="postBaseStyle" TargetType="View">
-                <Setter Property="IsVisible" Value="{Binding IsPostMode}" />
+                <Setter Property="IsVisible" Value="{Binding IsPostConfirmed}" />
                 <Setter Property="VerticalOptions" Value="Center" />
                 <Setter Property="HeightRequest" Value="40" />
             </Style>

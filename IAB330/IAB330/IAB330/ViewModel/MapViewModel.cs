@@ -2,6 +2,7 @@
 using Plugin.Geolocator;
 using Plugin.Permissions;
 using Plugin.Permissions.Abstractions;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xamarin.Forms;
@@ -27,6 +28,7 @@ namespace IAB330.ViewModel
                 SetupMap();
                 //CreateMarker();
                 GetUserPosition();
+                // setup/display pins
 
                 Map.MapClicked += OnMapClick;
                 GeneralCommand = new Command(async () => await DoSomething(), () => !IsBusy);
@@ -45,7 +47,10 @@ namespace IAB330.ViewModel
         
 
         // Enters mode that allows user to create marker on map
-        bool isPinPlacing;
+        private bool isPinPlacing;
+        private bool isPostConfirmed = false;
+        private int markerID = 0; // ID tracker
+
         public bool IsPinPlacing
         {
             get { return isPinPlacing; }
@@ -55,9 +60,7 @@ namespace IAB330.ViewModel
             }
         }
 
-
         // Shows post window after marker confirmation
-        bool isPostConfirmed;
         public bool IsPostConfirmed
         {
             get { return isPostConfirmed; }
@@ -92,7 +95,7 @@ namespace IAB330.ViewModel
 
 
         // Creates a marker on map
-        private int markerID = 0; // ID tracker
+
         CustomPin CreateMarker(double lat, double lng, string title, string details, int ID)
         {
             return new CustomPin
@@ -163,12 +166,12 @@ namespace IAB330.ViewModel
         // Moves map to user's location
         async void GetUserPosition()
         {
-            var QUTposition = new Position(-27.47735, 153.028414);
-            //var location = CrossGeolocator.Current.DesiredAccuracy = 50;
-            //var position = await location.GetPositionAsync(TimeSpan.FromSeconds(10));
+            //var QUTposition = new Position(-27.47735, 153.028414);
+            var location = CrossGeolocator.Current;
+            var position = await location.GetPositionAsync(TimeSpan.FromSeconds(10));
             Map.MoveToRegion(MapSpan.FromCenterAndRadius(
-                QUTposition, Distance.FromMeters(120)));
-            // position.Latitude, position.Longitude), Distance.FromMeters(120)));
+                //QUTposition, Distance.FromMeters(120)));
+                position.Latitude, position.Longitude), Distance.FromMeters(120)));
         }
 
 
