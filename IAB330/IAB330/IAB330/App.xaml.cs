@@ -9,7 +9,7 @@ namespace IAB330
             try
             {
                 InitializeComponent();
-                MainPage = new View.MapPage();
+                MainPage = new Views.MapPage();
             }
             catch
             {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using IAB330.Model;
+using IAB330.Models;
 
 namespace IAB330.Services
 {

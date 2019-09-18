@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Xamarin.Forms.Maps;
 
-namespace IAB330.Model
+namespace IAB330.Models
 {
     public class Item
     {
