@@ -39,6 +39,7 @@ namespace IAB330.ViewModel
             else
             {
                 // Force closes app on first Visual Studio execution without location permissions
+                Task.Run(async () => await Application.Current.MainPage.DisplayAlert("Need location", "Gunna need that location", "Quit")); //call function to open location settings
                 System.Diagnostics.Process.GetCurrentProcess().CloseMainWindow();
             }
         }
@@ -50,24 +51,19 @@ namespace IAB330.ViewModel
         private bool isPinPlacing;
         private bool isPostConfirmed = false;
         private int markerID = 0; // ID tracker
+        // add a pin list
 
         public bool IsPinPlacing
         {
             get { return isPinPlacing; }
-            set
-            {
-                SetProperty(ref isPinPlacing, value);
-            }
+            set { SetProperty(ref isPinPlacing, value); }
         }
 
         // Shows post window after marker confirmation
         public bool IsPostConfirmed
         {
             get { return isPostConfirmed; }
-            set
-            {
-                SetProperty(ref isPostConfirmed, value);
-            }
+            set { SetProperty(ref isPostConfirmed, value); }
         }
 
 
@@ -148,8 +144,43 @@ namespace IAB330.ViewModel
             {
                 return true;
             }
+            else
+            {
 
-            return false;
+                return false;
+            }
+
+            // new stuff
+            /*
+
+            await CrossPermissions.Current.RequestPermissionsAsync(Permission.Location);
+            var status = await CrossPermissions.Current.CheckPermissionStatusAsync(Permission.Location);
+            if (status != PermissionStatus.Granted)
+            {
+                if (await CrossPermissions.Current.ShouldShowRequestPermissionRationaleAsync(Permission.Location))
+                {
+                    await DisplayAlert("Need location", "Gunna need that location", "Quit"); //call function to open location settings
+                    System.Diagnostics.Process.GetCurrentProcess().CloseMainWindow();
+                }
+
+                //status = await CrossPermissions.Current.RequestPermissionAsync<LocationPermission>();
+            }
+
+            if (status == PermissionStatus.Granted)
+            {
+                var location = CrossGeolocator.Current;
+                if (location.IsGeolocationEnabled && location.IsGeolocationAvailable)
+                {
+                    //grabs the user's lat and lng
+                    var position = await location.GetPositionAsync();
+
+                    //move map to start on user's location
+                    myMap.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(position.Latitude, position.Longitude),
+                                                     Distance.FromMeters(100)));
+                    myMap.IsShowingUser = true;
+                }
+            }
+            */
         }
 
         // Setup and draws map
