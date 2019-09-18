@@ -171,7 +171,7 @@ namespace IAB330.ViewModel
             var position = await location.GetPositionAsync(TimeSpan.FromSeconds(10));
             Map.MoveToRegion(MapSpan.FromCenterAndRadius(
                 //QUTposition, Distance.FromMeters(120)));
-                position.Latitude, position.Longitude), Distance.FromMeters(120)));
+                new Position(position.Latitude, position.Longitude), Distance.FromMeters(120)));
         }
 
 
