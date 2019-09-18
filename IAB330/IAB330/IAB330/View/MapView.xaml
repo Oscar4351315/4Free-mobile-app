@@ -26,17 +26,20 @@
             </Style>
 
             <!-- Post -->
+            <!-- Base -->
             <Style x:Key="postBaseStyle" TargetType="View">
-                <Setter Property="IsVisible" Value="{Binding IsPostVisible}" />
+                <Setter Property="IsVisible" Value="{Binding IsPostMode}" />
                 <Setter Property="VerticalOptions" Value="Center" />
                 <Setter Property="HeightRequest" Value="40" />
             </Style>
+            <!-- Entry -->
             <Style x:Key="postEntryStyle" BasedOn="{StaticResource postBaseStyle}" TargetType="Entry">
                 <Setter Property="HorizontalOptions" Value="FillAndExpand" />
                 <Setter Property="TextColor" Value="Black" />
                 <Setter Property="Grid.Column" Value="2" />
                 <Setter Property="Grid.ColumnSpan" Value="3" />
             </Style>
+            <!-- Button -->
             <Style x:Key="postButtonStyle" BasedOn="{StaticResource postBaseStyle}" TargetType="Button">
                 <Setter Property="CornerRadius" Value="15" />
                 <Setter Property="TextColor" Value="White" />
@@ -102,7 +105,7 @@
                 Grid.Column="0" Grid.ColumnSpan="7"
                 BackgroundColor="{StaticResource bgColour}"
                 Style="{StaticResource statusBaseStyle}"
-                Command="{Binding PostCommand}" />
+                Command="{Binding TogglePostModeCommand}" />
 
         
 
@@ -120,35 +123,41 @@
                  Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="5"
                  Style="{StaticResource postBaseStyle}" />
         
-        <!-- User Entries -->
+        <!-- Data Entries -->
         <Entry Placeholder="Category"
                Grid.Row="2" Margin="0, 20, 0, 0"
+               Text="{Binding CategoryEntry}"
                Style="{StaticResource postEntryStyle}" />
         
         <Entry Placeholder="Title"
                Grid.Row="3"
+               Text="{Binding TitleEntry}"
                Style="{StaticResource postEntryStyle}" />
 
         <Entry Placeholder="Items" 
                Grid.Row="4"
+               Text="{Binding ItemsEntry}"
                Style="{StaticResource postEntryStyle}" />
 
         <Entry Placeholder="Description" 
                Grid.Row="5"
+               Text="{Binding DescriptionEntry}"
                Style="{StaticResource postEntryStyle}" />
 
         <Entry Placeholder="Start Time" 
                Grid.Row="6"
+               Text="{Binding StartTimeEntry}"
                Style="{StaticResource postEntryStyle}" />
 
         <Entry Placeholder="End Time" 
                Grid.Row="7" Margin="0, 0, 0, 20"
+               Text="{Binding EndTimeEntry}"
                Style="{StaticResource postEntryStyle}" />
 
         <!-- Action Buttons -->
         <Button Text="Cancel" BackgroundColor="#EA4235" Grid.Column="2"
                 Style="{StaticResource postButtonStyle}"
-                Command="{Binding CancelPostCommand}" />
+                Command="{Binding TogglePostModeCommand}" />
 
         <Button Text="Preview" BackgroundColor="#FABD03" Grid.Column="3"
                 Style="{StaticResource postButtonStyle}"
@@ -157,5 +166,10 @@
         <Button Text="Submit" BackgroundColor="#34A853" Grid.Column="4"
                 Style="{StaticResource postButtonStyle}"
                 Command="{Binding GeneralCommand}" />
+
+        <Label Text="{Binding CategoryText}" 
+               Style="{StaticResource postBaseStyle}"
+               Grid.Row="1" Grid.Column="3"/>
+        
     </Grid>
 </ContentPage>
