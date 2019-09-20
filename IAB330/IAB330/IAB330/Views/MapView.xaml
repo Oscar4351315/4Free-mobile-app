@@ -43,7 +43,7 @@
             <Style x:Key="formBaseStyle" TargetType="View">
                 <Setter Property="IsVisible" Value="{Binding IsPinConfirm}" />
                 <Setter Property="VerticalOptions" Value="Center" />
-                <Setter Property="HeightRequest" Value="50" />
+                <Setter Property="HeightRequest" Value="40" />
             </Style>
 
             <!-- BoxView-->
@@ -161,22 +161,22 @@
 
         <!-- User Entry -->
         <Entry Placeholder="Category" Grid.Row="2" Margin="0, 20, 0, 0"
-               Style="{StaticResource formEntryStyle}" />
+               Style="{StaticResource formEntryStyle}" Text="{Binding CategoryEntry}" />
 
         <Entry Placeholder="Title" Grid.Row="3"
-               Style="{StaticResource formEntryStyle}" />
+               Style="{StaticResource formEntryStyle}" Text="{Binding Title}" />
 
         <Entry Placeholder="Items" Grid.Row="4"
-               Style="{StaticResource formEntryStyle}" />
+               Style="{StaticResource formEntryStyle}" Text="{Binding Items}" />
 
         <Entry Placeholder="Description" Grid.Row="5"
-               Style="{StaticResource formEntryStyle}" />
+               Style="{StaticResource formEntryStyle}" Text="{Binding Description}" />
 
         <Entry Placeholder="Start Time" Grid.Row="6"
-               Style="{StaticResource formEntryStyle}" />
+               Style="{StaticResource formEntryStyle}" Text="{Binding StartTime}" />
 
         <Entry Placeholder="End Time" Grid.Row="7" Margin="0, 0, 0, 20"
-               Style="{StaticResource formEntryStyle}" />
+               Style="{StaticResource formEntryStyle}" Text="{Binding EndTime}" />
 
         <!-- Buttons -->
         <Button Text="Cancel" BackgroundColor="#EA4235" Grid.Column="2"
@@ -187,9 +187,9 @@
                 Style="{StaticResource formButtonStyle}"
                 Command="{Binding GeneralCommand}" />
 
-        <Button Text="Submit" BackgroundColor="#34A853" Grid.Column="4"
+        <Button x:Name="GetFormBtn" Text="Submit" BackgroundColor="#34A853" Grid.Column="4"
                 Style="{StaticResource formButtonStyle}"
-                Command="{Binding GeneralCommand}" />
+                Command="{Binding GetFormInfoCommand}" />
 
     </Grid>
 </ContentPage>

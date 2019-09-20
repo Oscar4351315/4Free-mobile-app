@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-
+using IAB330.Models;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
 using Plugin.Geolocator;
@@ -9,20 +9,65 @@ using Plugin.Permissions;
 using Plugin.Permissions.Abstractions;
 
 using CustomRenderer;
+using System.Diagnostics;
 
 namespace IAB330.ViewModels
 {
     public partial class MapViewModel : BaseViewModel
     {
+        // Binding to view
         public CustomMap Map { get; set; }
         public Command GeneralCommand { get; }
-        public Command TogglePostModeCommand { get; }
         public Command ConfirmPinCommand { get; }
+        public Command TogglePostModeCommand { get; }
         public Command CancelPinOrFormCommand { get; }
+        public Command GetFormInfoCommand { get; set; }
 
+
+        // Get the entry field values
+        private string itemsEntry;
+        private string titleEntry;
+        private string endTimeEntry;
+        private string categoryEntry;
+        private string startTimeEntry;
+        private string descriptionEntry;
+
+        public string ItemsEntry { get { return itemsEntry; } set { SetProperty(ref itemsEntry, value); } }
+        public string TitleEntry { get { return titleEntry; } set { SetProperty(ref titleEntry, value); } }
+        public string EndTimeEntry { get { return endTimeEntry; } set { SetProperty(ref endTimeEntry, value); } }
+        public string CategoryEntry { get { return categoryEntry;  } set { SetProperty(ref categoryEntry, value); } }
+        public string StartTimeEntry { get { return startTimeEntry; } set { SetProperty(ref startTimeEntry, value); } }
+        public string DescriptionEntry { get { return descriptionEntry; } set { SetProperty(ref descriptionEntry, value); } }
+
+        //public string CategoryEntry;
+
+        // Declaring variables:
+        // Enters mode that allows user to create marker on map if true
+        private bool isPinPlacing;
+        private bool isPinConfirm;
+        private int markerID = 0; // ID tracker
+        private List<CustomPin> CostumPinList;
+        private List<PostInfo> PostInfoList;
+
+        //private List<CustomPin> Pins;
+
+        public bool IsPinPlacing
+        {
+            get { return isPinPlacing; }
+            set { SetProperty(ref isPinPlacing, value); }
+        }
+
+        // Shows post window if true
+        public bool IsPinConfirm
+        {
+            get { return isPinConfirm; }
+            set { SetProperty(ref isPinConfirm, value); }
+        }
+
+        // Constructor that initiates and creates map
         public MapViewModel()
         {
-            Title = "Map Page";
+            TitleEntry = "Map Page";
             bool isAllowLocation = CheckLocationPermission();
 
             if (isAllowLocation)
@@ -35,6 +80,9 @@ namespace IAB330.ViewModels
                 TogglePostModeCommand = new Command(() => TogglePostMode(), () => !IsBusy);
                 ConfirmPinCommand = new Command(() => ConfirmPin(), () => !IsBusy);
                 CancelPinOrFormCommand = new Command(() => CancelPinOrForm(), () => !IsBusy);
+                GetFormInfoCommand = new Command(() => SaveFormInfo(), () => !IsBusy);
+                //GetFormInfoCommand = new Command<string> (GetFormInfo);
+
             }
             else
             {
@@ -86,7 +134,7 @@ namespace IAB330.ViewModels
             if (isPinPlacing)
             {
                 Map.Pins.Clear();
-                pin = CreateMarker(e.Position.Latitude, e.Position.Longitude, "Marker " + markerID, "Details", markerID);
+                pin = CreatePin(e.Position.Latitude, e.Position.Longitude, "Marker " + markerID, "Details", markerID);
                 Map.Pins.Add(pin);
             }
 
@@ -99,9 +147,8 @@ namespace IAB330.ViewModels
         }
 
 
-        // Creates a marker on map
-        private int markerID = 0; // ID tracker
-        CustomPin CreateMarker(double lat, double lng, string title, string details, int ID)
+        // Creates a pin
+        CustomPin CreatePin(double lat, double lng, string title, string details, int ID)
         {
             return new CustomPin
             {
@@ -143,88 +190,26 @@ namespace IAB330.ViewModels
         }
 
 
-        // Enters mode that allows user to create marker on map if true
-        bool isPinPlacing;
-        public bool IsPinPlacing
-        {
-            get { return isPinPlacing; }
-            set { SetProperty(ref isPinPlacing, value); }
-        }
-
-
-        // Shows post window if true
-        bool isPinConfirm;
-        public bool IsPinConfirm
-        {
-            get { return isPinConfirm; }
-            set { SetProperty(ref isPinConfirm, value); }
-        }
-
-
         // Generic command
         async Task DoSomething()
         {
             await Application.Current.MainPage.DisplayAlert("Doing Something", "I don't know what.", "Close");
         }
 
-        // Post class
-        public class PostInformation
+        // function to get information from form
+
+        void SaveFormInfo()
         {
-            string category;
-            string title;
-            string items;
-            string description;
-            string startTime;
-            string endTime;
+            Debug.WriteLine("post: " + categoryEntry);
+            Application.Current.MainPage.DisplayAlert("Doing Something", "hi " + categoryEntry, "Close");
+
+            PostInfo newPost = new PostInfo(categoryEntry, titleEntry, itemsEntry, descriptionEntry, startTimeEntry, endTimeEntry);
+            PostInfoList.Add(newPost);
+
+            Map.Pins.GetEnumerator(1);
+
+
         }
 
-        // Post's category input
-        string categoryEntry;
-
-        public string CategoryEntry
-        {
-            get { return categoryEntry; }
-            set { SetProperty(ref categoryEntry, value); }
-        }
-
-        // Post's title input
-        string titleEntry;
-        public string TitleEntry
-        {
-            get { return titleEntry; }
-            set { SetProperty(ref titleEntry, value); }
-        }
-
-        // Post's items input
-        string itemsEntry;
-        public string ItemsEntry
-        {
-            get { return itemsEntry; }
-            set { SetProperty(ref itemsEntry, value); }
-        }
-
-        // Post's description input
-        string descriptionEntry;
-        public string DescriptionEntry
-        {
-            get { return descriptionEntry; }
-            set { SetProperty(ref descriptionEntry, value); }
-        }
-
-        // Post's start time input
-        string startTimeEntry;
-        public string StartTimeEntry
-        {
-            get { return startTimeEntry; }
-            set { SetProperty(ref startTimeEntry, value); }
-        }
-
-        // Post's end time input
-        string endTimeEntry;
-        public string EndTimeEntry
-        {
-            get { return endTimeEntry; }
-            set { SetProperty(ref endTimeEntry, value); }
-        }
     }
 }

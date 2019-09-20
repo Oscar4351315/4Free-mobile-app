@@ -1,6 +1,6 @@
 ﻿using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
-
+using IAB330.Models;
 using IAB330.ViewModels;
 
 namespace IAB330.Views
@@ -10,7 +10,17 @@ namespace IAB330.Views
     {
         public MapPage()
         {
-            InitializeComponent(); 
+            InitializeComponent();
+            //CommandParameter = "{Binding Source={x:Reference CategoryEntry}, Path=Text}"
+
+            
+
+            //PostInfo Post = new PostInfo()
+            //{
+            //    CategoryEntry = CategoryEntry.Text
+            //};
+            //string name = OnPropertyChange(CategoryEntry.Text);          
+            //GetFormBtn.CommandParameter = name;
             BindingContext = new MapViewModel();
         }
     }
