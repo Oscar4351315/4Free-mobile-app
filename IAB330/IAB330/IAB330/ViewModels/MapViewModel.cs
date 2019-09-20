@@ -10,6 +10,7 @@ using Plugin.Permissions.Abstractions;
 
 using CustomRenderer;
 using System.Diagnostics;
+using System.Linq;
 
 namespace IAB330.ViewModels
 {
@@ -46,8 +47,9 @@ namespace IAB330.ViewModels
         private bool isPinPlacing;
         private bool isPinConfirm;
         private int markerID = 0; // ID tracker
-        private List<CustomPin> CostumPinList;
-        private List<PostInfo> PostInfoList;
+        private CustomPin TempCustomPin = new CustomPin();
+        public List<CustomPin> CustomPinList = new List<CustomPin>();
+        private List<PostInfo> PostInfoList = new List<PostInfo>();
 
         //private List<CustomPin> Pins;
 
@@ -75,6 +77,7 @@ namespace IAB330.ViewModels
                 SetupMap();
                 GetUserPosition();
 
+
                 Map.MapClicked += OnMapClick;
                 GeneralCommand = new Command(async () => await DoSomething(), () => !IsBusy);
                 TogglePostModeCommand = new Command(() => TogglePostMode(), () => !IsBusy);
@@ -82,6 +85,7 @@ namespace IAB330.ViewModels
                 CancelPinOrFormCommand = new Command(() => CancelPinOrForm(), () => !IsBusy);
                 GetFormInfoCommand = new Command(() => SaveFormInfo(), () => !IsBusy);
                 //GetFormInfoCommand = new Command<string> (GetFormInfo);
+
 
             }
             else
@@ -129,26 +133,43 @@ namespace IAB330.ViewModels
         // Creates marker at location on map click
         void OnMapClick(object sender, MapClickedEventArgs e)
         {
-            CustomPin pin = new CustomPin();
+            //CustomPin pin = new CustomPin();
 
             if (isPinPlacing)
             {
                 Map.Pins.Clear();
-                pin = CreatePin(e.Position.Latitude, e.Position.Longitude, "Marker " + markerID, "Details", markerID);
-                Map.Pins.Add(pin);
+                TempCustomPin = CreateCustomPin(e.Position.Latitude, e.Position.Longitude, "Marker " + markerID, "Details", markerID);
+                Map.Pins.Add(TempCustomPin);
+                //TempCustomPin = pin;
+
             }
 
-            if (isPinConfirm)
-            {
-                markerID += 1;
-                Map.CustomPins = new List<CustomPin> { pin };
-                IsPinPlacing = false;
-            }
+    // this doesn't do anything
+    //if (isPinConfirm)
+    //{
+    //    markerID += 1;
+    //    Task.Run(async () => await DoSomething());
+    //    //CustomPinList.Add(pin);
+    //    //Map.CustomPins = new List<CustomPin> { pin };
+    //    IsPinPlacing = false;
+    //}
         }
 
 
         // Creates a pin
-        CustomPin CreatePin(double lat, double lng, string title, string details, int ID)
+        Pin CreatePin(double lat, double lng, string title, string details, int ID)
+        {
+            return new Pin
+            {
+                Type = PinType.Place,
+                Position = new Position(lat, lng),
+                Label = title,
+                Address = details,
+                MarkerId = ID,
+            };
+        }
+
+        CustomPin CreateCustomPin(double lat, double lng, string title, string details, int ID)
         {
             return new CustomPin
             {
@@ -189,6 +210,14 @@ namespace IAB330.ViewModels
             IsPinConfirm = false;
         }
 
+        // might not need this
+        void CancelForm()
+        {
+            Map.Pins.Clear();
+            IsPinPlacing = false;
+            IsPinConfirm = false;
+        }
+
 
         // Generic command
         async Task DoSomething()
@@ -196,17 +225,50 @@ namespace IAB330.ViewModels
             await Application.Current.MainPage.DisplayAlert("Doing Something", "I don't know what.", "Close");
         }
 
-        // function to get information from form
+        // function to display all pins on the map
 
+        //async Task AddPinsToMap()
+        void AddPinsToMap()
+        {
+            Application.Current.MainPage.DisplayAlert("Doing Something", "add pins to map ran", "Close");
+            Map.Pins.Clear();
+            foreach (CustomPin Pin in CustomPinList)
+            {
+                Map.Pins.Add(Pin);
+            }
+            //CustomPinList.ForEach((x) => Map.Pins.Add(x));
+        }
+
+        // function to get information from form
         void SaveFormInfo()
         {
+            if (Map.Pins.Count != 1)
+            {
+                Application.Current.MainPage.DisplayAlert("Error!", "Something Failed Misserably #pinrelated", "Close");
+                return;
+            }
+
+            //Pin oldPin = Map.Pins.ElementAt(0);
+            //CustomPin newPin = new CustomPin();
+            //newPin = TempCustomPin;
+
+
             Debug.WriteLine("post: " + categoryEntry);
-            Application.Current.MainPage.DisplayAlert("Doing Something", "hi " + categoryEntry, "Close");
+            //Application.Current.MainPage.DisplayAlert("Doing Something", "hi " + categoryEntry, "Close");
 
             PostInfo newPost = new PostInfo(categoryEntry, titleEntry, itemsEntry, descriptionEntry, startTimeEntry, endTimeEntry);
             PostInfoList.Add(newPost);
 
-            Map.Pins.GetEnumerator(1);
+            TempCustomPin.Label = newPost.TitleEntry;
+            CustomPinList.Add(TempCustomPin);
+            //Map.CustomPins.Add(TempCustomPin);
+            IsPinConfirm = false;
+
+            //Task.Run(async () => await AddPinsToMap());
+            AddPinsToMap();
+            //Map.CustomPins = new List<CustomPin> {TempCustomPin};
+
+            Application.Current.MainPage.DisplayAlert("Doing Something", "number of marker in list: " + CustomPinList.Count(), "Close");
 
 
         }
