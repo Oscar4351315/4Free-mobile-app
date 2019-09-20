@@ -239,6 +239,14 @@ namespace IAB330.ViewModels
             IsPinConfirm = false;
             markerID += 1;
 
+            // reset entry field values
+            TitleEntry = "";
+            EndTimeEntry = "";
+            CategoryEntry = "";
+            StartTimeEntry = "";
+            DescriptionEntry = "";
+
+
             AddPinsToMap();
             //Application.Current.MainPage.DisplayAlert("Title Entry: " + newPost.TitleEntry, "number of marker in list: " + CustomPinList.Count(), "Close");
         }
