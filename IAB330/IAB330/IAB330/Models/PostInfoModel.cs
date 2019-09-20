@@ -80,9 +80,10 @@ namespace IAB330.Models
             set { endTimeEntry = value; }
         }
 
-        public PostInfo(string categoryEntry, string titleEntry, string itemsEntry, string descriptionEntry,
+        public PostInfo(int postID, string categoryEntry, string titleEntry, string itemsEntry, string descriptionEntry,
                         string startTimeEntry, string endTimeEntry)
         {
+            this.postID = postID;
             this.categoryEntry = categoryEntry;
             this.titleEntry = titleEntry;
             this.itemsEntry = itemsEntry;

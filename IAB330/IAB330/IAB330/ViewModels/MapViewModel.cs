@@ -77,15 +77,12 @@ namespace IAB330.ViewModels
                 SetupMap();
                 GetUserPosition();
 
-
                 Map.MapClicked += OnMapClick;
                 GeneralCommand = new Command(async () => await DoSomething(), () => !IsBusy);
                 TogglePostModeCommand = new Command(() => TogglePostMode(), () => !IsBusy);
                 ConfirmPinCommand = new Command(() => ConfirmPin(), () => !IsBusy);
                 CancelPinOrFormCommand = new Command(() => CancelPinOrForm(), () => !IsBusy);
                 GetFormInfoCommand = new Command(() => SaveFormInfo(), () => !IsBusy);
-                //GetFormInfoCommand = new Command<string> (GetFormInfo);
-
 
             }
             else
@@ -133,26 +130,12 @@ namespace IAB330.ViewModels
         // Creates marker at location on map click
         void OnMapClick(object sender, MapClickedEventArgs e)
         {
-            //CustomPin pin = new CustomPin();
-
             if (isPinPlacing)
             {
                 Map.Pins.Clear();
-                TempCustomPin = CreateCustomPin(e.Position.Latitude, e.Position.Longitude, "Marker " + markerID, "Details", markerID);
+                TempCustomPin = CreateCustomPin(e.Position.Latitude, e.Position.Longitude, "Marker " + markerID, "Marker " + markerID, markerID);
                 Map.Pins.Add(TempCustomPin);
-                //TempCustomPin = pin;
-
             }
-
-    // this doesn't do anything
-    //if (isPinConfirm)
-    //{
-    //    markerID += 1;
-    //    Task.Run(async () => await DoSomething());
-    //    //CustomPinList.Add(pin);
-    //    //Map.CustomPins = new List<CustomPin> { pin };
-    //    IsPinPlacing = false;
-    //}
         }
 
 
@@ -210,14 +193,6 @@ namespace IAB330.ViewModels
             IsPinConfirm = false;
         }
 
-        // might not need this
-        void CancelForm()
-        {
-            Map.Pins.Clear();
-            IsPinPlacing = false;
-            IsPinConfirm = false;
-        }
-
 
         // Generic command
         async Task DoSomething()
@@ -226,17 +201,9 @@ namespace IAB330.ViewModels
         }
 
         // function to display all pins on the map
-
-        //async Task AddPinsToMap()
         void AddPinsToMap()
         {
-            //Application.Current.MainPage.DisplayAlert("Doing Something", "add pins to map ran", "Close");
-            Map.Pins.Clear();
-            foreach (CustomPin Pin in CustomPinList)
-            {
-                Map.Pins.Add(Pin);
-            }
-            //CustomPinList.ForEach((x) => Map.Pins.Add(x));
+            CustomPinList.ForEach((pin) => Map.Pins.Add(pin));
         }
 
         // function to get information from form
@@ -249,38 +216,31 @@ namespace IAB330.ViewModels
                 return;
             }
 
+            // initiate a new PostInfo object
+            PostInfo newPost = new PostInfo(markerID, categoryEntry, titleEntry, itemsEntry, descriptionEntry, startTimeEntry, endTimeEntry);
 
             // check that there is a title
-            if(TitleEntry.Length == 0)
+            if(newPost.TitleEntry.Length == 0)
             {
                 Application.Current.MainPage.DisplayAlert("Missing fields", "You need to provide a title", "Close");
                 return;
             }
 
-            PostInfo newPost = new PostInfo(categoryEntry, titleEntry, itemsEntry, descriptionEntry, startTimeEntry, endTimeEntry);
-
-            //Pin oldPin = Map.Pins.ElementAt(0);
-            //CustomPin newPin = new CustomPin();
-            //newPin = TempCustomPin;
-
-
             //Debug.WriteLine("post: " + categoryEntry);
             //Application.Current.MainPage.DisplayAlert("Doing Something", "hi " + categoryEntry, "Close");
 
-            PostInfoList.Add(newPost);
-
+            // add title to pin
             TempCustomPin.Label = newPost.TitleEntry;
+
+            // add pin and post to the lists
+            PostInfoList.Add(newPost);
             CustomPinList.Add(TempCustomPin);
-            //Map.CustomPins.Add(TempCustomPin);
+
             IsPinConfirm = false;
+            markerID += 1;
 
-            //Task.Run(async () => await AddPinsToMap());
             AddPinsToMap();
-            //Map.CustomPins = new List<CustomPin> {TempCustomPin};
-
-            Application.Current.MainPage.DisplayAlert("Title Entry: " + newPost.TitleEntry, "number of marker in list: " + CustomPinList.Count(), "Close");
-
-
+            //Application.Current.MainPage.DisplayAlert("Title Entry: " + newPost.TitleEntry, "number of marker in list: " + CustomPinList.Count(), "Close");
         }
 
     }
