@@ -27,7 +27,7 @@ namespace IAB330.ViewModels
 
         // Get the entry field values
         private string itemsEntry;
-        private string titleEntry;
+        private string titleEntry = "";
         private string endTimeEntry;
         private string categoryEntry;
         private string startTimeEntry;
@@ -69,7 +69,7 @@ namespace IAB330.ViewModels
         // Constructor that initiates and creates map
         public MapViewModel()
         {
-            TitleEntry = "Map Page";
+            Title = "Map Page";
             bool isAllowLocation = CheckLocationPermission();
 
             if (isAllowLocation)
@@ -230,7 +230,7 @@ namespace IAB330.ViewModels
         //async Task AddPinsToMap()
         void AddPinsToMap()
         {
-            Application.Current.MainPage.DisplayAlert("Doing Something", "add pins to map ran", "Close");
+            //Application.Current.MainPage.DisplayAlert("Doing Something", "add pins to map ran", "Close");
             Map.Pins.Clear();
             foreach (CustomPin Pin in CustomPinList)
             {
@@ -242,21 +242,31 @@ namespace IAB330.ViewModels
         // function to get information from form
         void SaveFormInfo()
         {
+            // check that there is only one pin
             if (Map.Pins.Count != 1)
             {
                 Application.Current.MainPage.DisplayAlert("Error!", "Something Failed Misserably #pinrelated", "Close");
                 return;
             }
 
+
+            // check that there is a title
+            if(TitleEntry.Length == 0)
+            {
+                Application.Current.MainPage.DisplayAlert("Missing fields", "You need to provide a title", "Close");
+                return;
+            }
+
+            PostInfo newPost = new PostInfo(categoryEntry, titleEntry, itemsEntry, descriptionEntry, startTimeEntry, endTimeEntry);
+
             //Pin oldPin = Map.Pins.ElementAt(0);
             //CustomPin newPin = new CustomPin();
             //newPin = TempCustomPin;
 
 
-            Debug.WriteLine("post: " + categoryEntry);
+            //Debug.WriteLine("post: " + categoryEntry);
             //Application.Current.MainPage.DisplayAlert("Doing Something", "hi " + categoryEntry, "Close");
 
-            PostInfo newPost = new PostInfo(categoryEntry, titleEntry, itemsEntry, descriptionEntry, startTimeEntry, endTimeEntry);
             PostInfoList.Add(newPost);
 
             TempCustomPin.Label = newPost.TitleEntry;
@@ -268,7 +278,7 @@ namespace IAB330.ViewModels
             AddPinsToMap();
             //Map.CustomPins = new List<CustomPin> {TempCustomPin};
 
-            Application.Current.MainPage.DisplayAlert("Doing Something", "number of marker in list: " + CustomPinList.Count(), "Close");
+            Application.Current.MainPage.DisplayAlert("Title Entry: " + newPost.TitleEntry, "number of marker in list: " + CustomPinList.Count(), "Close");
 
 
         }

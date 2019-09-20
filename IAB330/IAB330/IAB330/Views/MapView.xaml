@@ -164,19 +164,19 @@
                Style="{StaticResource formEntryStyle}" Text="{Binding CategoryEntry}" />
 
         <Entry Placeholder="Title" Grid.Row="3"
-               Style="{StaticResource formEntryStyle}" Text="{Binding Title}" />
+               Style="{StaticResource formEntryStyle}" Text="{Binding TitleEntry}" />
 
         <Entry Placeholder="Items" Grid.Row="4"
-               Style="{StaticResource formEntryStyle}" Text="{Binding Items}" />
+               Style="{StaticResource formEntryStyle}" Text="{Binding ItemsEntry}" />
 
         <Entry Placeholder="Description" Grid.Row="5"
-               Style="{StaticResource formEntryStyle}" Text="{Binding Description}" />
+               Style="{StaticResource formEntryStyle}" Text="{Binding DescriptionEntry}" />
 
         <Entry Placeholder="Start Time" Grid.Row="6"
-               Style="{StaticResource formEntryStyle}" Text="{Binding StartTime}" />
+               Style="{StaticResource formEntryStyle}" Text="{Binding StartTimeEntry}" />
 
         <Entry Placeholder="End Time" Grid.Row="7" Margin="0, 0, 0, 20"
-               Style="{StaticResource formEntryStyle}" Text="{Binding EndTime}" />
+               Style="{StaticResource formEntryStyle}" Text="{Binding EndTimeEntry}" />
 
         <!-- Buttons -->
         <Button Text="Cancel" BackgroundColor="#EA4235" Grid.Column="2"
