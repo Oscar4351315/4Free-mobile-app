@@ -69,6 +69,7 @@ namespace IAB330.ViewModels
         public MapViewModel()
         {
             Title = "Map Page";
+            // could allow map without user location? just start at QUT
             bool isAllowLocation = CheckLocationPermission();
 
             if (isAllowLocation)
