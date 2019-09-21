@@ -21,11 +21,12 @@
             <!-- Tab Buttons -->
             <Style x:Key="tabButtonStyle" TargetType="Button">
                 <Setter Property="HorizontalOptions" Value="FillAndExpand" />
-                <Setter Property="VerticalOptions" Value="EndAndExpand" />
                 <Setter Property="HeightRequest" Value="50" />
-                <Setter Property="Grid.Row" Value="10" />
+                <Setter Property="BackgroundColor" Value="{StaticResource bgColour}" />
+                <Setter Property="Grid.Row" Value="11" />
             </Style>
 
+            
             <!-- Pin Mode Buttons-->
             <Style x:Key="pinButtonStyle" TargetType="Button">
                 <Setter Property="IsVisible" Value="{Binding IsPinPlacing}" />
@@ -34,7 +35,7 @@
                 <Setter Property="HeightRequest" Value="40" />
                 <Setter Property="TextColor" Value="White" />
                 <Setter Property="CornerRadius" Value="15" />
-                <Setter Property="Grid.Row" Value="9" />
+                <Setter Property="Grid.Row" Value="10" />
             </Style>
 
 
@@ -42,14 +43,12 @@
             <!-- Base -->
             <Style x:Key="formBaseStyle" TargetType="View">
                 <Setter Property="IsVisible" Value="{Binding IsPinConfirm}" />
-                <Setter Property="VerticalOptions" Value="Center" />
-                <Setter Property="HeightRequest" Value="40" />
+                <Setter Property="VerticalOptions" Value="FillAndExpand" />
+                <Setter Property="HorizontalOptions" Value="FillAndExpand" />
             </Style>
 
             <!-- BoxView-->
-            <Style x:Key="formBoxViewStyle" TargetType="BoxView">
-                <Setter Property="IsVisible" Value="{Binding IsPinConfirm}" />
-                <Setter Property="VerticalOptions" Value="FillAndExpand" />
+            <Style x:Key="formBoxViewStyle" BasedOn="{StaticResource formBaseStyle}" TargetType="BoxView">
                 <Setter Property="CornerRadius" Value="20" />
                 <Setter Property="Grid.Row" Value="1" />
                 <Setter Property="Grid.Column" Value="1" />
@@ -58,7 +57,6 @@
 
             <!-- Entry -->
             <Style x:Key="formEntryStyle" BasedOn="{StaticResource formBaseStyle}" TargetType="Entry">
-                <Setter Property="HorizontalOptions" Value="FillAndExpand" />
                 <Setter Property="TextColor" Value="Black" />
                 <Setter Property="Grid.Column" Value="2" />
                 <Setter Property="Grid.ColumnSpan" Value="3" />
@@ -79,14 +77,15 @@
     <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
         <Grid.RowDefinitions>
             <RowDefinition Height="10" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="20" />
             <RowDefinition Height="50" />
             <RowDefinition Height="50" />
         </Grid.RowDefinitions>
@@ -103,36 +102,32 @@
         <!-- Map Window -->
         <!-- Map -->
         <ContentView Content="{Binding Map}"
-                     Grid.Row="0" Grid.RowSpan="11"
+                     Grid.Row="0" Grid.RowSpan="12"
                      Grid.Column="0" Grid.ColumnSpan="7" />
 
         <!-- Tab Bar -->
-        <BoxView HorizontalOptions="FillAndExpand" VerticalOptions="EndAndExpand"
-                 HeightRequest="50" Grid.Row="10"
-                 Grid.Column="0" Grid.ColumnSpan="7"
+        <BoxView HorizontalOptions="FillAndExpand" HeightRequest="50" 
+                 Grid.Row="11" Grid.Column="0" Grid.ColumnSpan="7"
                  Color ="{StaticResource bgColour}" />
 
         <!-- Settings Button -->
         <Button ImageSource="icon_settings.png"  
                 Grid.Column="1" Grid.ColumnSpan="2" Margin="20, 0, 0, 0"
-                BackgroundColor="{StaticResource bgColour}"
                 Style="{StaticResource tabButtonStyle}"
                 Command="{Binding GeneralCommand}" />
 
         <!-- Quick Access Button -->
         <Button ImageSource="icon_quickaccess.png" 
                 Grid.Column="4" Grid.ColumnSpan="2" Margin="0, 0, 20, 0"
-                BackgroundColor="{StaticResource bgColour}"
                 Style="{StaticResource tabButtonStyle}"
                 Command="{Binding GeneralCommand}" />
 
         <!-- Post Button -->
         <Button ImageSource="icon_post.png"
-                HorizontalOptions="Center" Margin="0, 0, 0, 5"
+                HorizontalOptions="Center" VerticalOptions="Center" 
                 HeightRequest="80" WidthRequest="80" 
                 BorderRadius="40" BorderWidth="1" BorderColor="SlateGray" 
-                Grid.Column="2" Grid.ColumnSpan="3" Grid.Row="9" Grid.RowSpan="2"
-                BackgroundColor="{StaticResource bgColour}"
+                Grid.Row="10" Grid.RowSpan="2" Grid.Column="2" Grid.ColumnSpan="3" 
                 Style="{StaticResource tabButtonStyle}"
                 Command="{Binding TogglePostModeCommand}" />
 
@@ -152,12 +147,11 @@
 
         <!-- Form Window -->
         <!-- Background Box -->
-        <BoxView Color="{StaticResource bgColour}" Grid.RowSpan="8"
+        <BoxView Color="{StaticResource bgColour}" Grid.RowSpan="9"
                  Style="{StaticResource formBoxViewStyle}" />
 
         <!-- Photo Box -->
-        <BoxView Color="#3B77E6" HeightRequest="200"
-                 Style="{StaticResource formBoxViewStyle}" />
+        <BoxView Color="#3B77E6" Style="{StaticResource formBoxViewStyle}" />
 
         <!-- User Entry -->
         <Entry Placeholder="Category" Grid.Row="2" Margin="0, 20, 0, 0"
@@ -189,7 +183,7 @@
 
         <Button x:Name="GetFormBtn" Text="Submit" BackgroundColor="#34A853" Grid.Column="4"
                 Style="{StaticResource formButtonStyle}"
-                Command="{Binding GetFormInfoCommand}" />
+                Command="{Binding SaveFormInfoCommand}" />
 
     </Grid>
 </ContentPage>

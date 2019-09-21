@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Xamarin.Forms.Maps;
-
-namespace IAB330.Models
+﻿namespace IAB330.Models
 {
     public class Item
     {
