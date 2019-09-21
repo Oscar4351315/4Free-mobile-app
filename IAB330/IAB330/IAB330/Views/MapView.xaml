@@ -62,6 +62,13 @@
                 <Setter Property="Grid.ColumnSpan" Value="3" />
             </Style>
 
+            <!-- Picker -->
+            <Style x:Key="formPickerStyle" BasedOn="{StaticResource formBaseStyle}" TargetType="Picker">
+                <Setter Property="TextColor" Value="Black" />
+                <Setter Property="Grid.Column" Value="2" />
+                <Setter Property="Grid.ColumnSpan" Value="3" />
+            </Style>
+
             <!-- Button -->
             <Style x:Key="formButtonStyle" BasedOn="{StaticResource formBaseStyle}" TargetType="Button">
                 <Setter Property="CornerRadius" Value="15" />
@@ -154,8 +161,26 @@
         <BoxView Color="#3B77E6" Style="{StaticResource formBoxViewStyle}" />
 
         <!-- User Entry -->
-        <Entry Placeholder="Category" Grid.Row="2" Margin="0, 20, 0, 0"
-               Style="{StaticResource formEntryStyle}" Text="{Binding CategoryEntry}" />
+
+        <!-- Picker, for user convenience, also for further custom icon -->
+        <Picker x:Name="picker"
+                Style="{StaticResource formPickerStyle}"
+                Grid.Row="2" Margin="0, 20, 0, 0"
+                Title="Select a category (optional)"
+                TitleColor="Gray"
+                SelectedItem="{Binding CategoryEntry}">
+            <Picker.ItemsSource>
+                <x:Array Type="{x:Type x:String}">
+                    <x:String>Food / Drinks</x:String>
+                    <x:String>Stationary</x:String>
+                    <x:String>Hygiene products</x:String>
+                    <x:String>Sports equipment</x:String>
+                    <x:String>Misc / Others</x:String>
+                </x:Array>
+            </Picker.ItemsSource>
+        </Picker>
+
+
 
         <Entry Placeholder="Title" Grid.Row="3"
                Style="{StaticResource formEntryStyle}" Text="{Binding TitleEntry}" />
