@@ -6649,16 +6649,13 @@ namespace IAB330.Droid
 			public const int notify_panel_notification_icon_bg = 2131165526;
 			
 			// aapt resource value: 0x7F070157
-			public const int quickaccess = 2131165527;
+			public const int SplashScreen = 2131165527;
 			
 			// aapt resource value: 0x7F070158
-			public const int SplashScreen = 2131165528;
+			public const int tooltip_frame_dark = 2131165528;
 			
 			// aapt resource value: 0x7F070159
-			public const int tooltip_frame_dark = 2131165529;
-			
-			// aapt resource value: 0x7F07015A
-			public const int tooltip_frame_light = 2131165530;
+			public const int tooltip_frame_light = 2131165529;
 			
 			static Drawable()
 			{
