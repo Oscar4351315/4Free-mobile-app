@@ -51,7 +51,6 @@ namespace IAB330.ViewModels
         public List<CustomPin> CustomPinList = new List<CustomPin>();
         private List<PostInfo> PostInfoList = new List<PostInfo>();
 
-        //private List<CustomPin> Pins;
 
         public bool IsPinPlacing
         {
@@ -119,11 +118,11 @@ namespace IAB330.ViewModels
         async void GetUserPosition()
         {
             var QUTposition = new Position(-27.47735, 153.028414);
-            //var location = CrossGeolocator.Current;
-            //var position = await location.GetPositionAsync(TimeSpan.FromSeconds(10));
+            var location = CrossGeolocator.Current;
+            var position = await location.GetPositionAsync(TimeSpan.FromSeconds(10));
             Map.MoveToRegion(MapSpan.FromCenterAndRadius(
-                QUTposition, Distance.FromMeters(120)));
-            // new Postition(position.Latitude, position.Longitude), Distance.FromMeters(120))));
+                //QUTposition, Distance.FromMeters(120)));
+                new Position(position.Latitude, position.Longitude), Distance.FromMeters(120)));
         }
 
 
