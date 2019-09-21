@@ -1,6 +1,4 @@
-﻿using System;
-using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
+﻿using Xamarin.Forms;
 
 namespace IAB330
 {
@@ -8,24 +6,27 @@ namespace IAB330
     {
         public App()
         {
-            InitializeComponent();
-
-            MainPage = new MainPage();
+            try
+            {
+                InitializeComponent();
+                MainPage = new Views.MapPage();
+            }
+            catch
+            {
+                System.Diagnostics.Process.GetCurrentProcess().CloseMainWindow();
+            }
         }
 
+        // Handle when your app starts
         protected override void OnStart()
-        {
-            // Handle when your app starts
-        }
+        { }
 
+        // Handle when your app sleeps
         protected override void OnSleep()
-        {
-            // Handle when your app sleeps
-        }
+        { }
 
+        // Handle when your app resumes
         protected override void OnResume()
-        {
-            // Handle when your app resumes
-        }
+        { }
     }
 }
