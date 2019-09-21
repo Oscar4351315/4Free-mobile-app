@@ -107,9 +107,11 @@ namespace IAB330.ViewModels
         // When '+' button is pressed, enters or leaves pin placement window
         void TogglePostMode()
         {
+            Map.Pins.Clear();
             IsPinPlacing = !isPinPlacing;
             IsPinConfirm = false;
-            Map.Pins.Clear();
+
+            if (!IsPinPlacing) AddPinsToMap();
         }
 
         // When confirmed is pressed on pin placement window
@@ -126,6 +128,7 @@ namespace IAB330.ViewModels
         void CancelPinOrForm()
         {
             Map.Pins.Clear();
+            AddPinsToMap();
             IsPinPlacing = false;
             IsPinConfirm = false;
         }
