@@ -13,5 +13,7 @@ namespace CustomRenderer
             Address = details;
             MarkerId = ID;
         }
+
+        
     }
 }
