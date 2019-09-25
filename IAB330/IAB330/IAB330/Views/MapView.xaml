@@ -17,6 +17,7 @@
         <ResourceDictionary>
             <Color x:Key="bgColour">White</Color>
 
+            <!-- Map Window -->
             <!-- Tab Buttons -->
             <Style x:Key="tabButtonStyle" TargetType="Button">
                 <Setter Property="HorizontalOptions" Value="FillAndExpand" />
@@ -25,6 +26,7 @@
                 <Setter Property="Grid.Row" Value="11" />
             </Style>
 
+            
             <!-- Pin Mode Buttons-->
             <Style x:Key="pinButtonStyle" TargetType="Button">
                 <Setter Property="IsVisible" Value="{Binding IsPinPlacing}" />
@@ -35,6 +37,7 @@
                 <Setter Property="CornerRadius" Value="15" />
                 <Setter Property="Grid.Row" Value="10" />
             </Style>
+
 
             <!-- Form Window -->
             <!-- Base -->
@@ -54,6 +57,13 @@
 
             <!-- Entry -->
             <Style x:Key="formEntryStyle" BasedOn="{StaticResource formBaseStyle}" TargetType="Entry">
+                <Setter Property="TextColor" Value="Black" />
+                <Setter Property="Grid.Column" Value="2" />
+                <Setter Property="Grid.ColumnSpan" Value="3" />
+            </Style>
+
+            <!-- Picker -->
+            <Style x:Key="formPickerStyle" BasedOn="{StaticResource formBaseStyle}" TargetType="Picker">
                 <Setter Property="TextColor" Value="Black" />
                 <Setter Property="Grid.Column" Value="2" />
                 <Setter Property="Grid.ColumnSpan" Value="3" />
@@ -130,7 +140,8 @@
 
 
 
-        <!-- Pin Mode Buttons-->
+        <!-- Pin Mode -->
+        <!-- Buttons -->
         <Button Text="Cancel" BackgroundColor="#EA4235" Grid.Column="2"
                 Style="{StaticResource pinButtonStyle}"
                 Command="{Binding CancelPinOrFormCommand}" />
@@ -149,9 +160,27 @@
         <!-- Photo Box -->
         <BoxView Color="#3B77E6" Style="{StaticResource formBoxViewStyle}" />
 
-        <!-- User Entries -->
-        <Entry Placeholder="Category" Grid.Row="2" Margin="0, 20, 0, 0"
-               Style="{StaticResource formEntryStyle}" Text="{Binding CategoryEntry}" />
+        <!-- User Entry -->
+
+        <!-- Picker, for user convenience, also for further custom icon -->
+        <Picker x:Name="picker"
+                Style="{StaticResource formPickerStyle}"
+                Grid.Row="2" Margin="0, 20, 0, 0"
+                Title="Select a category (optional)"
+                TitleColor="Gray"
+                SelectedItem="{Binding CategoryEntry}">
+            <Picker.ItemsSource>
+                <x:Array Type="{x:Type x:String}">
+                    <x:String>Food / Drinks</x:String>
+                    <x:String>Stationary</x:String>
+                    <x:String>Hygiene products</x:String>
+                    <x:String>Sports equipment</x:String>
+                    <x:String>Misc / Others</x:String>
+                </x:Array>
+            </Picker.ItemsSource>
+        </Picker>
+
+
 
         <Entry Placeholder="Title" Grid.Row="3"
                Style="{StaticResource formEntryStyle}" Text="{Binding TitleEntry}" />
