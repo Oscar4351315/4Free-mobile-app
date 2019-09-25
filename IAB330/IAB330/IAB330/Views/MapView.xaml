@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-
              mc:Ignorable="d"
              x:Class="IAB330.Views.MapPage"
              xmlns:vm="clr-namespace:IAB330.ViewModels"
@@ -18,7 +17,6 @@
         <ResourceDictionary>
             <Color x:Key="bgColour">White</Color>
 
-            <!-- Map Window -->
             <!-- Tab Buttons -->
             <Style x:Key="tabButtonStyle" TargetType="Button">
                 <Setter Property="HorizontalOptions" Value="FillAndExpand" />
@@ -27,7 +25,6 @@
                 <Setter Property="Grid.Row" Value="11" />
             </Style>
 
-            
             <!-- Pin Mode Buttons-->
             <Style x:Key="pinButtonStyle" TargetType="Button">
                 <Setter Property="IsVisible" Value="{Binding IsPinPlacing}" />
@@ -38,7 +35,6 @@
                 <Setter Property="CornerRadius" Value="15" />
                 <Setter Property="Grid.Row" Value="10" />
             </Style>
-
 
             <!-- Form Window -->
             <!-- Base -->
@@ -134,8 +130,7 @@
 
 
 
-        <!-- Pin Mode -->
-        <!-- Buttons -->
+        <!-- Pin Mode Buttons-->
         <Button Text="Cancel" BackgroundColor="#EA4235" Grid.Column="2"
                 Style="{StaticResource pinButtonStyle}"
                 Command="{Binding CancelPinOrFormCommand}" />
@@ -154,7 +149,7 @@
         <!-- Photo Box -->
         <BoxView Color="#3B77E6" Style="{StaticResource formBoxViewStyle}" />
 
-        <!-- User Entry -->
+        <!-- User Entries -->
         <Entry Placeholder="Category" Grid.Row="2" Margin="0, 20, 0, 0"
                Style="{StaticResource formEntryStyle}" Text="{Binding CategoryEntry}" />
 

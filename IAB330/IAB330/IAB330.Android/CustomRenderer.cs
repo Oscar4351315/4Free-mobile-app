@@ -1,18 +1,12 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using IAB330.Models;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
-using Plugin.Geolocator;
-using Plugin.Permissions;
-using Plugin.Permissions.Abstractions;
 
 using CustomRenderer;
 using Xamarin.Forms.Maps.Android;
 using Android.Gms.Maps;
 using Android.Content;
 using Android.Gms.Maps.Model;
-using Android.Views;
 using CustomRenderer.Droid;
 
 
@@ -45,7 +39,7 @@ namespace CustomRenderer.Droid
 
             if (e.OldElement != null)
             {
-                // do shit when info window is clicked
+                // do something when info window is clicked
                 //NativeMap.InfoWindowClick -= OnInfoWindowClick;
             }
 
@@ -61,7 +55,7 @@ namespace CustomRenderer.Droid
         {
             base.OnMapReady(map);
             
-            // do shit when the info window is clicked
+            // do something when the info window is clicked
             //NativeMap.InfoWindowClick += OnInfoWindowClick;
             NativeMap.SetInfoWindowAdapter(this);
 
