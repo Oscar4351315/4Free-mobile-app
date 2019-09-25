@@ -54,7 +54,7 @@ namespace IAB330.ViewModels
         public Command SaveFormInfoCommand { get; set; }
         public bool IsPinPlacing { get { return isPinPlacing; } set { SetProperty(ref isPinPlacing, value); } }
         public bool IsPinConfirm { get { return isPinConfirm; } set { SetProperty(ref isPinConfirm, value); } }
-
+       
         // Setup and draws map
         void SetupMap()
         {
@@ -79,12 +79,9 @@ namespace IAB330.ViewModels
         // Moves map to user location
         async void GetUserPosition()
         {
-            //var QUTposition = new Position(-27.47735, 153.028414);
             var location = CrossGeolocator.Current;
             var position = await location.GetPositionAsync();
-            Map.MoveToRegion(MapSpan.FromCenterAndRadius(
-                //QUTposition, Distance.FromMeters(120)));
-                new Position(position.Latitude, position.Longitude), Distance.FromMeters(120)));
+            Map.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(position.Latitude, position.Longitude), Distance.FromMeters(120)));
         }
 
         // Creates pin at location on map click
@@ -102,6 +99,16 @@ namespace IAB330.ViewModels
         void AddPinsToMap()
         {
             CustomPinList.ForEach((pin) => Map.Pins.Add(pin));
+        }
+
+        // Reset entry field values
+        void ResetEntryFields()
+        {
+            TitleEntry = "";
+            EndTimeEntry = "";
+            CategoryEntry = "";
+            StartTimeEntry = "";
+            DescriptionEntry = "";
         }
 
         // When '+' button is pressed, enters or leaves pin placement window
@@ -160,29 +167,16 @@ namespace IAB330.ViewModels
             }
             else
             {
-                //Debug.WriteLine("post: " + categoryEntry);
-                //Application.Current.MainPage.DisplayAlert("Doing Something", "hi " + categoryEntry, "Close");
+                TempCustomPin.Label = newPost.TitleEntry; // Add title to pin
 
-                // add title to pin
-                TempCustomPin.Label = newPost.TitleEntry;
-
-                // add pin and post to the lists
+                // Add pin and post to the lists
                 PostInfoList.Add(newPost);
                 CustomPinList.Add(TempCustomPin);
-
                 IsPinConfirm = false;
                 pinID += 1;
 
-                // reset entry field values
-                TitleEntry = "";
-                EndTimeEntry = "";
-                CategoryEntry = "";
-                StartTimeEntry = "";
-                DescriptionEntry = "";
-
-
+                ResetEntryFields();
                 AddPinsToMap();
-                //Application.Current.MainPage.DisplayAlert("Title Entry: " + newPost.TitleEntry, "number of marker in list: " + CustomPinList.Count(), "Close");
             }
         }
 
