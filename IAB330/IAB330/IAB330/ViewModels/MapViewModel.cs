@@ -54,7 +54,7 @@ namespace IAB330.ViewModels
         public Command SaveFormInfoCommand { get; set; }
         public bool IsPinPlacing { get { return isPinPlacing; } set { SetProperty(ref isPinPlacing, value); } }
         public bool IsPinConfirm { get { return isPinConfirm; } set { SetProperty(ref isPinConfirm, value); } }
-
+       
         // Setup and draws map
         void SetupMap()
         {
@@ -102,6 +102,16 @@ namespace IAB330.ViewModels
         void AddPinsToMap()
         {
             CustomPinList.ForEach((pin) => Map.Pins.Add(pin));
+        }
+
+        void ResetEntryFields()
+        {
+            // reset entry field values
+            TitleEntry = "";
+            EndTimeEntry = "";
+            CategoryEntry = "";
+            StartTimeEntry = "";
+            DescriptionEntry = "";
         }
 
         // When '+' button is pressed, enters or leaves pin placement window
@@ -173,12 +183,7 @@ namespace IAB330.ViewModels
                 IsPinConfirm = false;
                 pinID += 1;
 
-                // reset entry field values
-                TitleEntry = "";
-                EndTimeEntry = "";
-                CategoryEntry = "";
-                StartTimeEntry = "";
-                DescriptionEntry = "";
+                ResetEntryFields();
 
 
                 AddPinsToMap();
