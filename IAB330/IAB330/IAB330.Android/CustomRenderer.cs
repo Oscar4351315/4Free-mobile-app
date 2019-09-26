@@ -62,6 +62,7 @@ namespace CustomRenderer.Droid
             map.UiSettings.ZoomControlsEnabled = false;
         }
 
+        // this function is called autimatically when the Add(pin) is used to add pins to the map
         protected override MarkerOptions CreateMarker(Pin CustomPin)
         {
             var marker = new MarkerOptions();
@@ -69,6 +70,7 @@ namespace CustomRenderer.Droid
             marker.SetTitle(CustomPin.Label);
             //marker.SetSnippet(CustomPin.Address);
             //marker.SetIcon(CustomPin.Icon);
+            // address is actually the image name for the image to use for the pin
             marker.SetIcon(BitmapDescriptorFactory.FromAsset(CustomPin.Address));
             //marker.SetIcon(BitmapDescriptorFactory.FromAsset("icon_food.png"));
             return marker;

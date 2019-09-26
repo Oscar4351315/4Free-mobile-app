@@ -90,6 +90,7 @@ namespace IAB330.ViewModels
             if (isPinPlacing)
             {
                 Map.Pins.Clear();
+                // the address field in pin is the image to use for the ping and has a default so not set here
                 TempCustomPin = new CustomPin(e.Position.Latitude, e.Position.Longitude, "Marker " + pinID, pinID);
                 Map.Pins.Add(TempCustomPin);
             }
@@ -136,6 +137,7 @@ namespace IAB330.ViewModels
         {
             Map.Pins.Clear();
             AddPinsToMap();
+            ResetEntryFields();
             IsPinPlacing = false;
             IsPinConfirm = false;
         }
@@ -149,6 +151,7 @@ namespace IAB330.ViewModels
         private string startTimeEntry;
         private string descriptionEntry;
 
+        // get-set's for the entry form data
         public string ItemsEntry { get { return itemsEntry; } set { SetProperty(ref itemsEntry, value); } }
         public string TitleEntry { get { return titleEntry; } set { SetProperty(ref titleEntry, value); } }
         public string EndTimeEntry { get { return endTimeEntry; } set { SetProperty(ref endTimeEntry, value); } }
@@ -156,7 +159,7 @@ namespace IAB330.ViewModels
         public string StartTimeEntry { get { return startTimeEntry; } set { SetProperty(ref startTimeEntry, value); } }
         public string DescriptionEntry { get { return descriptionEntry; } set { SetProperty(ref descriptionEntry, value); } }
 
-        // Saves form inputs
+        // Saves entry form inputs
         void SaveFormInfo()
         {
             PostInfo newPost = new PostInfo(pinID, categoryEntry, titleEntry, itemsEntry, descriptionEntry, startTimeEntry, endTimeEntry);
@@ -170,10 +173,8 @@ namespace IAB330.ViewModels
                 // Add data to the pin from the entry form
                 TempCustomPin.Label = newPost.TitleEntry; // Add title to pin
                 string png = CategoryToImage(newPost.CategoryEntry);
-                Application.Current.MainPage.DisplayAlert("info", "selected: " + png, "Close");
+                //Application.Current.MainPage.DisplayAlert("info", "selected: " + png, "Close");
                 TempCustomPin.Address = png;
-
-                //TempCustomPin.Address = newPost.
 
 
                 // Add pin and post to the lists
@@ -195,6 +196,8 @@ namespace IAB330.ViewModels
             await Application.Current.MainPage.DisplayAlert("Doing Something", "I don't know what.", "Close");
         }
 
+        // this function gets the category from the entry form and returns
+        //      the corresponding image filename
         string CategoryToImage(string category)
         {
             string png = "not set";
@@ -216,7 +219,8 @@ namespace IAB330.ViewModels
                     png = "misc_icon.png";
                     break;
             }
-
+            // add error handeling here?
+            //if (png == "not set") error??;
             return png;
         }
     }

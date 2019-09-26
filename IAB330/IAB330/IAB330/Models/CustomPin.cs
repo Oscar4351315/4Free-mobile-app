@@ -12,6 +12,7 @@ namespace CustomRenderer
             Position = new Position(lat, lng);
             Label = title;
             // aight new idea, don't know how to override the custom render with a custom pin so address is now the 
+            // address is the name of the image to use for the sustom pin
             Address = category;
             MarkerId = ID;
         }
