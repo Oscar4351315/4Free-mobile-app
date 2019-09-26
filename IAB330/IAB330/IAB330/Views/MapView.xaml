@@ -84,10 +84,10 @@
                     <DataTrigger TargetType="BoxView" Binding="{Binding Path=FormBackgroundColour}" Value="Food / Drink">
                         <Setter Property="Color" Value="#4286F5"/>
                     </DataTrigger>
-                    <DataTrigger TargetType="BoxView" Binding="{Binding Path=FormBackgroundColour}" Value="Stationary">
+                    <DataTrigger TargetType="BoxView" Binding="{Binding Path=FormBackgroundColour}" Value="Health">
                         <Setter Property="Color" Value="#EA4235"/>
                     </DataTrigger>
-                    <DataTrigger TargetType="BoxView" Binding="{Binding Path=FormBackgroundColour}" Value="Health">
+                    <DataTrigger TargetType="BoxView" Binding="{Binding Path=FormBackgroundColour}" Value="Stationary">
                         <Setter Property="Color" Value="#FABD03"/>
                     </DataTrigger>
                     <DataTrigger TargetType="BoxView" Binding="{Binding Path=FormBackgroundColour}" Value="Sports">
@@ -232,8 +232,8 @@
             <Picker.ItemsSource>
                 <x:Array Type="{x:Type x:String}">
                     <x:String>Food / Drink</x:String>
-                    <x:String>Stationary</x:String>
                     <x:String>Health</x:String>
+                    <x:String>Stationary</x:String>
                     <x:String>Sports</x:String>
                     <x:String>Misc</x:String>
                 </x:Array>

@@ -202,11 +202,11 @@ namespace IAB330.ViewModels
                 case ("Food / Drink"):
                     png = "food_icon.png";
                     break;
-                case ("Stationary"):
-                    png = "pen_icon.png";
-                    break;
                 case ("Health"):
                     png = "health_icon.png";
+                    break;
+                case ("Stationary"):
+                    png = "pen_icon.png";
                     break;
                 case ("Sports"):
                     png = "sport_icon.png";
