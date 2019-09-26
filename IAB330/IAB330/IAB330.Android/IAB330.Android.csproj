@@ -236,9 +236,6 @@
     <AndroidAsset Include="Assets\pin.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\food.png" />
-  </ItemGroup>
-  <ItemGroup>
     <AndroidAsset Include="Assets\food_icon.png" />
   </ItemGroup>
   <ItemGroup>

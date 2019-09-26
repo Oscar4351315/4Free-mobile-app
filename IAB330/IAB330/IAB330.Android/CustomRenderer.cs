@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
-
-using CustomRenderer;
 using Xamarin.Forms.Maps.Android;
 using Android.Gms.Maps;
 using Android.Content;
 using Android.Gms.Maps.Model;
 using CustomRenderer.Droid;
+using CustomRenderer;
 
 
 [assembly: ExportRenderer(typeof(CustomMap), typeof(CustomMapRenderer))]
@@ -23,19 +24,18 @@ namespace CustomRenderer.Droid
 
         public Android.Views.View GetInfoContents(Marker marker)
         {
-            throw new System.NotImplementedException();
+            Application.Current.MainPage.DisplayAlert("Marker Info Window", "Feature not yet implemented", "Close");
+            return null;
         }
 
         public Android.Views.View GetInfoWindow(Marker marker)
         {
-            throw new System.NotImplementedException();
+            return null;
         }
 
         protected override void OnElementChanged(Xamarin.Forms.Platform.Android.ElementChangedEventArgs<Map> e)
         {
             base.OnElementChanged(e);
-
-          
 
             if (e.OldElement != null)
             {
@@ -50,7 +50,7 @@ namespace CustomRenderer.Droid
                 Control.GetMapAsync(this);
             }
         }
-        
+
         protected override void OnMapReady(GoogleMap map)
         {
             base.OnMapReady(map);
@@ -62,7 +62,7 @@ namespace CustomRenderer.Droid
             map.UiSettings.ZoomControlsEnabled = false;
         }
 
-        // this function is called autimatically when the Add(pin) is used to add pins to the map
+        // this function is called automatically when the Add(pin) is used to add pins to the map
         protected override MarkerOptions CreateMarker(Pin CustomPin)
         {
             var marker = new MarkerOptions();
