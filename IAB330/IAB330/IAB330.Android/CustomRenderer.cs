@@ -62,14 +62,30 @@ namespace CustomRenderer.Droid
             map.UiSettings.ZoomControlsEnabled = false;
         }
 
-        protected override MarkerOptions CreateMarker(Pin pin)
+        protected override MarkerOptions CreateMarker(Pin CustomPin)
         {
             var marker = new MarkerOptions();
-            marker.SetPosition(new LatLng(pin.Position.Latitude, pin.Position.Longitude));
-            marker.SetTitle(pin.Label);
-            marker.SetSnippet(pin.Address);
-            marker.SetIcon(BitmapDescriptorFactory.FromAsset("icon_food.png"));
+            marker.SetPosition(new LatLng(CustomPin.Position.Latitude, CustomPin.Position.Longitude));
+            marker.SetTitle(CustomPin.Label);
+            //marker.SetSnippet(CustomPin.Address);
+            //marker.SetIcon(CustomPin.Icon);
+            marker.SetIcon(BitmapDescriptorFactory.FromAsset(CustomPin.Address));
+            //marker.SetIcon(BitmapDescriptorFactory.FromAsset("icon_food.png"));
             return marker;
         }
+
+        // self made function, not useful at all
+        MarkerOptions CreateCustomMarker(CustomPin customPin)
+        {
+            var marker = new MarkerOptions();
+            marker.SetPosition(new LatLng(customPin.Position.Latitude, customPin.Position.Longitude));
+            marker.SetTitle(customPin.Label);
+            marker.SetSnippet(customPin.Address);
+            //marker.SetIcon(CustomPin.Icon);
+            marker.SetIcon(BitmapDescriptorFactory.FromAsset(customPin.Icon));
+            //marker.SetIcon(BitmapDescriptorFactory.FromAsset("icon_food.png"));
+            return marker;
+        }
+
     }
 }

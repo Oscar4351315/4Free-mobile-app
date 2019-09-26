@@ -172,7 +172,7 @@
             <Picker.ItemsSource>
                 <x:Array Type="{x:Type x:String}">
                     <x:String>Food / Drinks</x:String>
-                    <x:String>Stationary</x:String>
+                    <x:String>Stationary / School</x:String>
                     <x:String>Hygiene products</x:String>
                     <x:String>Sports equipment</x:String>
                     <x:String>Misc / Others</x:String>

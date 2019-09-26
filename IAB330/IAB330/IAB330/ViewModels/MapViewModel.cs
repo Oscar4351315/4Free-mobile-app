@@ -90,7 +90,7 @@ namespace IAB330.ViewModels
             if (isPinPlacing)
             {
                 Map.Pins.Clear();
-                TempCustomPin = new CustomPin(e.Position.Latitude, e.Position.Longitude, "Marker " + pinID, "Marker " + pinID, pinID);
+                TempCustomPin = new CustomPin(e.Position.Latitude, e.Position.Longitude, "Marker " + pinID, pinID);
                 Map.Pins.Add(TempCustomPin);
             }
         }
@@ -167,7 +167,14 @@ namespace IAB330.ViewModels
             }
             else
             {
+                // Add data to the pin from the entry form
                 TempCustomPin.Label = newPost.TitleEntry; // Add title to pin
+                string png = CategoryToImage(newPost.CategoryEntry);
+                Application.Current.MainPage.DisplayAlert("info", "selected: " + png, "Close");
+                TempCustomPin.Address = png;
+
+                //TempCustomPin.Address = newPost.
+
 
                 // Add pin and post to the lists
                 PostInfoList.Add(newPost);
@@ -175,6 +182,8 @@ namespace IAB330.ViewModels
                 IsPinConfirm = false;
                 pinID += 1;
 
+                // remove temp pin, reset the entry fields and add all pins to the map
+                Map.Pins.Clear();
                 ResetEntryFields();
                 AddPinsToMap();
             }
@@ -184,6 +193,31 @@ namespace IAB330.ViewModels
         async Task DoSomething()
         {
             await Application.Current.MainPage.DisplayAlert("Doing Something", "I don't know what.", "Close");
+        }
+
+        string CategoryToImage(string category)
+        {
+            string png = "not set";
+            switch (category)
+            {
+                case ("Food / Drinks"):
+                    png = "food_icon.png";
+                    break;
+                case ("Stationary / School"):
+                    png = "pen_icon.png";
+                    break;
+                case ("Hygiene products"):
+                    png = "health_icon.png";
+                    break;
+                case ("Sports equipment"):
+                    png = "sports_icon.png";
+                    break;
+                case ("Misc / Others"):
+                    png = "misc_icon.png";
+                    break;
+            }
+
+            return png;
         }
     }
 }
