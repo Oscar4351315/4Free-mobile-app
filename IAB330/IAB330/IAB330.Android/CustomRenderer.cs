@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
-
-using CustomRenderer;
 using Xamarin.Forms.Maps.Android;
 using Android.Gms.Maps;
 using Android.Content;
 using Android.Gms.Maps.Model;
 using CustomRenderer.Droid;
+using CustomRenderer;
 
 
 [assembly: ExportRenderer(typeof(CustomMap), typeof(CustomMapRenderer))]
@@ -23,19 +24,18 @@ namespace CustomRenderer.Droid
 
         public Android.Views.View GetInfoContents(Marker marker)
         {
-            throw new System.NotImplementedException();
+            Application.Current.MainPage.DisplayAlert("Marker Info Window", "Feature not yet implemented", "Close");
+            return null;
         }
 
         public Android.Views.View GetInfoWindow(Marker marker)
         {
-            throw new System.NotImplementedException();
+            return null;
         }
 
         protected override void OnElementChanged(Xamarin.Forms.Platform.Android.ElementChangedEventArgs<Map> e)
         {
             base.OnElementChanged(e);
-
-          
 
             if (e.OldElement != null)
             {
@@ -50,7 +50,7 @@ namespace CustomRenderer.Droid
                 Control.GetMapAsync(this);
             }
         }
-        
+
         protected override void OnMapReady(GoogleMap map)
         {
             base.OnMapReady(map);
@@ -62,14 +62,32 @@ namespace CustomRenderer.Droid
             map.UiSettings.ZoomControlsEnabled = false;
         }
 
-        protected override MarkerOptions CreateMarker(Pin pin)
+        // this function is called automatically when the Add(pin) is used to add pins to the map
+        protected override MarkerOptions CreateMarker(Pin CustomPin)
         {
             var marker = new MarkerOptions();
-            marker.SetPosition(new LatLng(pin.Position.Latitude, pin.Position.Longitude));
-            marker.SetTitle(pin.Label);
-            marker.SetSnippet(pin.Address);
-            marker.SetIcon(BitmapDescriptorFactory.FromAsset("icon_food.png"));
+            marker.SetPosition(new LatLng(CustomPin.Position.Latitude, CustomPin.Position.Longitude));
+            marker.SetTitle(CustomPin.Label);
+            //marker.SetSnippet(CustomPin.Address);
+            //marker.SetIcon(CustomPin.Icon);
+            // address is actually the image name for the image to use for the pin
+            marker.SetIcon(BitmapDescriptorFactory.FromAsset(CustomPin.Address));
+            //marker.SetIcon(BitmapDescriptorFactory.FromAsset("icon_food.png"));
             return marker;
         }
+
+        // self made function, not useful at all
+        MarkerOptions CreateCustomMarker(CustomPin customPin)
+        {
+            var marker = new MarkerOptions();
+            marker.SetPosition(new LatLng(customPin.Position.Latitude, customPin.Position.Longitude));
+            marker.SetTitle(customPin.Label);
+            marker.SetSnippet(customPin.Address);
+            //marker.SetIcon(CustomPin.Icon);
+            marker.SetIcon(BitmapDescriptorFactory.FromAsset(customPin.Icon));
+            //marker.SetIcon(BitmapDescriptorFactory.FromAsset("icon_food.png"));
+            return marker;
+        }
+
     }
 }

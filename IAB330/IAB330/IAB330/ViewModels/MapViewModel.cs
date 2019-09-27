@@ -6,7 +6,6 @@ using Xamarin.Forms.Maps;
 using Plugin.Geolocator;
 using Plugin.Permissions;
 using Plugin.Permissions.Abstractions;
-
 using CustomRenderer;
 
 namespace IAB330.ViewModels
@@ -27,7 +26,7 @@ namespace IAB330.ViewModels
                 GeneralCommand = new Command(async () => await DoSomething(), () => !IsBusy);
                 TogglePostModeCommand = new Command(() => TogglePostMode(), () => !IsBusy);
                 ConfirmPinCommand = new Command(() => ConfirmPin(), () => !IsBusy);
-                CancelPinOrFormCommand = new Command(() => CancelPinOrForm(), () => !IsBusy);
+                CancelPinOrFormCommand = new Command(() => ResetAll(), () => !IsBusy);
                 SaveFormInfoCommand = new Command(() => SaveFormInfo(), () => !IsBusy);
 
             }
@@ -41,6 +40,8 @@ namespace IAB330.ViewModels
         // Variable declarations
         private bool isPinPlacing;
         private bool isPinConfirm;
+        private bool isConfirmButtonEnabled;
+        private string formBackgroundColour;
         private CustomPin TempCustomPin = new CustomPin();
         private List<PostInfo> PostInfoList = new List<PostInfo>();
         public List<CustomPin> CustomPinList = new List<CustomPin>();
@@ -54,7 +55,9 @@ namespace IAB330.ViewModels
         public Command SaveFormInfoCommand { get; set; }
         public bool IsPinPlacing { get { return isPinPlacing; } set { SetProperty(ref isPinPlacing, value); } }
         public bool IsPinConfirm { get { return isPinConfirm; } set { SetProperty(ref isPinConfirm, value); } }
-       
+        public bool IsConfirmButtonEnabled { get {  return isConfirmButtonEnabled; } set { SetProperty(ref isConfirmButtonEnabled, value); } }
+        public string FormBackgroundColour { get { return formBackgroundColour; } set { SetProperty(ref formBackgroundColour, value); } }
+
         // Setup and draws map
         void SetupMap()
         {
@@ -90,35 +93,28 @@ namespace IAB330.ViewModels
             if (isPinPlacing)
             {
                 Map.Pins.Clear();
-                TempCustomPin = new CustomPin(e.Position.Latitude, e.Position.Longitude, "Marker " + pinID, "Marker " + pinID, pinID);
+                IsConfirmButtonEnabled = true;
+                TempCustomPin = new CustomPin(e.Position.Latitude, e.Position.Longitude, "Marker " + pinID, pinID);
                 Map.Pins.Add(TempCustomPin);
             }
-        }
-
-        // Displays all saved pins on map
-        void AddPinsToMap()
-        {
-            CustomPinList.ForEach((pin) => Map.Pins.Add(pin));
-        }
-
-        // Reset entry field values
-        void ResetEntryFields()
-        {
-            TitleEntry = "";
-            EndTimeEntry = "";
-            CategoryEntry = "";
-            StartTimeEntry = "";
-            DescriptionEntry = "";
         }
 
         // When '+' button is pressed, enters or leaves pin placement window
         void TogglePostMode()
         {
             Map.Pins.Clear();
+            ResetEntryFields();
             IsPinPlacing = !isPinPlacing;
             IsPinConfirm = false;
+            IsConfirmButtonEnabled = false;
 
             if (!IsPinPlacing) AddPinsToMap();
+        }
+
+        // Displays all saved pins on map
+        void AddPinsToMap()
+        {
+            CustomPinList.ForEach((pin) => Map.Pins.Add(pin));
         }
 
         // When confirmed is pressed on pin placement window
@@ -128,62 +124,106 @@ namespace IAB330.ViewModels
             {
                 IsPinPlacing = false;
                 IsPinConfirm = true;
+                IsConfirmButtonEnabled = false;
             }
         }
 
         // When cancel is pressed on pin placement/ form window
-        void CancelPinOrForm()
+        void ResetAll()
         {
-            Map.Pins.Clear();
-            AddPinsToMap();
             IsPinPlacing = false;
             IsPinConfirm = false;
+            IsConfirmButtonEnabled = false;
+            Map.Pins.Clear();
+            ResetEntryFields();
+            AddPinsToMap();
         }
 
         // Form entry fields
         private int pinID = 0;
-        private string itemsEntry;
-        private string titleEntry;
-        private string endTimeEntry;
         private string categoryEntry;
-        private string startTimeEntry;
+        private string titleEntry;
+        private string itemsEntry;
         private string descriptionEntry;
-
+        private string startTimeEntry;
+        private string endTimeEntry;
+        
+        // get-set's for the entry form data
+        public string CategoryEntry { get { return categoryEntry; } set { SetProperty(ref categoryEntry, value); FormBackgroundColour = categoryEntry; } }
+        public string TitleEntry { get { return titleEntry; } set { SetProperty(ref titleEntry, value); _ = (TitleEntry.Length > 0) ? IsConfirmButtonEnabled = true : IsConfirmButtonEnabled = false; } }
         public string ItemsEntry { get { return itemsEntry; } set { SetProperty(ref itemsEntry, value); } }
-        public string TitleEntry { get { return titleEntry; } set { SetProperty(ref titleEntry, value); } }
-        public string EndTimeEntry { get { return endTimeEntry; } set { SetProperty(ref endTimeEntry, value); } }
-        public string CategoryEntry { get { return categoryEntry; } set { SetProperty(ref categoryEntry, value); } }
-        public string StartTimeEntry { get { return startTimeEntry; } set { SetProperty(ref startTimeEntry, value); } }
         public string DescriptionEntry { get { return descriptionEntry; } set { SetProperty(ref descriptionEntry, value); } }
+        public string StartTimeEntry { get { return startTimeEntry; } set { SetProperty(ref startTimeEntry, value); } }
+        public string EndTimeEntry { get { return endTimeEntry; } set { SetProperty(ref endTimeEntry, value); } }
 
-        // Saves form inputs
+        // Reset entry field values
+        void ResetEntryFields()
+        {
+            CategoryEntry = "default";
+            TitleEntry = "";
+            ItemsEntry = "";
+            DescriptionEntry = "";
+            StartTimeEntry = "";
+            EndTimeEntry = "";
+        }
+
+        // Saves entry form inputs
         void SaveFormInfo()
         {
             PostInfo newPost = new PostInfo(pinID, categoryEntry, titleEntry, itemsEntry, descriptionEntry, startTimeEntry, endTimeEntry);
 
-            if (newPost.TitleEntry == null) // checks title exists
+            if (newPost.TitleEntry != null && newPost.TitleEntry.Length > 0) // checks title exists
             {
-                Application.Current.MainPage.DisplayAlert("Missing fields", "You need to provide a title", "Close");
-            }
-            else
-            {
+
+                // Add data to the pin from the entry form
                 TempCustomPin.Label = newPost.TitleEntry; // Add title to pin
+                string png = CategoryToImage(newPost.CategoryEntry);
+                //Application.Current.MainPage.DisplayAlert("info", "selected: " + png, "Close");
+                TempCustomPin.Address = png;
+
 
                 // Add pin and post to the lists
                 PostInfoList.Add(newPost);
                 CustomPinList.Add(TempCustomPin);
-                IsPinConfirm = false;
                 pinID += 1;
 
-                ResetEntryFields();
-                AddPinsToMap();
+                // remove temp pin, reset the entry fields and add all pins to the map
+                ResetAll();
             }
+        }
+
+        // this function gets the category from the entry form and returns
+        //      the corresponding image filename
+        string CategoryToImage(string category)
+        {
+            string png = "pin.png";
+            switch (category)
+            {
+                case ("Food / Drink"):
+                    png = "food_icon.png";
+                    break;
+                case ("Health"):
+                    png = "health_icon.png";
+                    break;
+                case ("Stationary"):
+                    png = "pen_icon.png";
+                    break;
+                case ("Sports"):
+                    png = "sport_icon.png";
+                    break;
+                case ("Misc"):
+                    png = "misc_icon.png";
+                    break;
+            }
+            // add error handeling here?
+            //if (png == "not set") error??;
+            return png;
         }
 
         // Generic command
         async Task DoSomething()
         {
-            await Application.Current.MainPage.DisplayAlert("Doing Something", "I don't know what.", "Close");
+            await Application.Current.MainPage.DisplayAlert("Notice", "Feature not yet implemented", "Close");
         }
     }
 }
