@@ -95,6 +95,7 @@ namespace IAB330.ViewModels
                 Map.Pins.Clear();
                 IsConfirmButtonEnabled = true;
                 TempCustomPin = new CustomPin(e.Position.Latitude, e.Position.Longitude, "Marker " + pinID, pinID);
+                Map.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(e.Position.Latitude, e.Position.Longitude), Distance.FromMeters(120)));
                 Map.Pins.Add(TempCustomPin);
             }
         }

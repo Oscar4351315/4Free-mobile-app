@@ -24,7 +24,7 @@ namespace CustomRenderer.Droid
 
         public Android.Views.View GetInfoContents(Marker marker)
         {
-            Application.Current.MainPage.DisplayAlert("Marker Info Window", "Feature not yet implemented", "Close");
+            //Application.Current.MainPage.DisplayAlert("Marker Info Window", "Feature not yet implemented", "Close");
             return null;
         }
 
