@@ -7,6 +7,8 @@ using Plugin.Geolocator;
 using Plugin.Permissions;
 using Plugin.Permissions.Abstractions;
 using CustomRenderer;
+using System;
+
 
 namespace IAB330.ViewModels
 {
@@ -95,6 +97,7 @@ namespace IAB330.ViewModels
                 Map.Pins.Clear();
                 IsConfirmButtonEnabled = true;
                 TempCustomPin = new CustomPin(e.Position.Latitude, e.Position.Longitude, "Marker " + pinID, pinID);
+                Map.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(e.Position.Latitude, e.Position.Longitude), Distance.FromMeters(120)));
                 Map.Pins.Add(TempCustomPin);
             }
         }
@@ -145,16 +148,17 @@ namespace IAB330.ViewModels
         private string titleEntry;
         private string itemsEntry;
         private string descriptionEntry;
-        private string startTimeEntry;
-        private string endTimeEntry;
+        private TimeSpan startTimeEntry;
+        private TimeSpan endTimeEntry;
+
         
         // get-set's for the entry form data
         public string CategoryEntry { get { return categoryEntry; } set { SetProperty(ref categoryEntry, value); FormBackgroundColour = categoryEntry; } }
         public string TitleEntry { get { return titleEntry; } set { SetProperty(ref titleEntry, value); _ = (TitleEntry.Length > 0) ? IsConfirmButtonEnabled = true : IsConfirmButtonEnabled = false; } }
         public string ItemsEntry { get { return itemsEntry; } set { SetProperty(ref itemsEntry, value); } }
         public string DescriptionEntry { get { return descriptionEntry; } set { SetProperty(ref descriptionEntry, value); } }
-        public string StartTimeEntry { get { return startTimeEntry; } set { SetProperty(ref startTimeEntry, value); } }
-        public string EndTimeEntry { get { return endTimeEntry; } set { SetProperty(ref endTimeEntry, value); } }
+        public TimeSpan StartTimeEntry { get { return startTimeEntry; } set { SetProperty(ref startTimeEntry, value); } }
+        public TimeSpan EndTimeEntry { get { return endTimeEntry; } set { SetProperty(ref endTimeEntry, value); } }
 
         // Reset entry field values
         void ResetEntryFields()
@@ -163,8 +167,8 @@ namespace IAB330.ViewModels
             TitleEntry = "";
             ItemsEntry = "";
             DescriptionEntry = "";
-            StartTimeEntry = "";
-            EndTimeEntry = "";
+            StartTimeEntry = TimeSpan.Zero;
+            EndTimeEntry = TimeSpan.Zero;
         }
 
         // Saves entry form inputs
@@ -178,7 +182,7 @@ namespace IAB330.ViewModels
                 // Add data to the pin from the entry form
                 TempCustomPin.Label = newPost.TitleEntry; // Add title to pin
                 string png = CategoryToImage(newPost.CategoryEntry);
-                //Application.Current.MainPage.DisplayAlert("info", "selected: " + png, "Close");
+                //Application.Current.MainPage.DisplayAlert("info", "selected: " + endTimeEntry, "Close");
                 TempCustomPin.Address = png;
 
 

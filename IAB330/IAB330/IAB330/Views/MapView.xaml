@@ -109,7 +109,12 @@
                 <Setter Property="Grid.ColumnSpan" Value="3" />
             </Style>
 
-            <Style x:Key="formPickerStyle" BasedOn="{StaticResource formInputBaseStyle}" TargetType="Picker">
+            <Style x:Key="formPickerStyle" BasedOn="{StaticResource formInputBaseStyle}" TargetType="Picker" >
+                <Setter Property="FontFamily" Value="Arial" />
+                <Setter Property="FontSize" Value="Body" />
+            </Style>
+
+            <Style x:Key="formTimePickerStyle" BasedOn="{StaticResource formInputBaseStyle}" TargetType="TimePicker" >
                 <Setter Property="FontFamily" Value="Arial" />
                 <Setter Property="FontSize" Value="Body" />
             </Style>
@@ -249,11 +254,11 @@
         <Entry Placeholder="Description" Grid.Row="5"
                Style="{StaticResource formEntryStyle}" Text="{Binding DescriptionEntry}" />
 
-        <Entry Placeholder="Start Time" Grid.Row="6"
-               Style="{StaticResource formEntryStyle}" Text="{Binding StartTimeEntry}" />
+        <TimePicker Grid.Row="6" 
+               Style="{StaticResource formTimePickerStyle}" Time="{Binding StartTimeEntry}"/>
 
-        <Entry Placeholder="End Time" Grid.Row="7" Margin="0, 0, 0, 20"
-               Style="{StaticResource formEntryStyle}" Text="{Binding EndTimeEntry}" />
+        <TimePicker Grid.Row="7"  Margin="0, 0, 0, 20"
+               Style="{StaticResource formTimePickerStyle}" Time="{Binding EndTimeEntry}"/>
 
         <!-- Buttons -->
         <Button Text="Cancel" Grid.Column="2" BackgroundColor="{StaticResource cancelButtonColour}" 
