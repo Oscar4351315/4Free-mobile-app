@@ -16,16 +16,25 @@
     <ContentPage.Resources>
         <ResourceDictionary>
             <Color x:Key="bgColour">White</Color>
+            <Color x:Key="confirmButtonColour">#34A853</Color>
+            <Color x:Key="cancelButtonColour">#EA4235</Color>
+            <Color x:Key="greyedButtonColour">LightGray</Color>
 
             <!-- Map Window -->
-            <!-- Tab Buttons -->
-            <Style x:Key="tabButtonStyle" TargetType="Button">
+            <!-- Base -->
+            <Style x:Key="tabStyleBase" TargetType="View">
                 <Setter Property="HorizontalOptions" Value="FillAndExpand" />
-                <Setter Property="VerticalOptions" Value="EndAndExpand" />
                 <Setter Property="HeightRequest" Value="50" />
-                <Setter Property="Grid.Row" Value="10" />
+                <Setter Property="Grid.Row" Value="11" />
+            </Style>
+            
+            <!-- Tab Buttons -->
+            <Style x:Key="tabButtonStyle" BasedOn="{StaticResource tabStyleBase}" TargetType="Button">
+                <Setter Property="BackgroundColor" Value="{StaticResource bgColour}" />
             </Style>
 
+            
+            
             <!-- Pin Mode Buttons-->
             <Style x:Key="pinButtonStyle" TargetType="Button">
                 <Setter Property="IsVisible" Value="{Binding IsPinPlacing}" />
@@ -34,34 +43,85 @@
                 <Setter Property="HeightRequest" Value="40" />
                 <Setter Property="TextColor" Value="White" />
                 <Setter Property="CornerRadius" Value="15" />
-                <Setter Property="Grid.Row" Value="9" />
+                <Setter Property="Grid.Row" Value="10" />
             </Style>
+
+            <!-- Pin Confirm Button -->
+            <Style x:Key="pinConfirmButtonStyle" BasedOn="{StaticResource pinButtonStyle}" TargetType="Button">
+                <Style.Triggers>
+                    <DataTrigger TargetType="Button" Binding="{Binding Path=IsConfirmButtonEnabled}" Value="True">
+                        <Setter Property="BackgroundColor" Value="{StaticResource confirmButtonColour}"/>
+                        <Setter Property="InputTransparent" Value="False"/>
+                    </DataTrigger>
+                    <DataTrigger TargetType="Button" Binding="{Binding Path=IsConfirmButtonEnabled}" Value="False">
+                        <Setter Property="BackgroundColor" Value="{StaticResource greyedButtonColour}"/>
+                        <Setter Property="InputTransparent" Value="True"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+
 
 
             <!-- Form Window -->
             <!-- Base -->
             <Style x:Key="formBaseStyle" TargetType="View">
                 <Setter Property="IsVisible" Value="{Binding IsPinConfirm}" />
-                <Setter Property="VerticalOptions" Value="Center" />
-                <Setter Property="HeightRequest" Value="40" />
+                <Setter Property="VerticalOptions" Value="FillAndExpand" />
+                <Setter Property="HorizontalOptions" Value="FillAndExpand" />
             </Style>
 
-            <!-- BoxView-->
-            <Style x:Key="formBoxViewStyle" TargetType="BoxView">
-                <Setter Property="IsVisible" Value="{Binding IsPinConfirm}" />
-                <Setter Property="VerticalOptions" Value="FillAndExpand" />
+            <!-- BoxView -->
+            <Style x:Key="formBoxViewStyle" BasedOn="{StaticResource formBaseStyle}" TargetType="BoxView">
                 <Setter Property="CornerRadius" Value="20" />
                 <Setter Property="Grid.Row" Value="1" />
                 <Setter Property="Grid.Column" Value="1" />
                 <Setter Property="Grid.ColumnSpan" Value="5" />
             </Style>
 
-            <!-- Entry -->
-            <Style x:Key="formEntryStyle" BasedOn="{StaticResource formBaseStyle}" TargetType="Entry">
-                <Setter Property="HorizontalOptions" Value="FillAndExpand" />
-                <Setter Property="TextColor" Value="Black" />
+            <!-- Photo BoxView -->
+            <Style x:Key="formPhotoStyle" BasedOn="{StaticResource formBoxViewStyle}" TargetType="BoxView">
+                <Style.Triggers>
+                    <DataTrigger TargetType="BoxView" Binding="{Binding Path=FormBackgroundColour}" Value="Food / Drink">
+                        <Setter Property="Color" Value="#4286F5"/>
+                    </DataTrigger>
+                    <DataTrigger TargetType="BoxView" Binding="{Binding Path=FormBackgroundColour}" Value="Health">
+                        <Setter Property="Color" Value="#EA4235"/>
+                    </DataTrigger>
+                    <DataTrigger TargetType="BoxView" Binding="{Binding Path=FormBackgroundColour}" Value="Stationary">
+                        <Setter Property="Color" Value="#FABD03"/>
+                    </DataTrigger>
+                    <DataTrigger TargetType="BoxView" Binding="{Binding Path=FormBackgroundColour}" Value="Sports">
+                        <Setter Property="Color" Value="#34A853"/>
+                    </DataTrigger>
+                    <DataTrigger TargetType="BoxView" Binding="{Binding Path=FormBackgroundColour}" Value="Misc">
+                        <Setter Property="Color" Value="#A142F4"/>
+                    </DataTrigger>
+                    <DataTrigger TargetType="BoxView" Binding="{Binding Path=FormBackgroundColour}" Value="default">
+                        <Setter Property="Color" Value="SlateGray"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+
+            <!-- Picker and Entry -->
+            <Style x:Key="formInputBaseStyle" BasedOn="{StaticResource formBaseStyle}" TargetType="View">
+                <Setter Property="Grid.Row" Value="1" />
                 <Setter Property="Grid.Column" Value="2" />
                 <Setter Property="Grid.ColumnSpan" Value="3" />
+            </Style>
+
+            <Style x:Key="formPickerStyle" BasedOn="{StaticResource formInputBaseStyle}" TargetType="Picker" >
+                <Setter Property="FontFamily" Value="Arial" />
+                <Setter Property="FontSize" Value="Body" />
+            </Style>
+
+            <Style x:Key="formTimePickerStyle" BasedOn="{StaticResource formInputBaseStyle}" TargetType="TimePicker" >
+                <Setter Property="FontFamily" Value="Arial" />
+                <Setter Property="FontSize" Value="Body" />
+            </Style>
+
+            <Style x:Key="formEntryStyle" BasedOn="{StaticResource formInputBaseStyle}" TargetType="Entry">
+                <Setter Property="FontFamily" Value="Arial" />
+                <Setter Property="FontSize" Value="Body" />
             </Style>
 
             <!-- Button -->
@@ -69,6 +129,20 @@
                 <Setter Property="CornerRadius" Value="15" />
                 <Setter Property="TextColor" Value="White" />
                 <Setter Property="Grid.Row" Value="8" />
+            </Style>
+
+            <!-- Confirm Button -->
+            <Style x:Key="formConfirmButtonStyle" BasedOn="{StaticResource formButtonStyle}" TargetType="Button">
+                <Style.Triggers>
+                    <DataTrigger TargetType="Button" Binding="{Binding Path=IsConfirmButtonEnabled}" Value="True">
+                        <Setter Property="BackgroundColor" Value="{StaticResource confirmButtonColour}"/>
+                        <Setter Property="InputTransparent" Value="False"/>
+                    </DataTrigger>
+                    <DataTrigger TargetType="Button" Binding="{Binding Path=IsConfirmButtonEnabled}" Value="False">
+                        <Setter Property="BackgroundColor" Value="{StaticResource greyedButtonColour}"/>
+                        <Setter Property="InputTransparent" Value="True"/>
+                    </DataTrigger>
+                </Style.Triggers>
             </Style>
         </ResourceDictionary>
     </ContentPage.Resources>
@@ -79,14 +153,15 @@
     <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
         <Grid.RowDefinitions>
             <RowDefinition Height="10" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="20" />
             <RowDefinition Height="50" />
             <RowDefinition Height="50" />
         </Grid.RowDefinitions>
@@ -103,36 +178,32 @@
         <!-- Map Window -->
         <!-- Map -->
         <ContentView Content="{Binding Map}"
-                     Grid.Row="0" Grid.RowSpan="11"
+                     Grid.Row="0" Grid.RowSpan="12"
                      Grid.Column="0" Grid.ColumnSpan="7" />
 
         <!-- Tab Bar -->
-        <BoxView HorizontalOptions="FillAndExpand" VerticalOptions="EndAndExpand"
-                 HeightRequest="50" Grid.Row="10"
-                 Grid.Column="0" Grid.ColumnSpan="7"
-                 Color ="{StaticResource bgColour}" />
+        <BoxView Grid.Column="0" Grid.ColumnSpan="7"
+                 Color ="{StaticResource bgColour}"
+                 Style="{StaticResource tabStyleBase}" />
 
         <!-- Settings Button -->
         <Button ImageSource="icon_settings.png"  
                 Grid.Column="1" Grid.ColumnSpan="2" Margin="20, 0, 0, 0"
-                BackgroundColor="{StaticResource bgColour}"
                 Style="{StaticResource tabButtonStyle}"
                 Command="{Binding GeneralCommand}" />
 
         <!-- Quick Access Button -->
         <Button ImageSource="icon_quickaccess.png" 
                 Grid.Column="4" Grid.ColumnSpan="2" Margin="0, 0, 20, 0"
-                BackgroundColor="{StaticResource bgColour}"
                 Style="{StaticResource tabButtonStyle}"
                 Command="{Binding GeneralCommand}" />
 
         <!-- Post Button -->
         <Button ImageSource="icon_post.png"
-                HorizontalOptions="Center" Margin="0, 0, 0, 5"
+                HorizontalOptions="Center" VerticalOptions="Center" 
                 HeightRequest="80" WidthRequest="80" 
                 BorderRadius="40" BorderWidth="1" BorderColor="SlateGray" 
-                Grid.Column="2" Grid.ColumnSpan="3" Grid.Row="9" Grid.RowSpan="2"
-                BackgroundColor="{StaticResource bgColour}"
+                Grid.Row="10" Grid.RowSpan="2" Grid.Column="2" Grid.ColumnSpan="3" 
                 Style="{StaticResource tabButtonStyle}"
                 Command="{Binding TogglePostModeCommand}" />
 
@@ -140,30 +211,41 @@
 
         <!-- Pin Mode -->
         <!-- Buttons -->
-        <Button Text="Cancel" BackgroundColor="#EA4235" Grid.Column="2"
+        <Button Text="Cancel" Grid.Column="2" BackgroundColor="{StaticResource cancelButtonColour}" 
                 Style="{StaticResource pinButtonStyle}"
                 Command="{Binding CancelPinOrFormCommand}" />
 
-        <Button Text="Confirm" BackgroundColor="#34A853" Grid.Column="4"
-                Style="{StaticResource pinButtonStyle}"
+        <Button Text="Confirm" Grid.Column="4"
+                Style="{StaticResource pinConfirmButtonStyle}"
                 Command="{Binding ConfirmPinCommand}" />
 
 
 
         <!-- Form Window -->
         <!-- Background Box -->
-        <BoxView Color="{StaticResource bgColour}" Grid.RowSpan="8"
+        <BoxView Color="{StaticResource bgColour}" Grid.RowSpan="9" 
                  Style="{StaticResource formBoxViewStyle}" />
 
         <!-- Photo Box -->
-        <BoxView Color="#3B77E6" HeightRequest="200"
-                 Style="{StaticResource formBoxViewStyle}" />
+        <BoxView Style="{StaticResource formPhotoStyle}" />
 
-        <!-- User Entry -->
-        <Entry Placeholder="Category" Grid.Row="2" Margin="0, 20, 0, 0"
-               Style="{StaticResource formEntryStyle}" Text="{Binding CategoryEntry}" />
+        <!-- User Inputs -->
+        <Picker Title="Category" TitleColor="Gray" Grid.Row="2" Margin="0, 20, 0, 0"
+                SelectedItem="{Binding CategoryEntry}"
+                Style="{StaticResource formPickerStyle}">
+            
+            <Picker.ItemsSource>
+                <x:Array Type="{x:Type x:String}">
+                    <x:String>Food / Drink</x:String>
+                    <x:String>Health</x:String>
+                    <x:String>Stationary</x:String>
+                    <x:String>Sports</x:String>
+                    <x:String>Misc</x:String>
+                </x:Array>
+            </Picker.ItemsSource>
+        </Picker>
 
-        <Entry Placeholder="Title" Grid.Row="3"
+        <Entry Placeholder="Title  *" Grid.Row="3"
                Style="{StaticResource formEntryStyle}" Text="{Binding TitleEntry}" />
 
         <Entry Placeholder="Items" Grid.Row="4"
@@ -172,24 +254,23 @@
         <Entry Placeholder="Description" Grid.Row="5"
                Style="{StaticResource formEntryStyle}" Text="{Binding DescriptionEntry}" />
 
-        <Entry Placeholder="Start Time" Grid.Row="6"
-               Style="{StaticResource formEntryStyle}" Text="{Binding StartTimeEntry}" />
+        <TimePicker Grid.Row="6" 
+               Style="{StaticResource formTimePickerStyle}" Time="{Binding StartTimeEntry}"/>
 
-        <Entry Placeholder="End Time" Grid.Row="7" Margin="0, 0, 0, 20"
-               Style="{StaticResource formEntryStyle}" Text="{Binding EndTimeEntry}" />
+        <TimePicker Grid.Row="7"  Margin="0, 0, 0, 20"
+               Style="{StaticResource formTimePickerStyle}" Time="{Binding EndTimeEntry}"/>
 
         <!-- Buttons -->
-        <Button Text="Cancel" BackgroundColor="#EA4235" Grid.Column="2"
+        <Button Text="Cancel" Grid.Column="2" BackgroundColor="{StaticResource cancelButtonColour}" 
                 Style="{StaticResource formButtonStyle}"
                 Command="{Binding CancelPinOrFormCommand}" />
 
-        <Button Text="Preview" BackgroundColor="#FABD03" Grid.Column="3"
+        <Button Text="Preview" Grid.Column="3" BackgroundColor="#FABD03"
                 Style="{StaticResource formButtonStyle}"
                 Command="{Binding GeneralCommand}" />
 
-        <Button x:Name="GetFormBtn" Text="Submit" BackgroundColor="#34A853" Grid.Column="4"
-                Style="{StaticResource formButtonStyle}"
-                Command="{Binding GetFormInfoCommand}" />
-
+        <Button Text="Submit" Grid.Column="4"
+                Style="{StaticResource formConfirmButtonStyle}"
+                Command="{Binding SaveFormInfoCommand}" />
     </Grid>
 </ContentPage>

@@ -5,7 +5,7 @@ namespace CustomRenderer
 {
     public class CustomMap : Map
     {
+        public CustomMap() : base() { }
         public List<CustomPin> CustomPins { get; set; }
-
     }
 }

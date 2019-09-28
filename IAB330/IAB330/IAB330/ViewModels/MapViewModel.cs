@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using IAB330.Models;
 using Xamarin.Forms;
@@ -7,69 +6,17 @@ using Xamarin.Forms.Maps;
 using Plugin.Geolocator;
 using Plugin.Permissions;
 using Plugin.Permissions.Abstractions;
-
 using CustomRenderer;
-using System.Diagnostics;
-using System.Linq;
+using System;
+
 
 namespace IAB330.ViewModels
 {
     public partial class MapViewModel : BaseViewModel
     {
-        // Binding to view
-        public CustomMap Map { get; set; }
-        public Command GeneralCommand { get; }
-        public Command ConfirmPinCommand { get; }
-        public Command TogglePostModeCommand { get; }
-        public Command CancelPinOrFormCommand { get; }
-        public Command GetFormInfoCommand { get; set; }
-
-
-        // Get the entry field values
-        private string itemsEntry;
-        private string titleEntry = "";
-        private string endTimeEntry;
-        private string categoryEntry;
-        private string startTimeEntry;
-        private string descriptionEntry;
-
-        public string ItemsEntry { get { return itemsEntry; } set { SetProperty(ref itemsEntry, value); } }
-        public string TitleEntry { get { return titleEntry; } set { SetProperty(ref titleEntry, value); } }
-        public string EndTimeEntry { get { return endTimeEntry; } set { SetProperty(ref endTimeEntry, value); } }
-        public string CategoryEntry { get { return categoryEntry;  } set { SetProperty(ref categoryEntry, value); } }
-        public string StartTimeEntry { get { return startTimeEntry; } set { SetProperty(ref startTimeEntry, value); } }
-        public string DescriptionEntry { get { return descriptionEntry; } set { SetProperty(ref descriptionEntry, value); } }
-
-        //public string CategoryEntry;
-
-        // Declaring variables:
-        // Enters mode that allows user to create marker on map if true
-        private bool isPinPlacing;
-        private bool isPinConfirm;
-        private int markerID = 0; // ID tracker
-        private CustomPin TempCustomPin = new CustomPin();
-        public List<CustomPin> CustomPinList = new List<CustomPin>();
-        private List<PostInfo> PostInfoList = new List<PostInfo>();
-
-
-        public bool IsPinPlacing
-        {
-            get { return isPinPlacing; }
-            set { SetProperty(ref isPinPlacing, value); }
-        }
-
-        // Shows post window if true
-        public bool IsPinConfirm
-        {
-            get { return isPinConfirm; }
-            set { SetProperty(ref isPinConfirm, value); }
-        }
-
-        // Constructor that initiates and creates map
         public MapViewModel()
         {
             Title = "Map Page";
-            // could allow map without user location? just start at QUT
             bool isAllowLocation = CheckLocationPermission();
 
             if (isAllowLocation)
@@ -81,8 +28,8 @@ namespace IAB330.ViewModels
                 GeneralCommand = new Command(async () => await DoSomething(), () => !IsBusy);
                 TogglePostModeCommand = new Command(() => TogglePostMode(), () => !IsBusy);
                 ConfirmPinCommand = new Command(() => ConfirmPin(), () => !IsBusy);
-                CancelPinOrFormCommand = new Command(() => CancelPinOrForm(), () => !IsBusy);
-                GetFormInfoCommand = new Command(() => SaveFormInfo(), () => !IsBusy);
+                CancelPinOrFormCommand = new Command(() => ResetAll(), () => !IsBusy);
+                SaveFormInfoCommand = new Command(() => SaveFormInfo(), () => !IsBusy);
 
             }
             else
@@ -92,17 +39,26 @@ namespace IAB330.ViewModels
             }
         }
 
-        // Returns true if user allowed locations for app
-        bool CheckLocationPermission()
-        {
-            CrossPermissions.Current.RequestPermissionsAsync(Permission.Location);
-            var task = Task.Run(async () => await CrossPermissions.Current.CheckPermissionStatusAsync(Permission.Location));
-            var result = task.Result;
+        // Variable declarations
+        private bool isPinPlacing;
+        private bool isPinConfirm;
+        private bool isConfirmButtonEnabled;
+        private string formBackgroundColour;
+        private CustomPin TempCustomPin = new CustomPin();
+        private List<PostInfo> PostInfoList = new List<PostInfo>();
+        public List<CustomPin> CustomPinList = new List<CustomPin>();
 
-            if (result == PermissionStatus.Granted) return true;
-            return false;
-        }
-
+        // View bindings
+        public CustomMap Map { get; set; }
+        public Command GeneralCommand { get; }
+        public Command ConfirmPinCommand { get; }
+        public Command TogglePostModeCommand { get; }
+        public Command CancelPinOrFormCommand { get; }
+        public Command SaveFormInfoCommand { get; set; }
+        public bool IsPinPlacing { get { return isPinPlacing; } set { SetProperty(ref isPinPlacing, value); } }
+        public bool IsPinConfirm { get { return isPinConfirm; } set { SetProperty(ref isPinConfirm, value); } }
+        public bool IsConfirmButtonEnabled { get {  return isConfirmButtonEnabled; } set { SetProperty(ref isConfirmButtonEnabled, value); } }
+        public string FormBackgroundColour { get { return formBackgroundColour; } set { SetProperty(ref formBackgroundColour, value); } }
 
         // Setup and draws map
         void SetupMap()
@@ -114,65 +70,55 @@ namespace IAB330.ViewModels
             };
         }
 
-
-        // Moves map to user's location
-        async void GetUserPosition()
+        // Requests user for locations permission
+        bool CheckLocationPermission()
         {
-            var QUTposition = new Position(-27.47735, 153.028414);
-            var location = CrossGeolocator.Current;
-            var position = await location.GetPositionAsync(TimeSpan.FromSeconds(10));
-            Map.MoveToRegion(MapSpan.FromCenterAndRadius(
-                //QUTposition, Distance.FromMeters(120)));
-                new Position(position.Latitude, position.Longitude), Distance.FromMeters(120)));
+            CrossPermissions.Current.RequestPermissionsAsync(Permission.Location);
+            var task = Task.Run(async () => await CrossPermissions.Current.CheckPermissionStatusAsync(Permission.Location));
+            var result = task.Result;
+
+            if (result == PermissionStatus.Granted) return true;
+            return false;
         }
 
+        // Moves map to user location
+        async void GetUserPosition()
+        {
+            var location = CrossGeolocator.Current;
+            var position = await location.GetPositionAsync();
+            Map.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(position.Latitude, position.Longitude), Distance.FromMeters(120)));
+        }
 
-        // Creates marker at location on map click
+        // Creates pin at location on map click
         void OnMapClick(object sender, MapClickedEventArgs e)
         {
             if (isPinPlacing)
             {
                 Map.Pins.Clear();
-                TempCustomPin = CreateCustomPin(e.Position.Latitude, e.Position.Longitude, "Marker " + markerID, "Marker " + markerID, markerID);
+                IsConfirmButtonEnabled = true;
+                TempCustomPin = new CustomPin(e.Position.Latitude, e.Position.Longitude, "Marker " + pinID, pinID);
+                Map.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(e.Position.Latitude, e.Position.Longitude), Distance.FromMeters(120)));
                 Map.Pins.Add(TempCustomPin);
             }
         }
 
-
-        // Creates a pin
-        Pin CreatePin(double lat, double lng, string title, string details, int ID)
-        {
-            return new Pin
-            {
-                Type = PinType.Place,
-                Position = new Position(lat, lng),
-                Label = title,
-                Address = details,
-                MarkerId = ID,
-            };
-        }
-
-        CustomPin CreateCustomPin(double lat, double lng, string title, string details, int ID)
-        {
-            return new CustomPin
-            {
-                Type = PinType.Place,
-                Position = new Position(lat, lng),
-                Label = title,
-                Address = details,
-                MarkerId = ID,
-            };
-        }
-
-
         // When '+' button is pressed, enters or leaves pin placement window
         void TogglePostMode()
         {
+            Map.Pins.Clear();
+            ResetEntryFields();
             IsPinPlacing = !isPinPlacing;
             IsPinConfirm = false;
-            Map.Pins.Clear();
+            IsConfirmButtonEnabled = false;
+
+            if (!IsPinPlacing) AddPinsToMap();
         }
 
+        // Displays all saved pins on map
+        void AddPinsToMap()
+        {
+            CustomPinList.ForEach((pin) => Map.Pins.Add(pin));
+        }
 
         // When confirmed is pressed on pin placement window
         void ConfirmPin()
@@ -181,75 +127,107 @@ namespace IAB330.ViewModels
             {
                 IsPinPlacing = false;
                 IsPinConfirm = true;
+                IsConfirmButtonEnabled = false;
             }
         }
 
-
         // When cancel is pressed on pin placement/ form window
-        void CancelPinOrForm()
+        void ResetAll()
         {
-            Map.Pins.Clear();
             IsPinPlacing = false;
             IsPinConfirm = false;
+            IsConfirmButtonEnabled = false;
+            Map.Pins.Clear();
+            ResetEntryFields();
+            AddPinsToMap();
         }
 
+        // Form entry fields
+        private int pinID = 0;
+        private string categoryEntry;
+        private string titleEntry;
+        private string itemsEntry;
+        private string descriptionEntry;
+        private TimeSpan startTimeEntry;
+        private TimeSpan endTimeEntry;
+
+        
+        // get-set's for the entry form data
+        public string CategoryEntry { get { return categoryEntry; } set { SetProperty(ref categoryEntry, value); FormBackgroundColour = categoryEntry; } }
+        public string TitleEntry { get { return titleEntry; } set { SetProperty(ref titleEntry, value); _ = (TitleEntry.Length > 0) ? IsConfirmButtonEnabled = true : IsConfirmButtonEnabled = false; } }
+        public string ItemsEntry { get { return itemsEntry; } set { SetProperty(ref itemsEntry, value); } }
+        public string DescriptionEntry { get { return descriptionEntry; } set { SetProperty(ref descriptionEntry, value); } }
+        public TimeSpan StartTimeEntry { get { return startTimeEntry; } set { SetProperty(ref startTimeEntry, value); } }
+        public TimeSpan EndTimeEntry { get { return endTimeEntry; } set { SetProperty(ref endTimeEntry, value); } }
+
+        // Reset entry field values
+        void ResetEntryFields()
+        {
+            CategoryEntry = "default";
+            TitleEntry = "";
+            ItemsEntry = "";
+            DescriptionEntry = "";
+            StartTimeEntry = TimeSpan.Zero;
+            EndTimeEntry = TimeSpan.Zero;
+        }
+
+        // Saves entry form inputs
+        void SaveFormInfo()
+        {
+            PostInfo newPost = new PostInfo(pinID, categoryEntry, titleEntry, itemsEntry, descriptionEntry, startTimeEntry, endTimeEntry);
+
+            if (newPost.TitleEntry != null && newPost.TitleEntry.Length > 0) // checks title exists
+            {
+
+                // Add data to the pin from the entry form
+                TempCustomPin.Label = newPost.TitleEntry; // Add title to pin
+                string png = CategoryToImage(newPost.CategoryEntry);
+                //Application.Current.MainPage.DisplayAlert("info", "selected: " + endTimeEntry, "Close");
+                TempCustomPin.Address = png;
+
+
+                // Add pin and post to the lists
+                PostInfoList.Add(newPost);
+                CustomPinList.Add(TempCustomPin);
+                pinID += 1;
+
+                // remove temp pin, reset the entry fields and add all pins to the map
+                ResetAll();
+            }
+        }
+
+        // this function gets the category from the entry form and returns
+        //      the corresponding image filename
+        string CategoryToImage(string category)
+        {
+            string png = "pin.png";
+            switch (category)
+            {
+                case ("Food / Drink"):
+                    png = "food_icon.png";
+                    break;
+                case ("Health"):
+                    png = "health_icon.png";
+                    break;
+                case ("Stationary"):
+                    png = "pen_icon.png";
+                    break;
+                case ("Sports"):
+                    png = "sport_icon.png";
+                    break;
+                case ("Misc"):
+                    png = "misc_icon.png";
+                    break;
+            }
+            // add error handeling here?
+            //if (png == "not set") error??;
+            return png;
+        }
 
         // Generic command
         async Task DoSomething()
         {
-            await Application.Current.MainPage.DisplayAlert("Doing Something", "I don't know what.", "Close");
+            await Application.Current.MainPage.DisplayAlert("Notice", "Feature not yet implemented", "Close");
         }
-
-        // function to display all pins on the map
-        void AddPinsToMap()
-        {
-            CustomPinList.ForEach((pin) => Map.Pins.Add(pin));
-        }
-
-        // function to get information from form
-        void SaveFormInfo()
-        {
-            // check that there is only one pin
-            if (Map.Pins.Count != 1)
-            {
-                Application.Current.MainPage.DisplayAlert("Error!", "Something Failed Misserably #pinrelated", "Close");
-                return;
-            }
-
-            // initiate a new PostInfo object
-            PostInfo newPost = new PostInfo(markerID, categoryEntry, titleEntry, itemsEntry, descriptionEntry, startTimeEntry, endTimeEntry);
-
-            // check that there is a title
-            if(newPost.TitleEntry.Length == 0)
-            {
-                Application.Current.MainPage.DisplayAlert("Missing fields", "You need to provide a title", "Close");
-                return;
-            }
-
-            //Debug.WriteLine("post: " + categoryEntry);
-            //Application.Current.MainPage.DisplayAlert("Doing Something", "hi " + categoryEntry, "Close");
-
-            // add title to pin
-            TempCustomPin.Label = newPost.TitleEntry;
-
-            // add pin and post to the lists
-            PostInfoList.Add(newPost);
-            CustomPinList.Add(TempCustomPin);
-
-            IsPinConfirm = false;
-            markerID += 1;
-
-            // reset entry field values
-            TitleEntry = "";
-            EndTimeEntry = "";
-            CategoryEntry = "";
-            StartTimeEntry = "";
-            DescriptionEntry = "";
-
-
-            AddPinsToMap();
-            //Application.Current.MainPage.DisplayAlert("Title Entry: " + newPost.TitleEntry, "number of marker in list: " + CustomPinList.Count(), "Close");
-        }
-
     }
 }
