@@ -32,11 +32,6 @@ namespace IAB330.ViewModels
                 SaveFormInfoCommand = new Command(() => SaveFormInfo(), () => !IsBusy);
 
             }
-            else
-            {
-                // Force closes app on first Visual Studio execution without location permissions
-                System.Diagnostics.Process.GetCurrentProcess().CloseMainWindow();
-            }
         }
 
         // Variable declarations
@@ -74,11 +69,8 @@ namespace IAB330.ViewModels
         bool CheckLocationPermission()
         {
             CrossPermissions.Current.RequestPermissionsAsync(Permission.Location);
-            var task = Task.Run(async () => await CrossPermissions.Current.CheckPermissionStatusAsync(Permission.Location));
-            var result = task.Result;
-
-            if (result == PermissionStatus.Granted) return true;
-            return false;
+            do { } while (CrossPermissions.Current.CheckPermissionStatusAsync(Permission.Location).Result != PermissionStatus.Granted);
+            return true;
         }
 
         // Moves map to user location
@@ -152,7 +144,7 @@ namespace IAB330.ViewModels
         private TimeSpan endTimeEntry;
 
         
-        // get-set's for the entry form data
+        // Get-set's for form data
         public string CategoryEntry { get { return categoryEntry; } set { SetProperty(ref categoryEntry, value); FormBackgroundColour = categoryEntry; } }
         public string TitleEntry { get { return titleEntry; } set { SetProperty(ref titleEntry, value); _ = (TitleEntry.Length > 0) ? IsConfirmButtonEnabled = true : IsConfirmButtonEnabled = false; } }
         public string ItemsEntry { get { return itemsEntry; } set { SetProperty(ref itemsEntry, value); } }
@@ -160,7 +152,7 @@ namespace IAB330.ViewModels
         public TimeSpan StartTimeEntry { get { return startTimeEntry; } set { SetProperty(ref startTimeEntry, value); } }
         public TimeSpan EndTimeEntry { get { return endTimeEntry; } set { SetProperty(ref endTimeEntry, value); } }
 
-        // Reset entry field values
+        // Reset form entry fields
         void ResetEntryFields()
         {
             CategoryEntry = "default";
@@ -180,9 +172,8 @@ namespace IAB330.ViewModels
             {
 
                 // Add data to the pin from the entry form
-                TempCustomPin.Label = newPost.TitleEntry; // Add title to pin
+                TempCustomPin.Label = newPost.TitleEntry;
                 string png = CategoryToImage(newPost.CategoryEntry);
-                //Application.Current.MainPage.DisplayAlert("info", "selected: " + endTimeEntry, "Close");
                 TempCustomPin.Address = png;
 
 
@@ -191,13 +182,11 @@ namespace IAB330.ViewModels
                 CustomPinList.Add(TempCustomPin);
                 pinID += 1;
 
-                // remove temp pin, reset the entry fields and add all pins to the map
                 ResetAll();
             }
         }
 
-        // this function gets the category from the entry form and returns
-        //      the corresponding image filename
+        // Retrives category from entry form and returns the corresponding image filename
         string CategoryToImage(string category)
         {
             string png = "pin.png";
@@ -219,8 +208,7 @@ namespace IAB330.ViewModels
                     png = "misc_icon.png";
                     break;
             }
-            // add error handeling here?
-            //if (png == "not set") error??;
+
             return png;
         }
 
