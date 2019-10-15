@@ -1,13 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using IAB330.Models;
+
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
 using Plugin.Geolocator;
 using Plugin.Permissions;
 using Plugin.Permissions.Abstractions;
+
+using IAB330.Models;
 using CustomRenderer;
-using System;
 
 
 namespace IAB330.ViewModels
@@ -23,14 +25,15 @@ namespace IAB330.ViewModels
             {
                 SetupMap();
                 GetUserPosition();
+                CreateFakeMarkers();
 
                 Map.MapClicked += OnMapClick;
                 GeneralCommand = new Command(async () => await DoSomething(), () => !IsBusy);
+                ShowSettingsCommand = new Command(async () => await ShowSettings(), () => !IsBusy);
                 TogglePostModeCommand = new Command(() => TogglePostMode(), () => !IsBusy);
                 ConfirmPinCommand = new Command(() => ConfirmPin(), () => !IsBusy);
                 CancelPinOrFormCommand = new Command(() => ResetAll(), () => !IsBusy);
                 SaveFormInfoCommand = new Command(() => SaveFormInfo(), () => !IsBusy);
-
             }
         }
 
@@ -47,6 +50,7 @@ namespace IAB330.ViewModels
         public CustomMap Map { get; set; }
         public Command GeneralCommand { get; }
         public Command ConfirmPinCommand { get; }
+        public Command ShowSettingsCommand { get; }
         public Command TogglePostModeCommand { get; }
         public Command CancelPinOrFormCommand { get; }
         public Command SaveFormInfoCommand { get; set; }
@@ -65,6 +69,27 @@ namespace IAB330.ViewModels
             };
         }
 
+        void CreateFakeMarkers()
+        {
+            double[] posX = new double[] { -27.472831442, -27.473040, -27.471817 };
+            double[] posY = new double[] { 153.023499906, 153.024960, 153.023329 };
+            string[] title = new string[] { "Bandaids", "Plushies", "Redbull" };
+            string[] category = new string[] { "health_icon.png", "misc_icon.png", "food_icon.png" };
+
+            for (int i = 0; i < 3; i++)
+            {
+                CustomPin fakePin = new CustomPin(posX[i], posY[i], title[i], pinID, category[i]);
+                PostInfo newPost = new PostInfo(pinID, category[i], title[i], "", "", startTimeEntry, endTimeEntry);
+
+                // Add pin and post to the lists
+                PostInfoList.Add(newPost);
+                CustomPinList.Add(fakePin);
+                pinID += 1;
+            }
+
+            ResetAll();
+        }
+
         // Requests user for locations permission
         bool CheckLocationPermission()
         {
@@ -76,9 +101,11 @@ namespace IAB330.ViewModels
         // Moves map to user location
         async void GetUserPosition()
         {
-            var location = CrossGeolocator.Current;
-            var position = await location.GetPositionAsync();
-            Map.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(position.Latitude, position.Longitude), Distance.FromMeters(120)));
+            Map.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(-27.472831442, 153.023499906), Distance.FromMeters(120)));
+
+            //var location = CrossGeolocator.Current;
+            //var position = await location.GetPositionAsync();
+            //Map.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(position.Latitude, position.Longitude), Distance.FromMeters(120)));
         }
 
         // Creates pin at location on map click
@@ -88,7 +115,7 @@ namespace IAB330.ViewModels
             {
                 Map.Pins.Clear();
                 IsConfirmButtonEnabled = true;
-                TempCustomPin = new CustomPin(e.Position.Latitude, e.Position.Longitude, "Marker " + pinID, pinID);
+                TempCustomPin = new CustomPin(e.Position.Latitude, e.Position.Longitude, "", pinID);
                 Map.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(e.Position.Latitude, e.Position.Longitude), Distance.FromMeters(120)));
                 Map.Pins.Add(TempCustomPin);
             }
@@ -143,6 +170,10 @@ namespace IAB330.ViewModels
         private TimeSpan startTimeEntry;
         private TimeSpan endTimeEntry;
 
+        int GetCurrentTime()
+        {
+            return DateTime.Now.ToLocalTime().Hour;
+        }
         
         // Get-set's for form data
         public string CategoryEntry { get { return categoryEntry; } set { SetProperty(ref categoryEntry, value); FormBackgroundColour = categoryEntry; } }
@@ -159,19 +190,19 @@ namespace IAB330.ViewModels
             TitleEntry = "";
             ItemsEntry = "";
             DescriptionEntry = "";
-            StartTimeEntry = TimeSpan.Zero;
-            EndTimeEntry = TimeSpan.Zero;
+
+            int currentTime = DateTime.Now.ToLocalTime().Hour;
+            StartTimeEntry = TimeSpan.FromHours(currentTime);
+            EndTimeEntry = TimeSpan.FromHours(currentTime + 1);
         }
 
         // Saves entry form inputs
         void SaveFormInfo()
         {
-            PostInfo newPost = new PostInfo(pinID, categoryEntry, titleEntry, itemsEntry, descriptionEntry, startTimeEntry, endTimeEntry);
-
-            if (newPost.TitleEntry != null && newPost.TitleEntry.Length > 0) // checks title exists
+            if (TitleEntry != null && TitleEntry.Length > 0) // checks title exists
             {
-
                 // Add data to the pin from the entry form
+                PostInfo newPost = new PostInfo(pinID, categoryEntry, titleEntry, itemsEntry, descriptionEntry, startTimeEntry, endTimeEntry);
                 TempCustomPin.Label = newPost.TitleEntry;
                 string png = CategoryToImage(newPost.CategoryEntry);
                 TempCustomPin.Address = png;
@@ -210,6 +241,14 @@ namespace IAB330.ViewModels
             }
 
             return png;
+        }
+
+
+        // Settings Window
+        async Task ShowSettings()
+        {
+            await Application.Current.MainPage.DisplayAlert("Settings", "4Free. Version 1.1.\n\nDeveloped By:\n" +
+                "Markus Henrikson, Steven Hua, & Oscar Li", "Close");
         }
 
         // Generic command
