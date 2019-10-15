@@ -15,12 +15,12 @@ namespace IAB330.Services
             items = new List<Item>();
             var mockItems = new List<Item>
             {
-                new Item { Id = Guid.NewGuid().ToString(), Text = "First item", Description="This is an item description." },
-                new Item { Id = Guid.NewGuid().ToString(), Text = "Second item", Description="This is an item description." },
-                new Item { Id = Guid.NewGuid().ToString(), Text = "Third item", Description="This is an item description." },
-                new Item { Id = Guid.NewGuid().ToString(), Text = "Fourth item", Description="This is an item description." },
-                new Item { Id = Guid.NewGuid().ToString(), Text = "Fifth item", Description="This is an item description." },
-                new Item { Id = Guid.NewGuid().ToString(), Text = "Sixth item", Description="This is an item description." }
+                new Item { Id = Guid.NewGuid().ToString(), Title = "First item", Category="This is an item description." },
+                new Item { Id = Guid.NewGuid().ToString(), Title = "Second item", Category="This is an item description." },
+                new Item { Id = Guid.NewGuid().ToString(), Title = "Third item", Category="This is an item description." },
+                new Item { Id = Guid.NewGuid().ToString(), Title = "Fourth item", Category="This is an item description." },
+                new Item { Id = Guid.NewGuid().ToString(), Title = "Fifth item", Category="This is an item description." },
+                new Item { Id = Guid.NewGuid().ToString(), Title = "Sixth item", Category="This is an item description." }
             };
 
             foreach (var item in mockItems)

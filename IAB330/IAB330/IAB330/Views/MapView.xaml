@@ -68,30 +68,6 @@
                 <Setter Property="HorizontalOptions" Value="FillAndExpand" />
             </Style>
 
-            <!-- Photo BoxView -->
-            <Style x:Key="formPhotoStyle" BasedOn="{StaticResource formBaseStyle}" TargetType="BoxView">
-                <Style.Triggers>
-                    <DataTrigger TargetType="BoxView" Binding="{Binding Path=FormBackgroundColour}" Value="Food / Drink">
-                        <Setter Property="Color" Value="#4286F5"/>
-                    </DataTrigger>
-                    <DataTrigger TargetType="BoxView" Binding="{Binding Path=FormBackgroundColour}" Value="Health">
-                        <Setter Property="Color" Value="#EA4235"/>
-                    </DataTrigger>
-                    <DataTrigger TargetType="BoxView" Binding="{Binding Path=FormBackgroundColour}" Value="Stationary">
-                        <Setter Property="Color" Value="#FABD03"/>
-                    </DataTrigger>
-                    <DataTrigger TargetType="BoxView" Binding="{Binding Path=FormBackgroundColour}" Value="Sports">
-                        <Setter Property="Color" Value="#34A853"/>
-                    </DataTrigger>
-                    <DataTrigger TargetType="BoxView" Binding="{Binding Path=FormBackgroundColour}" Value="Misc">
-                        <Setter Property="Color" Value="#A142F4"/>
-                    </DataTrigger>
-                    <DataTrigger TargetType="BoxView" Binding="{Binding Path=FormBackgroundColour}" Value="default">
-                        <Setter Property="Color" Value="SlateGray"/>
-                    </DataTrigger>
-                </Style.Triggers>
-            </Style>
-
             <!-- Picker & Entry -->
             <Style x:Key="formInputBaseStyle" BasedOn="{StaticResource formBaseStyle}" TargetType="View">
                 <Setter Property="Grid.Column" Value="2" />
@@ -133,6 +109,27 @@
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
+
+
+
+            <!-- Quick Access Window -->
+            <!-- Base -->
+            <Style x:Key="quickAccessBaseStyle" TargetType="View">
+                <Setter Property="IsVisible" Value="{Binding IsShowQuickAccess}" />
+                <Setter Property="VerticalOptions" Value="FillAndExpand" />
+                <Setter Property="HorizontalOptions" Value="FillAndExpand" />
+            </Style>
+
+            <Style x:Key="quickAccessButtonStyle" BasedOn="{StaticResource quickAccessBaseStyle}" TargetType="Button">
+                <Setter Property="IsVisible" Value="{Binding IsShowQuickAccess}" />
+                <Setter Property="VerticalOptions" Value="Center" />
+                <Setter Property="HorizontalOptions" Value="Fill" />
+                <Setter Property="BackgroundColor" Value="{StaticResource bgColour}" />
+                <Setter Property="CornerRadius" Value="20" />
+                <Setter Property="Grid.Column" Value="1" />
+                <Setter Property="Grid.ColumnSpan" Value="2" />
+            </Style>
+
         </ResourceDictionary>
     </ContentPage.Resources>
 
@@ -183,7 +180,7 @@
                 Style="{StaticResource tabButtonStyle}" Command="{Binding TogglePostModeCommand}" />
 
         <Button ImageSource="icon_quickaccess.png" Grid.Column="4" Grid.ColumnSpan="2" Margin="0, 0, 20, 0"
-                Style="{StaticResource tabButtonStyle}" Command="{Binding GeneralCommand}" />
+                Style="{StaticResource tabButtonStyle}" Command="{Binding ToggleQuickAccessCommand}" />
 
         <!--  Pin Mode Buttons -->
         <Button Text="Cancel" Grid.Column="1" Grid.ColumnSpan="2" BackgroundColor="{StaticResource cancelButtonColour}" 
@@ -196,11 +193,13 @@
         
         <!-- Form Window -->
         <!-- Background Box -->       
-        <BoxView Grid.Row="1" Grid.RowSpan="9" Grid.Column="1" Grid.ColumnSpan="5" CornerRadius="20"
-                 Color="{StaticResource bgColour}" Style="{StaticResource formBaseStyle}" />
+        <Frame Grid.Row="1" Grid.RowSpan="9" Grid.Column="1" Grid.ColumnSpan="5" 
+               CornerRadius="20" BorderColor="{Binding FormBackgroundColour}"
+               BackgroundColor="{StaticResource bgColour}" Style="{StaticResource formBaseStyle}" />
 
         <!-- Photo Box -->
-        <BoxView Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="5" CornerRadius="20" Style="{StaticResource formPhotoStyle}" />
+        <BoxView Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="5" CornerRadius="20" 
+                 Color="{Binding FormBackgroundColour}" Style="{StaticResource formBaseStyle}" />
 
         <!-- User Inputs -->
         <Picker Grid.Row="2" Title="Category" TitleColor="Gray" Margin="0, 20, 0, 0"
@@ -231,13 +230,40 @@
 
         <Button Text="Submit" Grid.Column="4" Style="{StaticResource formConfirmButtonStyle}" Command="{Binding SaveFormInfoCommand}" />
 
-        
+
         
         <!-- Quick Access Window -->
         <!-- Background Box -->
-        <BoxView IsVisible="False" Grid.Row="1" Grid.RowSpan="10" Grid.Column="4" Grid.ColumnSpan="3" CornerRadius="20, 0, 20, 0"
-                 Color="{StaticResource bgColour}"/>
+        <ListView ItemsSource="{Binding CustomPinList}" Grid.Row="5" Grid.RowSpan="5" Grid.Column="1" Grid.ColumnSpan="5"
+                  BackgroundColor="{StaticResource bgColour}"  Style="{StaticResource quickAccessBaseStyle}" >
+            <d:ListView.ItemsSource>
+                <x:Array Type="{x:Type x:String}">
+                    <x:String>First Item</x:String>
+                    <x:String>Second Item</x:String>
+                    <x:String>Third Item</x:String>
+                </x:Array>
+            </d:ListView.ItemsSource>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <StackLayout Padding="10">
+                            <Label Text="{Binding Label}" 
+                                d:Text="Title" />
+                            <Label Text="{Binding Address}" 
+                                d:Text="Item description"/>
+                        </StackLayout>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
         
-        
+        <!-- Quick Access Window 
+
+        <Button Grid.Row="5" ImageSource="icon_sports.png" Style="{StaticResource quickAccessButtonStyle}" Margin="0,20,0,0" />
+        <Label Grid.Row="5" Grid.Column="2" Text="Sports" Style="{StaticResource quickAccessBaseStyle}" />
+        <Button Grid.Row="6" ImageSource="icon_sports.png" Style="{StaticResource quickAccessButtonStyle}"  />
+        <Button Grid.Row="7" ImageSource="icon_sports.png" Style="{StaticResource quickAccessButtonStyle}"  />
+        <Button Grid.Row="8" ImageSource="icon_sports.png" Style="{StaticResource quickAccessButtonStyle}"  /> -->
+
     </Grid>
 </ContentPage>
