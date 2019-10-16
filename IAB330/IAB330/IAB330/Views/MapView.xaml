@@ -16,9 +16,9 @@
     <ContentPage.Resources>
         <ResourceDictionary>
             <Color x:Key="bgColour">White</Color>
-            <Color x:Key="confirmButtonColour">#34A853</Color>
-            <Color x:Key="cancelButtonColour">#EA4235</Color>
-            <Color x:Key="greyedButtonColour">LightGray</Color>
+            <Color x:Key="confirmBtnColour">#34A853</Color>
+            <Color x:Key="cancelBtnColour">#EA4235</Color>
+            <Color x:Key="greyedBtnColour">LightGray</Color>
 
             <!-- Map Window -->
             <!-- Base -->
@@ -27,17 +27,16 @@
                 <Setter Property="HeightRequest" Value="50" />
                 <Setter Property="Grid.Row" Value="11" />
             </Style>
-            
+
             <!-- Tab Buttons -->
-            <Style x:Key="tabButtonStyle" BasedOn="{StaticResource tabBaseStyle}" TargetType="Button">
+            <Style x:Key="tabBtnStyle" BasedOn="{StaticResource tabBaseStyle}" TargetType="Button">
                 <Setter Property="BackgroundColor" Value="{StaticResource bgColour}" />
             </Style>
 
             <!-- Pin Mode Buttons-->
-            <Style x:Key="pinButtonStyle" TargetType="Button">
+            <Style x:Key="pinBtnStyle" TargetType="Button">
                 <Setter Property="IsVisible" Value="{Binding IsPinPlacing}" />
                 <Setter Property="HorizontalOptions" Value="FillAndExpand" />
-                <Setter Property="VerticalOptions" Value="EndAndExpand" />
                 <Setter Property="HeightRequest" Value="40" />
                 <Setter Property="TextColor" Value="White" />
                 <Setter Property="CornerRadius" Value="15" />
@@ -45,21 +44,21 @@
             </Style>
 
             <!-- Pin Confirm Button -->
-            <Style x:Key="pinConfirmButtonStyle" BasedOn="{StaticResource pinButtonStyle}" TargetType="Button">
+            <Style x:Key="pinConfirmBtnStyle" BasedOn="{StaticResource pinBtnStyle}" TargetType="Button">
                 <Style.Triggers>
                     <DataTrigger TargetType="Button" Binding="{Binding Path=IsConfirmButtonEnabled}" Value="True">
-                        <Setter Property="BackgroundColor" Value="{StaticResource confirmButtonColour}"/>
+                        <Setter Property="BackgroundColor" Value="{StaticResource confirmBtnColour}"/>
                         <Setter Property="InputTransparent" Value="False"/>
                     </DataTrigger>
                     <DataTrigger TargetType="Button" Binding="{Binding Path=IsConfirmButtonEnabled}" Value="False">
-                        <Setter Property="BackgroundColor" Value="{StaticResource greyedButtonColour}"/>
+                        <Setter Property="BackgroundColor" Value="{StaticResource greyedBtnColour}"/>
                         <Setter Property="InputTransparent" Value="True"/>
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
 
 
-            
+
             <!-- Form Window -->
             <!-- Base -->
             <Style x:Key="formBaseStyle" TargetType="View">
@@ -90,21 +89,21 @@
             </Style>
 
             <!-- Button -->
-            <Style x:Key="formButtonStyle" BasedOn="{StaticResource formBaseStyle}" TargetType="Button">
+            <Style x:Key="formBtnStyle" BasedOn="{StaticResource formBaseStyle}" TargetType="Button">
                 <Setter Property="CornerRadius" Value="15" />
                 <Setter Property="TextColor" Value="White" />
                 <Setter Property="Grid.Row" Value="8" />
             </Style>
 
             <!-- Confirm Button -->
-            <Style x:Key="formConfirmButtonStyle" BasedOn="{StaticResource formButtonStyle}" TargetType="Button">
+            <Style x:Key="formConfirmBtnStyle" BasedOn="{StaticResource formBtnStyle}" TargetType="Button">
                 <Style.Triggers>
                     <DataTrigger TargetType="Button" Binding="{Binding Path=IsConfirmButtonEnabled}" Value="True">
-                        <Setter Property="BackgroundColor" Value="{StaticResource confirmButtonColour}"/>
+                        <Setter Property="BackgroundColor" Value="{StaticResource confirmBtnColour}"/>
                         <Setter Property="InputTransparent" Value="False"/>
                     </DataTrigger>
                     <DataTrigger TargetType="Button" Binding="{Binding Path=IsConfirmButtonEnabled}" Value="False">
-                        <Setter Property="BackgroundColor" Value="{StaticResource greyedButtonColour}"/>
+                        <Setter Property="BackgroundColor" Value="{StaticResource greyedBtnColour}"/>
                         <Setter Property="InputTransparent" Value="True"/>
                     </DataTrigger>
                 </Style.Triggers>
@@ -119,17 +118,6 @@
                 <Setter Property="VerticalOptions" Value="FillAndExpand" />
                 <Setter Property="HorizontalOptions" Value="FillAndExpand" />
             </Style>
-
-            <Style x:Key="quickAccessButtonStyle" BasedOn="{StaticResource quickAccessBaseStyle}" TargetType="Button">
-                <Setter Property="IsVisible" Value="{Binding IsShowQuickAccess}" />
-                <Setter Property="VerticalOptions" Value="Center" />
-                <Setter Property="HorizontalOptions" Value="Fill" />
-                <Setter Property="BackgroundColor" Value="{StaticResource bgColour}" />
-                <Setter Property="CornerRadius" Value="20" />
-                <Setter Property="Grid.Column" Value="1" />
-                <Setter Property="Grid.ColumnSpan" Value="2" />
-            </Style>
-
         </ResourceDictionary>
     </ContentPage.Resources>
 
@@ -161,40 +149,36 @@
             <ColumnDefinition Width="10" />
         </Grid.ColumnDefinitions>
 
-        
         <!-- Map Window -->
         <!-- Map -->
         <ContentView Content="{Binding Map}" Grid.Row="0" Grid.RowSpan="12" Grid.Column="0" Grid.ColumnSpan="7" />
-    
+
         <!-- Tab Bar -->
         <BoxView Grid.Column="0" Grid.ColumnSpan="7" Color ="{StaticResource bgColour}" Style="{StaticResource tabBaseStyle}" />
 
         <!-- Tab Bar Buttons -->
-        <Button ImageSource="icon_settings.png" Grid.Column="1" Grid.ColumnSpan="2" Margin="20, 0, 0, 0"
-                Style="{StaticResource tabButtonStyle}" Command="{Binding ShowSettingsCommand}" />
-
+        <Button ImageSource="icon_settings.png" Grid.Column="2" 
+                Style="{StaticResource tabBtnStyle}" Command="{Binding ShowSettingsCommand}" />
         <Button ImageSource="icon_post.png" HeightRequest="80" WidthRequest="80" 
-                HorizontalOptions="Center" VerticalOptions="Center" 
                 BorderRadius="40" BorderWidth="1" BorderColor="SlateGray" 
-                Grid.Row="10" Grid.RowSpan="2" Grid.Column="2" Grid.ColumnSpan="3" 
-                Style="{StaticResource tabButtonStyle}" Command="{Binding TogglePostModeCommand}" />
-
-        <Button ImageSource="icon_quickaccess.png" Grid.Column="4" Grid.ColumnSpan="2" Margin="0, 0, 20, 0"
-                Style="{StaticResource tabButtonStyle}" Command="{Binding ToggleQuickAccessCommand}" />
+                HorizontalOptions="Center" VerticalOptions="Center" 
+                Grid.Row="10" Grid.RowSpan="2" Grid.Column="3" 
+                Style="{StaticResource tabBtnStyle}" Command="{Binding TogglePostModeCommand}" />
+        <Button ImageSource="icon_quickaccess.png" Grid.Column="4" 
+                Style="{StaticResource tabBtnStyle}" Command="{Binding ToggleQuickAccessCommand}" />
 
         <!--  Pin Mode Buttons -->
-        <Button Text="Cancel" Grid.Column="1" Grid.ColumnSpan="2" BackgroundColor="{StaticResource cancelButtonColour}" 
-                Style="{StaticResource pinButtonStyle}" Command="{Binding CancelPinOrFormCommand}" />
-
+        <Button Text="Cancel" Grid.Column="1" Grid.ColumnSpan="2" BackgroundColor="{StaticResource cancelBtnColour}" 
+                Style="{StaticResource pinBtnStyle}" Command="{Binding CancelPinOrFormCommand}" />
         <Button Text="Confirm" Grid.Column="4" Grid.ColumnSpan="2" 
-                Style="{StaticResource pinConfirmButtonStyle}" Command="{Binding ConfirmPinCommand}" />
+                Style="{StaticResource pinConfirmBtnStyle}" Command="{Binding ConfirmPinCommand}" />
 
 
-        
+
         <!-- Form Window -->
-        <!-- Background Box -->       
+        <!-- Background Box -->
         <Frame Grid.Row="1" Grid.RowSpan="9" Grid.Column="1" Grid.ColumnSpan="5" 
-               CornerRadius="20" BorderColor="{Binding FormBackgroundColour}"
+               CornerRadius="20" BorderColor="{Binding FormBackgroundColour}" 
                BackgroundColor="{StaticResource bgColour}" Style="{StaticResource formBaseStyle}" />
 
         <!-- Photo Box -->
@@ -202,7 +186,7 @@
                  Color="{Binding FormBackgroundColour}" Style="{StaticResource formBaseStyle}" />
 
         <!-- User Inputs -->
-        <Picker Grid.Row="2" Title="Category" TitleColor="Gray" Margin="0, 20, 0, 0"
+        <Picker Title="Category" Grid.Row="2" TitleColor="Gray" Margin="0, 20, 0, 0"
                 SelectedItem="{Binding CategoryEntry}" Style="{StaticResource formPickerStyle}">
             <Picker.ItemsSource>
                 <x:Array Type="{x:Type x:String}">
@@ -214,56 +198,52 @@
                 </x:Array>
             </Picker.ItemsSource>
         </Picker>
-
-        <Entry Grid.Row="3" Placeholder="Title  *" Text="{Binding TitleEntry}" Style="{StaticResource formEntryStyle}" />
-        <Entry Grid.Row="4" Placeholder="Items" Text="{Binding ItemsEntry}" Style="{StaticResource formEntryStyle}" />
-        <Entry Grid.Row="5" Placeholder="Description" Text="{Binding DescriptionEntry}" Style="{StaticResource formEntryStyle}" />
-        <TimePicker Grid.Row="6" Time="{Binding StartTimeEntry}" Style="{StaticResource formTimePickerStyle}" />
-        <TimePicker Grid.Row="7" Time="{Binding EndTimeEntry}" Style="{StaticResource formTimePickerStyle}" Margin="0, 0, 0, 20" />
+        <Entry Placeholder="Title  *" Grid.Row="3" Text="{Binding TitleEntry}" Style="{StaticResource formEntryStyle}" />
+        <Entry Placeholder="Items" Grid.Row="4" Text="{Binding ItemsEntry}" Style="{StaticResource formEntryStyle}" />
+        <Entry Placeholder="Description" Grid.Row="5" Text="{Binding DescriptionEntry}" Style="{StaticResource formEntryStyle}" />
+        <TimePicker Time="{Binding StartTimeEntry}" Grid.Row="6" Style="{StaticResource formTimePickerStyle}" />
+        <TimePicker Time="{Binding EndTimeEntry}" Grid.Row="7" Style="{StaticResource formTimePickerStyle}" Margin="0, 0, 0, 20" />
 
         <!-- Buttons -->
-        <Button Text="Cancel" Grid.Column="2" BackgroundColor="{StaticResource cancelButtonColour}" 
-                Style="{StaticResource formButtonStyle}" Command="{Binding CancelPinOrFormCommand}" />
-
-        <Button Text="Preview" Grid.Column="3" BackgroundColor="#FABD03"
-                Style="{StaticResource formButtonStyle}" Command="{Binding GeneralCommand}" />
-
-        <Button Text="Submit" Grid.Column="4" Style="{StaticResource formConfirmButtonStyle}" Command="{Binding SaveFormInfoCommand}" />
+        <Button Text="Cancel" Grid.Column="2" BackgroundColor="{StaticResource cancelBtnColour}" 
+                Style="{StaticResource formBtnStyle}" Command="{Binding CancelPinOrFormCommand}" />
+        <Button Text="Preview" Grid.Column="3" BackgroundColor="#FABD03" 
+                Style="{StaticResource formBtnStyle}" Command="{Binding GeneralCommand}" />
+        <Button Text="Submit" Grid.Column="4" Style="{StaticResource formConfirmBtnStyle}" Command="{Binding SaveFormInfoCommand}" />
 
 
+
+        <!-- Quick Access Window Pin List -->
+        <Label Text="Nearest To Me" Grid.Row="7" Grid.Column="4" Grid.ColumnSpan="3" BackgroundColor="White" FontSize="Large" 
+               HorizontalOptions="FillAndExpand"  HorizontalTextAlignment="Center" Style="{StaticResource quickAccessBaseStyle}"/>
         
-        <!-- Quick Access Window -->
-        <!-- Background Box -->
-        <ListView ItemsSource="{Binding CustomPinList}" Grid.Row="5" Grid.RowSpan="5" Grid.Column="1" Grid.ColumnSpan="5"
-                  BackgroundColor="{StaticResource bgColour}"  Style="{StaticResource quickAccessBaseStyle}" >
-            <d:ListView.ItemsSource>
-                <x:Array Type="{x:Type x:String}">
-                    <x:String>First Item</x:String>
-                    <x:String>Second Item</x:String>
-                    <x:String>Third Item</x:String>
-                </x:Array>
-            </d:ListView.ItemsSource>
+        <ListView x:Name="PinList" ItemsSource="{Binding CustomPinList}" BackgroundColor="White"
+                  Grid.Row="8" Grid.RowSpan="3" Grid.Column="4" Grid.ColumnSpan="3"
+                  RowHeight="50" HeightRequest="250" Style="{StaticResource quickAccessBaseStyle}" >
             <ListView.ItemTemplate>
                 <DataTemplate>
+                    
                     <ViewCell>
-                        <StackLayout Padding="10">
-                            <Label Text="{Binding Label}" 
-                                d:Text="Title" />
-                            <Label Text="{Binding Address}" 
-                                d:Text="Item description"/>
-                        </StackLayout>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="0" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <Image Source="{Binding Address}" Grid.Row="0" Grid.RowSpan="2" Grid.Column="1"/>
+                            <Label Text="{Binding Label}" Grid.Row="0" Grid.Column="2"  VerticalOptions="End" />
+                            <Label Text="{Binding MarkerId}" Grid.Row="0" Grid.Column="3" VerticalOptions="End"/>
+                            <Label Text="{Binding Address}" Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2" VerticalOptions="Start" />
+                        </Grid>
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        
-        <!-- Quick Access Window 
-
-        <Button Grid.Row="5" ImageSource="icon_sports.png" Style="{StaticResource quickAccessButtonStyle}" Margin="0,20,0,0" />
-        <Label Grid.Row="5" Grid.Column="2" Text="Sports" Style="{StaticResource quickAccessBaseStyle}" />
-        <Button Grid.Row="6" ImageSource="icon_sports.png" Style="{StaticResource quickAccessButtonStyle}"  />
-        <Button Grid.Row="7" ImageSource="icon_sports.png" Style="{StaticResource quickAccessButtonStyle}"  />
-        <Button Grid.Row="8" ImageSource="icon_sports.png" Style="{StaticResource quickAccessButtonStyle}"  /> -->
-
     </Grid>
 </ContentPage>

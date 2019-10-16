@@ -7,7 +7,7 @@ namespace CustomRenderer
         public string Icon { get; set; }
         public int MarkerId { get; set; }
         public CustomPin() { }
-        public CustomPin(double lat, double lng, string title, int ID, string category = "pin.png")
+        public CustomPin(double lat, double lng, string title, int ID, string category = "icon_pin.png")
         {
             Type = PinType.Place;
             Position = new Position(lat, lng);

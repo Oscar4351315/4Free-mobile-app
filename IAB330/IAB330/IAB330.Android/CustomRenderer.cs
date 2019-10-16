@@ -10,14 +10,12 @@ using Android.Gms.Maps.Model;
 using CustomRenderer.Droid;
 using CustomRenderer;
 
-
 [assembly: ExportRenderer(typeof(CustomMap), typeof(CustomMapRenderer))]
 namespace CustomRenderer.Droid
 {
     public class CustomMapRenderer : MapRenderer, GoogleMap.IInfoWindowAdapter
     {
         List<CustomPin> customPins;
-
         public CustomMapRenderer(Context context) : base(context)
         {
         }

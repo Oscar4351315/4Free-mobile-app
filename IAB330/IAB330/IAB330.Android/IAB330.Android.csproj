@@ -67,17 +67,17 @@
     <PackageReference Include="Xam.Plugin.Geolocator">
       <Version>4.5.0.6</Version>
     </PackageReference>
-    <PackageReference Include="Xamarin.Forms" Version="4.2.0.778463" />
-    <PackageReference Include="Xamarin.Android.Support.Design" Version="28.0.0.1" />
-    <PackageReference Include="Xamarin.Android.Support.v7.AppCompat" Version="28.0.0.1" />
-    <PackageReference Include="Xamarin.Android.Support.v4" Version="28.0.0.1" />
-    <PackageReference Include="Xamarin.Android.Support.v7.CardView" Version="28.0.0.1" />
-    <PackageReference Include="Xamarin.Android.Support.v7.MediaRouter" Version="28.0.0.1" />
-    <PackageReference Include="Xamarin.Android.Support.Core.Utils" Version="28.0.0.1" />
-    <PackageReference Include="Xamarin.Android.Support.CustomTabs" Version="28.0.0.1" />
-    <PackageReference Include="Xamarin.Essentials" Version="1.3.0" />
+    <PackageReference Include="Xamarin.Forms" Version="4.2.0.848062" />
+    <PackageReference Include="Xamarin.Android.Support.Design" Version="28.0.0.3" />
+    <PackageReference Include="Xamarin.Android.Support.v7.AppCompat" Version="28.0.0.3" />
+    <PackageReference Include="Xamarin.Android.Support.v4" Version="28.0.0.3" />
+    <PackageReference Include="Xamarin.Android.Support.v7.CardView" Version="28.0.0.3" />
+    <PackageReference Include="Xamarin.Android.Support.v7.MediaRouter" Version="28.0.0.3" />
+    <PackageReference Include="Xamarin.Android.Support.Core.Utils" Version="28.0.0.3" />
+    <PackageReference Include="Xamarin.Android.Support.CustomTabs" Version="28.0.0.3" />
+    <PackageReference Include="Xamarin.Essentials" Version="1.3.1" />
     <PackageReference Include="Xamarin.Forms.Maps">
-      <Version>4.2.0.778463</Version>
+      <Version>4.2.0.848062</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
@@ -92,6 +92,10 @@
     <None Include="Properties\AndroidManifest.xml" />
   </ItemGroup>
   <ItemGroup>
+    <AndroidResource Include="Resources\drawable\icon_food.png">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+    </AndroidResource>
     <AndroidResource Include="Resources\layout\Tabbar.xml" />
     <AndroidResource Include="Resources\layout\Toolbar.xml" />
     <AndroidResource Include="Resources\values\styles.xml" />
@@ -137,7 +141,7 @@
     <AndroidResource Include="Resources\drawable-xxxhdpi\icon_settings.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxxhdpi\icon_sports.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\icon_sport.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable-xxxhdpi\logo.png" />
@@ -167,7 +171,7 @@
     <AndroidResource Include="Resources\drawable-xxhdpi\icon_settings.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\icon_sports.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\icon_sport.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable-xhdpi\icon_food.png" />
@@ -188,7 +192,7 @@
     <AndroidResource Include="Resources\drawable-xhdpi\icon_settings.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xhdpi\icon_sports.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\icon_sport.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable-hdpi\icon_food.png" />
@@ -209,9 +213,6 @@
     <AndroidResource Include="Resources\drawable-hdpi\icon_settings.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable-hdpi\icon_sports.png" />
-  </ItemGroup>
-  <ItemGroup>
     <AndroidResource Include="Resources\drawable-hdpi\logo.png" />
   </ItemGroup>
   <ItemGroup>
@@ -230,25 +231,37 @@
     <AndroidResource Include="Resources\drawable-xxhdpi\logo.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\icon_food.png" />
+    <AndroidAsset Include="Assets\icon_food.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\pin.png" />
+    <AndroidAsset Include="Assets\icon_health.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\food_icon.png" />
+    <AndroidAsset Include="Assets\icon_misc.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\health_icon.png" />
+    <AndroidAsset Include="Assets\icon_pen.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\misc_icon.png" />
+    <AndroidAsset Include="Assets\icon_pin.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\pen_icon.png" />
+    <AndroidAsset Include="Assets\icon_sport.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\sport_icon.png" />
+    <AndroidResource Include="Resources\drawable\icon_health.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\icon_misc.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\icon_pen.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable-hdpi\icon_sport.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\icon_sport.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>

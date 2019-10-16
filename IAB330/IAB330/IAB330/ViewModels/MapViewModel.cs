@@ -181,9 +181,31 @@ namespace IAB330.ViewModels
             PostInfoList = new ObservableCollection<PostInfo>();
             CustomPinList = new ObservableCollection<CustomPin>()
             {
-                new CustomPin() { Position = new Position(-27.472831442, 153.023499906), Label = "Bandaids", Address = "health_icon.png", MarkerId = 1 },
-                new CustomPin() { Position = new Position(-27.473040, 153.024960), Label = "Plushies", Address = "misc_icon.png", MarkerId = 2 },
-                new CustomPin() { Position = new Position(-27.471817, 153.023329), Label = "Redbull", Address = "food_icon.png", MarkerId = 3 },
+                new CustomPin() { Position = new Position(-27.472831, 153.023499), Label = "Bandaids", Address = "icon_health.png", MarkerId = 1 },
+                new CustomPin() { Position = new Position(-27.473040, 153.024960), Label = "Plushies", Address = "icon_misc.png", MarkerId = 2 },
+                new CustomPin() { Position = new Position(-27.471817, 153.023329), Label = "Redbull", Address = "icon_food.png", MarkerId = 3 },
+                new CustomPin() { Position = new Position(-27.472831, 153.023699), Label = "Football", Address = "icon_sport.png", MarkerId = 4 },
+                new CustomPin() { Position = new Position(-27.473040, 153.024910), Label = "Pens", Address = "icon_pen.png", MarkerId = 5 },
+                new CustomPin() { Position = new Position(-27.472831, 153.023499), Label = "Bandaids", Address = "icon_health.png", MarkerId = 6 },
+                new CustomPin() { Position = new Position(-27.473040, 153.024960), Label = "Plushies", Address = "icon_misc.png", MarkerId = 7 },
+                new CustomPin() { Position = new Position(-27.471817, 153.023329), Label = "Redbull", Address = "icon_food.png", MarkerId = 8 },
+                new CustomPin() { Position = new Position(-27.472831, 153.023699), Label = "Football", Address = "icon_sport.png", MarkerId = 9 },
+                new CustomPin() { Position = new Position(-27.473040, 153.024910), Label = "Pens", Address = "icon_pen.png", MarkerId = 10 },
+                new CustomPin() { Position = new Position(-27.472831, 153.023499), Label = "Bandaids", Address = "icon_health.png", MarkerId = 11 },
+                new CustomPin() { Position = new Position(-27.473040, 153.024960), Label = "Plushies", Address = "icon_misc.png", MarkerId = 12 },
+                new CustomPin() { Position = new Position(-27.471817, 153.023329), Label = "Redbull", Address = "icon_food.png", MarkerId = 13 },
+                new CustomPin() { Position = new Position(-27.472831, 153.023699), Label = "Football", Address = "icon_sport.png", MarkerId = 14 },
+                new CustomPin() { Position = new Position(-27.473040, 153.024910), Label = "Pens", Address = "icon_pen.png", MarkerId = 15 },
+                new CustomPin() { Position = new Position(-27.472831, 153.023499), Label = "Bandaids", Address = "icon_health.png", MarkerId = 16 },
+                new CustomPin() { Position = new Position(-27.473040, 153.024960), Label = "Plushies", Address = "icon_misc.png", MarkerId = 17 },
+                new CustomPin() { Position = new Position(-27.471817, 153.023329), Label = "Redbull", Address = "icon_food.png", MarkerId = 18 },
+                new CustomPin() { Position = new Position(-27.472831, 153.023699), Label = "Football", Address = "icon_sport.png", MarkerId = 19 },
+                new CustomPin() { Position = new Position(-27.473040, 153.024910), Label = "Pens", Address = "icon_pen.png", MarkerId = 20 },
+                new CustomPin() { Position = new Position(-27.472831, 153.023499), Label = "Bandaids", Address = "icon_health.png", MarkerId = 21 },
+                new CustomPin() { Position = new Position(-27.473040, 153.024960), Label = "Plushies", Address = "icon_misc.png", MarkerId = 22 },
+                new CustomPin() { Position = new Position(-27.471817, 153.023329), Label = "Redbull", Address = "icon_food.png", MarkerId = 23 },
+                new CustomPin() { Position = new Position(-27.472831, 153.023699), Label = "Football", Address = "icon_sport.png", MarkerId = 24 },
+                new CustomPin() { Position = new Position(-27.473040, 153.024910), Label = "Pens", Address = "icon_pen.png", MarkerId = 25 },
             };
 
             CustomPinList.ForEach((pin) => PostInfoList.Add(new PostInfo(pin.MarkerId, pin.Address, pin.Label, "", "", startTimeEntry, endTimeEntry)));
@@ -237,14 +259,14 @@ namespace IAB330.ViewModels
         // Retrives category from entry form and returns the corresponding image filename
         string CategoryToImage(string category)
         {
-            string png = "pin.png";
+            string png = "icon_pin.png";
             switch (category)
             {
-                case ("Food / Drink"): png = "food_icon.png"; break;
-                case ("Health"): png = "health_icon.png"; break;
-                case ("Stationary"): png = "pen_icon.png"; break;
-                case ("Sports"): png = "sport_icon.png"; break;
-                case ("Misc"): png = "misc_icon.png"; break;
+                case ("Food / Drink"): png = "icon_food.png"; break;
+                case ("Health"): png = "icon_health.png"; break;
+                case ("Stationary"): png = "icon_pen.png"; break;
+                case ("Sports"): png = "icon_sport.png"; break;
+                case ("Misc"): png = "icon_misc.png"; break;
             }
 
             return png;

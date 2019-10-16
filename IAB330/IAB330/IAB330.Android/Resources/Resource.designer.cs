@@ -5998,7 +5998,7 @@ namespace IAB330.Droid
 			public const int icon_settings = 2131165489;
 			
 			// aapt resource value: 0x7F070132
-			public const int icon_sports = 2131165490;
+			public const int icon_sport = 2131165490;
 			
 			// aapt resource value: 0x7F070077
 			public const int ic_audiotrack_dark = 2131165303;
