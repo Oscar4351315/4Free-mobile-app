@@ -129,7 +129,7 @@ namespace IAB330.ViewModels
             {
                 Map.Pins.Clear();
                 IsConfirmButtonEnabled = true;
-                tempCustomPin = new CustomPin(e.Position.Latitude, e.Position.Longitude, "", pinID);
+                tempCustomPin = new CustomPin { Position = new Position(e.Position.Latitude, e.Position.Longitude), };
                 Map.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(e.Position.Latitude, e.Position.Longitude), Distance.FromMeters(120)));
                 Map.Pins.Add(tempCustomPin);
             }
