@@ -62,6 +62,8 @@ namespace IAB330.ViewModels
         public bool IsPinConfirm { get { return isPinConfirm; } set { SetProperty(ref isPinConfirm, value); } }
         public bool IsShowQuickAccess { get { return isShowQuickAccess; } set { SetProperty(ref isShowQuickAccess, value); } }
         public bool IsConfirmButtonEnabled { get {  return isConfirmButtonEnabled; } set { SetProperty(ref isConfirmButtonEnabled, value); } }
+
+        // Repositions map when an item from quick access is selected
         public CustomPin SelectedPinListItem
         {
             get { return selectedPinListItem; }
@@ -72,7 +74,6 @@ namespace IAB330.ViewModels
                 Map.MoveToRegion(MapSpan.FromCenterAndRadius(pinPosition, Distance.FromMeters(120)));
             }
         }
-
 
         // Returns a colour based on the category the user has selected
         public string FormBackgroundColour
@@ -129,7 +130,7 @@ namespace IAB330.ViewModels
             {
                 Map.Pins.Clear();
                 IsConfirmButtonEnabled = true;
-                tempCustomPin = new CustomPin { Position = new Position(e.Position.Latitude, e.Position.Longitude), };
+                tempCustomPin = new CustomPin { Position = new Position(e.Position.Latitude, e.Position.Longitude), Label = "hi" };
                 Map.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(e.Position.Latitude, e.Position.Longitude), Distance.FromMeters(120)));
                 Map.Pins.Add(tempCustomPin);
             }
@@ -151,7 +152,6 @@ namespace IAB330.ViewModels
             IsPinConfirm = false;
             IsShowQuickAccess = false;
             IsConfirmButtonEnabled = false;
-
             if (!IsPinPlacing) AddPinsToMap();
         }
 
@@ -184,7 +184,6 @@ namespace IAB330.ViewModels
             ResetEntryFields();
             IsPinPlacing = false;
             IsPinConfirm = false;
-
             IsShowQuickAccess = false;
             IsConfirmButtonEnabled = false;
         }
@@ -195,16 +194,16 @@ namespace IAB330.ViewModels
             PostInfoList = new ObservableCollection<PostInfo>();
             CustomPinList = new ObservableCollection<CustomPin>()
             {
-                new CustomPin() { Position = new Position(-27.472831, 153.023499), Label = "Bandaids", Address = "icon_health.png", MarkerId = 1 },
-                new CustomPin() { Position = new Position(-27.473040, 153.024960), Label = "Plushies", Address = "icon_misc.png", MarkerId = 2 },
-                new CustomPin() { Position = new Position(-27.471817, 153.023329), Label = "Redbull", Address = "icon_food.png", MarkerId = 3 },
-                new CustomPin() { Position = new Position(-27.472831, 153.023699), Label = "Football", Address = "icon_sport.png", MarkerId = 4 },
-                new CustomPin() { Position = new Position(-27.473040, 153.024910), Label = "Pens", Address = "icon_pen.png", MarkerId = 5 },
-                new CustomPin() { Position = new Position(-27.473040, 153.023329), Label = "Panadol", Address = "icon_health.png", MarkerId = 6 },
-                new CustomPin() { Position = new Position(-27.471817, 153.023499), Label = "Headbands", Address = "icon_misc.png", MarkerId = 7 },
+                new CustomPin() { Position = new Position(-27.472831, 153.023499), Label = "Bandaids", Address = "icon_health.png", PinID = 0 },
+                new CustomPin() { Position = new Position(-27.473040, 153.024960), Label = "Plushies", Address = "icon_misc.png", PinID = 1 },
+                new CustomPin() { Position = new Position(-27.471817, 153.023329), Label = "Redbull", Address = "icon_food.png", PinID = 2 },
+                new CustomPin() { Position = new Position(-27.472831, 153.023699), Label = "Football", Address = "icon_sport.png", PinID = 3 },
+                new CustomPin() { Position = new Position(-27.473040, 153.024910), Label = "Pens", Address = "icon_pen.png", PinID = 4 },
+                new CustomPin() { Position = new Position(-27.473040, 153.023329), Label = "Panadol", Address = "icon_health.png", PinID = 5 },
+                new CustomPin() { Position = new Position(-27.471817, 153.023499), Label = "Headbands", Address = "icon_misc.png", PinID = 6 },
             };
 
-            CustomPinList.ForEach((pin) => PostInfoList.Add(new PostInfo(pin.MarkerId, pin.Address, pin.Label, "", "", startTimeEntry, endTimeEntry)));
+            CustomPinList.ForEach((pin) => PostInfoList.Add(new PostInfo(pin.PinID, pin.Address, pin.Label, "", "", startTimeEntry, endTimeEntry)));
             pinID = CustomPinList.Count + 1; // Prepares for next pin
             ResetAll();
         }

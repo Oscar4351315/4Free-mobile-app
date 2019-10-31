@@ -11,7 +11,7 @@ namespace IAB330.Services
         // Retrives category from entry form and returns the corresponding image filename
         public string CategoryToImage(string category)
         {
-            string png = "pin.png";
+            string png;
             switch (category)
             {
                 case ("Food / Drink"): png = "icon_food.png"; break;
@@ -19,8 +19,8 @@ namespace IAB330.Services
                 case ("Stationary"): png = "icon_pen.png"; break;
                 case ("Sports"): png = "icon_sport.png"; break;
                 case ("Misc"): png = "icon_misc.png"; break;
+                default: png = "pin.png"; break;
             }
-
             return png;
         }
     }
