@@ -11,12 +11,6 @@ namespace IAB330.Views
         {
             InitializeComponent();
             BindingContext = new MapViewModel();
-
-            // Prevents item selection from highlighting
-            PinList.ItemTapped += (object sender, ItemTappedEventArgs e) => {
-                if (e.Item == null) return;
-                if (sender is ListView lv) lv.SelectedItem = null;
-            };
         }
     }
 }

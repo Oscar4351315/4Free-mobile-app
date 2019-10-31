@@ -215,14 +215,13 @@
 
         <!-- Quick Access Window Pin List -->
         <Label Text="Nearest To Me" Grid.Row="7" Grid.Column="4" Grid.ColumnSpan="3" BackgroundColor="White" FontSize="Large" 
-               HorizontalOptions="FillAndExpand"  HorizontalTextAlignment="Center" Style="{StaticResource quickAccessBaseStyle}"/>
-        
-        <ListView x:Name="PinList" ItemsSource="{Binding CustomPinList}" BackgroundColor="White"
+               HeightRequest="30"  HorizontalTextAlignment="Center" Style="{StaticResource quickAccessBaseStyle}"/>
+
+        <ListView ItemsSource="{Binding CustomPinList}" SelectedItem="{Binding SelectedPinListItem, Mode=TwoWay}"
                   Grid.Row="8" Grid.RowSpan="3" Grid.Column="4" Grid.ColumnSpan="3"
-                  RowHeight="50" HeightRequest="250" Style="{StaticResource quickAccessBaseStyle}" >
+                  RowHeight="50" HeightRequest="250" BackgroundColor="White" Style="{StaticResource quickAccessBaseStyle}" >
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    
                     <ViewCell>
                         <Grid>
                             <Grid.RowDefinitions>

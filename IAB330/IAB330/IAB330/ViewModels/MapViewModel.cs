@@ -44,7 +44,8 @@ namespace IAB330.ViewModels
         private bool isConfirmButtonEnabled;
         private bool isShowQuickAccess;
         private string formBackgroundColour;
-        private CustomPin TempCustomPin = new CustomPin();
+        private CustomPin selectedPinListItem;
+        private CustomPin tempCustomPin = new CustomPin();
         
         // View bindings
         public CustomMap Map { get; set; }
@@ -60,6 +61,20 @@ namespace IAB330.ViewModels
         public bool IsPinConfirm { get { return isPinConfirm; } set { SetProperty(ref isPinConfirm, value); } }
         public bool IsShowQuickAccess { get { return isShowQuickAccess; } set { SetProperty(ref isShowQuickAccess, value); } }
         public bool IsConfirmButtonEnabled { get {  return isConfirmButtonEnabled; } set { SetProperty(ref isConfirmButtonEnabled, value); } }
+
+        public CustomPin SelectedPinListItem
+        {
+            get { return selectedPinListItem; }
+            set
+            {
+                SetProperty(ref selectedPinListItem, value);
+                var pinPosition = selectedPinListItem.Position;
+ 
+                Map.MoveToRegion(MapSpan.FromCenterAndRadius(pinPosition, Distance.FromMeters(120)));
+                //Application.Current.MainPage.DisplayAlert("Test", pinSelected.Address.ToString(), "Close");
+            }
+        }
+
 
         // Returns a colour based on the category the user has selected
         public string FormBackgroundColour
@@ -116,9 +131,9 @@ namespace IAB330.ViewModels
             {
                 Map.Pins.Clear();
                 IsConfirmButtonEnabled = true;
-                TempCustomPin = new CustomPin(e.Position.Latitude, e.Position.Longitude, "", pinID);
+                tempCustomPin = new CustomPin(e.Position.Latitude, e.Position.Longitude, "", pinID);
                 Map.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(e.Position.Latitude, e.Position.Longitude), Distance.FromMeters(120)));
-                Map.Pins.Add(TempCustomPin);
+                Map.Pins.Add(tempCustomPin);
             }
         }
 
@@ -171,6 +186,7 @@ namespace IAB330.ViewModels
             ResetEntryFields();
             IsPinPlacing = false;
             IsPinConfirm = false;
+
             IsShowQuickAccess = false;
             IsConfirmButtonEnabled = false;
         }
@@ -248,9 +264,9 @@ namespace IAB330.ViewModels
         // Saves entry form inputs
         void SaveFormInfo()
         {
-            TempCustomPin.Label = TitleEntry;
-            TempCustomPin.Address = CategoryToImage(CategoryEntry);
-            CustomPinList.Add(TempCustomPin);
+            tempCustomPin.Label = TitleEntry;
+            tempCustomPin.Address = CategoryToImage(CategoryEntry);
+            CustomPinList.Add(tempCustomPin);
             PostInfoList.Add(new PostInfo(pinID, categoryEntry, titleEntry, itemsEntry, descriptionEntry, startTimeEntry, endTimeEntry));
             pinID += 1;
             ResetAll();
