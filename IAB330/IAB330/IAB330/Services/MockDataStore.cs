@@ -1,66 +1,65 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using IAB330.Models;
+
+using Xamarin.Forms.Maps;
+using CustomRenderer;
 
 namespace IAB330.Services
 {
-    public class MockDataStore : IDataStore<Item>
+    public class MockDataStore : IDataStore<CustomPin>
     {
-        List<Item> items;
+        List<CustomPin> customPinList;
 
         public MockDataStore()
         {
-            items = new List<Item>();
-            var mockItems = new List<Item>
+            customPinList = new List<CustomPin>();
+            var mockPins = new List<CustomPin>
             {
-                new Item { Id = Guid.NewGuid().ToString(), Title = "First item", Category="This is an item description." },
-                new Item { Id = Guid.NewGuid().ToString(), Title = "Second item", Category="This is an item description." },
-                new Item { Id = Guid.NewGuid().ToString(), Title = "Third item", Category="This is an item description." },
-                new Item { Id = Guid.NewGuid().ToString(), Title = "Fourth item", Category="This is an item description." },
-                new Item { Id = Guid.NewGuid().ToString(), Title = "Fifth item", Category="This is an item description." },
-                new Item { Id = Guid.NewGuid().ToString(), Title = "Sixth item", Category="This is an item description." }
+                new CustomPin() { Position = new Position(-27.472831, 153.023499), Label = "Bandaids", Address = "icon_health.png"},
+                new CustomPin() { Position = new Position(-27.473040, 153.024960), Label = "Plushies", Address = "icon_misc.png" },
+                new CustomPin() { Position = new Position(-27.471817, 153.023329), Label = "Redbull", Address = "icon_food.png"},
+                new CustomPin() { Position = new Position(-27.472831, 153.023699), Label = "Football", Address = "icon_sport.png"},
+                new CustomPin() { Position = new Position(-27.473040, 153.024910), Label = "Pens", Address = "icon_pen.png"},
+                new CustomPin() { Position = new Position(-27.473040, 153.023329), Label = "Panadol", Address = "icon_health.png"},
+                new CustomPin() { Position = new Position(-27.471817, 153.023499), Label = "Headbands", Address = "icon_misc.png"},
             };
 
-            foreach (var item in mockItems)
-            {
-                items.Add(item);
-            }
+            mockPins.ForEach((pin) => customPinList.Add(pin));
         }
 
-        public async Task<bool> AddItemAsync(Item item)
+        public async Task<bool> AddItemAsync(CustomPin pin)
         {
-            items.Add(item);
+            customPinList.Add(pin);
 
             return await Task.FromResult(true);
         }
 
-        public async Task<bool> UpdateItemAsync(Item item)
+        public async Task<bool> UpdateItemAsync(CustomPin pin)
         {
-            var oldItem = items.Where((Item arg) => arg.Id == item.Id).FirstOrDefault();
-            items.Remove(oldItem);
-            items.Add(item);
+            var oldItem = customPinList.Where((CustomPin arg) => arg.MarkerID == pin.MarkerID).FirstOrDefault();
+            customPinList.Remove(oldItem);
+            customPinList.Add(pin);
 
             return await Task.FromResult(true);
         }
 
         public async Task<bool> DeleteItemAsync(string id)
         {
-            var oldItem = items.Where((Item arg) => arg.Id == id).FirstOrDefault();
-            items.Remove(oldItem);
+            var oldItem = customPinList.Where((CustomPin arg) => arg.MarkerID.ToString() == id).FirstOrDefault();
+            customPinList.Remove(oldItem);
 
             return await Task.FromResult(true);
         }
 
-        public async Task<Item> GetItemAsync(string id)
+        public async Task<CustomPin> GetItemAsync(string id)
         {
-            return await Task.FromResult(items.FirstOrDefault(s => s.Id == id));
+            return await Task.FromResult(customPinList.FirstOrDefault(s => s.MarkerID.ToString() == id));
         }
 
-        public async Task<IEnumerable<Item>> GetItemsAsync(bool forceRefresh = false)
+        public async Task<IEnumerable<CustomPin>> GetItemsAsync(bool forceRefresh = false)
         {
-            return await Task.FromResult(items);
+            return await Task.FromResult(customPinList);
         }
     }
 }

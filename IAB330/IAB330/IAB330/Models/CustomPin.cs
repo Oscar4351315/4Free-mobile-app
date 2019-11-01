@@ -5,12 +5,12 @@ namespace CustomRenderer
 {
     public class CustomPin : Pin
     {
-        public int PinID { get; set; }
+        public int MarkerID { get; set; }
         public string Category { get; set; }
-        public string Title { get; set; }
         public string Items { get; set; }
         public string Description { get; set; }
         public TimeSpan StartTime { get; set; }
         public TimeSpan EndTime { get; set; }
+        public string TimeRemaining { get; set; }
     }
 }

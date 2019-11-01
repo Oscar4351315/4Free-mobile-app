@@ -6,6 +6,7 @@ namespace IAB330.Interfaces
 {
     public interface IImageService
     {
+        string FormBackgroundColour(string category);
         string CategoryToImage(string category);
     }
 }

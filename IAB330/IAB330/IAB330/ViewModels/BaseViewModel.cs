@@ -5,14 +5,14 @@ using System.Runtime.CompilerServices;
 
 using Xamarin.Forms;
 
-using IAB330.Models;
 using IAB330.Services;
+using CustomRenderer;
 
 namespace IAB330.ViewModels
 {
     public class BaseViewModel : INotifyPropertyChanged
     {
-        public IDataStore<Item> DataStore => DependencyService.Get<IDataStore<Item>>() ?? new MockDataStore();
+        public IDataStore<CustomPin> DataStore => DependencyService.Get<IDataStore<CustomPin>>() ?? new MockDataStore();
 
         bool isBusy = false;
         public bool IsBusy

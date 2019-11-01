@@ -186,7 +186,7 @@
                  Color="{Binding FormBackgroundColour}" Style="{StaticResource formBaseStyle}" />
 
         <!-- User Inputs -->
-        <Picker Title="Category" Grid.Row="2" TitleColor="Gray" Margin="0, 20, 0, 0"
+        <Picker Title="Category *" Grid.Row="2" TitleColor="Gray" Margin="0, 20, 0, 0"
                 SelectedItem="{Binding CategoryEntry}" Style="{StaticResource formPickerStyle}">
             <Picker.ItemsSource>
                 <x:Array Type="{x:Type x:String}">
@@ -207,15 +207,13 @@
         <!-- Buttons -->
         <Button Text="Cancel" Grid.Column="2" BackgroundColor="{StaticResource cancelBtnColour}" 
                 Style="{StaticResource formBtnStyle}" Command="{Binding CancelPinOrFormCommand}" />
-        <Button Text="Preview" Grid.Column="3" BackgroundColor="#FABD03" 
-                Style="{StaticResource formBtnStyle}" Command="{Binding GeneralCommand}" />
         <Button Text="Submit" Grid.Column="4" Style="{StaticResource formConfirmBtnStyle}" Command="{Binding SaveFormInfoCommand}" />
 
 
 
         <!-- Quick Access Window Pin List -->
-        <Label Text="Nearest To Me" Grid.Row="7" Grid.Column="4" Grid.ColumnSpan="3" BackgroundColor="White" FontSize="Large" 
-               HeightRequest="30"  HorizontalTextAlignment="Center" Style="{StaticResource quickAccessBaseStyle}"/>
+        <Label Text="Quick View" Grid.Row="7" Grid.Column="4" Grid.ColumnSpan="3" BackgroundColor="White" FontSize="Large" 
+               HeightRequest="30"  HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Style="{StaticResource quickAccessBaseStyle}"/>
 
         <ListView ItemsSource="{Binding CustomPinList}" SelectedItem="{Binding SelectedPinListItem, Mode=TwoWay}"
                   Grid.Row="8" Grid.RowSpan="3" Grid.Column="4" Grid.ColumnSpan="3"

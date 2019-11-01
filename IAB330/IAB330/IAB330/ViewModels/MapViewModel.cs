@@ -10,7 +10,6 @@ using Plugin.Geolocator;
 using Plugin.Permissions;
 using Plugin.Permissions.Abstractions;
 
-using IAB330.Models;
 using IAB330.Services;
 using CustomRenderer;
 
@@ -46,22 +45,22 @@ namespace IAB330.ViewModels
         private bool isShowQuickAccess;
         private string formBackgroundColour;
         private CustomPin selectedPinListItem;
-        private CustomPin tempCustomPin = new CustomPin();
+        private CustomPin tempCustomPin;
         
         // View bindings
         public CustomMap Map { get; set; }
         public ObservableCollection<CustomPin> CustomPinList { get; set; }
-        private ObservableCollection<PostInfo> PostInfoList { get; set; }
         public Command ConfirmPinCommand { get; }
         public Command ShowSettingsCommand { get; }
         public Command ToggleQuickAccessCommand { get; }
         public Command TogglePostModeCommand { get; }
         public Command CancelPinOrFormCommand { get; }
-        public Command SaveFormInfoCommand { get; set; }
+        public Command SaveFormInfoCommand { get; }
         public bool IsPinPlacing { get { return isPinPlacing; } set { SetProperty(ref isPinPlacing, value); } }
         public bool IsPinConfirm { get { return isPinConfirm; } set { SetProperty(ref isPinConfirm, value); } }
         public bool IsShowQuickAccess { get { return isShowQuickAccess; } set { SetProperty(ref isShowQuickAccess, value); } }
         public bool IsConfirmButtonEnabled { get {  return isConfirmButtonEnabled; } set { SetProperty(ref isConfirmButtonEnabled, value); } }
+        public string FormBackgroundColour { get { return formBackgroundColour; } set { SetProperty(ref formBackgroundColour, new ImageService().FormBackgroundColour(value)); } }
 
         // Repositions map when an item from quick access is selected
         public CustomPin SelectedPinListItem
@@ -75,35 +74,29 @@ namespace IAB330.ViewModels
             }
         }
 
-        // Returns a colour based on the category the user has selected
-        public string FormBackgroundColour
-        {
-            get { return formBackgroundColour; }
-            set
-            {
-                string colour;
-                switch (value)
-                {
-                    case ("Food / Drink"): colour = "#4286F5"; break;
-                    case ("Health"): colour = "#EA4235"; break;
-                    case ("Stationary"): colour = "#FABD03"; break;
-                    case ("Sports"): colour = "#34A853"; break;
-                    case ("Misc"): colour = "#A142F4"; break;
-                    default: colour = "SlateGray"; break;
-                }
-
-                SetProperty(ref formBackgroundColour, colour);
-            }
-        }
-
         // Setup and draws map
         void SetupMap()
         {
-            Map = new CustomMap
+            Map = new CustomMap { MapType = MapType.Street, IsShowingUser = true, };
+        }
+
+        // Creates pin at location on map click
+        void OnMapClick(object sender, MapClickedEventArgs e)
+        {
+            if (isPinPlacing)
             {
-                MapType = MapType.Street,
-                IsShowingUser = true,
-            };
+                tempCustomPin = new CustomPin
+                {
+                    Position = new Position(e.Position.Latitude, e.Position.Longitude),
+                    Label = " ",
+                    Address = new ImageService().CategoryToImage(CategoryEntry)
+                };
+
+                Map.Pins.Clear();
+                Map.Pins.Add(tempCustomPin);
+                Map.MoveToRegion(MapSpan.FromCenterAndRadius(tempCustomPin.Position, Distance.FromMeters(120)));
+                IsConfirmButtonEnabled = true;
+            }
         }
 
         // Requests user for locations permission
@@ -123,35 +116,37 @@ namespace IAB330.ViewModels
             //Map.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(position.Latitude, position.Longitude), Distance.FromMeters(120)));
         }
 
-        // Creates pin at location on map click
-        void OnMapClick(object sender, MapClickedEventArgs e)
+        // Create fake pins on the map for testing purposes
+        async Task CreateFakePins()
         {
-            if (isPinPlacing)
+            CustomPinList = new ObservableCollection<CustomPin>();
+            var mockPins = await DataStore.GetItemsAsync(true);
+            ResetAll();
+
+            foreach (var pin in mockPins)
             {
-                Map.Pins.Clear();
-                IsConfirmButtonEnabled = true;
-                tempCustomPin = new CustomPin { Position = new Position(e.Position.Latitude, e.Position.Longitude), Label = "hi" };
-                Map.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(e.Position.Latitude, e.Position.Longitude), Distance.FromMeters(120)));
-                Map.Pins.Add(tempCustomPin);
+                CustomPinList.Add(pin);
+                Map.Pins.Add(pin);
+                pinID += 1;
             }
         }
 
         // When the Settings button is pressed, displays message in popup window
         async Task ShowSettings()
         {
-            await Application.Current.MainPage.DisplayAlert("Settings", "4Free. Version 1.1\n\nDeveloped By:\n" +
-                "Markus Henrikson, Steven Hua, & Oscar Li", "Close");
+            await Application.Current.MainPage.DisplayAlert("Settings", "4Free. Version 1.1\n\nDeveloped By:\nMarkus Henrikson, Steven Hua, & Oscar Li", "Close");
         }
 
         // When '+' button is pressed, enters or leaves pin placement window
         void TogglePostMode()
         {
-            Map.Pins.Clear();
-            ResetEntryFields();
             IsPinPlacing = !isPinPlacing;
             IsPinConfirm = false;
-            IsShowQuickAccess = false;
             IsConfirmButtonEnabled = false;
+            IsShowQuickAccess = false;
+            Map.Pins.Clear();
+            ResetEntryFields();
+
             if (!IsPinPlacing) AddPinsToMap();
         }
 
@@ -179,39 +174,19 @@ namespace IAB330.ViewModels
         // When cancel is pressed on pin placement/ form window
         void ResetAll()
         {
+            IsPinPlacing = false;
+            IsPinConfirm = false;
+            IsConfirmButtonEnabled = false;
+            IsShowQuickAccess = false;
             Map.Pins.Clear();
             AddPinsToMap();
             ResetEntryFields();
-            IsPinPlacing = false;
-            IsPinConfirm = false;
-            IsShowQuickAccess = false;
-            IsConfirmButtonEnabled = false;
-        }
-
-        // Create fake pins on the map for testing purposes
-        void CreateFakePins()
-        {
-            PostInfoList = new ObservableCollection<PostInfo>();
-            CustomPinList = new ObservableCollection<CustomPin>()
-            {
-                new CustomPin() { Position = new Position(-27.472831, 153.023499), Label = "Bandaids", Address = "icon_health.png", PinID = 0 },
-                new CustomPin() { Position = new Position(-27.473040, 153.024960), Label = "Plushies", Address = "icon_misc.png", PinID = 1 },
-                new CustomPin() { Position = new Position(-27.471817, 153.023329), Label = "Redbull", Address = "icon_food.png", PinID = 2 },
-                new CustomPin() { Position = new Position(-27.472831, 153.023699), Label = "Football", Address = "icon_sport.png", PinID = 3 },
-                new CustomPin() { Position = new Position(-27.473040, 153.024910), Label = "Pens", Address = "icon_pen.png", PinID = 4 },
-                new CustomPin() { Position = new Position(-27.473040, 153.023329), Label = "Panadol", Address = "icon_health.png", PinID = 5 },
-                new CustomPin() { Position = new Position(-27.471817, 153.023499), Label = "Headbands", Address = "icon_misc.png", PinID = 6 },
-            };
-
-            CustomPinList.ForEach((pin) => PostInfoList.Add(new PostInfo(pin.PinID, pin.Address, pin.Label, "", "", startTimeEntry, endTimeEntry)));
-            pinID = CustomPinList.Count + 1; // Prepares for next pin
-            ResetAll();
+            UpdatePinTimeRemaining();
         }
 
 
-
-        // Form entry fields
-        private int pinID = 0;
+        // Form variable declarations
+        private int pinID = 1;
         private string categoryEntry;
         private string titleEntry;
         private string itemsEntry;
@@ -219,34 +194,63 @@ namespace IAB330.ViewModels
         private TimeSpan startTimeEntry;
         private TimeSpan endTimeEntry;
 
-        // Get-set's for form data
-        public string CategoryEntry { get { return categoryEntry; } set { SetProperty(ref categoryEntry, value); FormBackgroundColour = categoryEntry; } }
-        public string TitleEntry { get { return titleEntry; } set { SetProperty(ref titleEntry, value); _ = (TitleEntry.Length > 0) ? IsConfirmButtonEnabled = true : IsConfirmButtonEnabled = false; } }
+        // Form view bindings
+        public string CategoryEntry { get { return categoryEntry; } set { SetProperty(ref categoryEntry, value); UpdateFormVisualState(); } }
+        public string TitleEntry { get { return titleEntry; } set { SetProperty(ref titleEntry, value); UpdateFormVisualState(); } }
         public string ItemsEntry { get { return itemsEntry; } set { SetProperty(ref itemsEntry, value); } }
         public string DescriptionEntry { get { return descriptionEntry; } set { SetProperty(ref descriptionEntry, value); } }
         public TimeSpan StartTimeEntry { get { return startTimeEntry; } set { SetProperty(ref startTimeEntry, value); } }
         public TimeSpan EndTimeEntry { get { return endTimeEntry; } set { SetProperty(ref endTimeEntry, value); } }
 
+        // Updates all pins' remaining time
+        public void UpdatePinTimeRemaining()
+        {
+            foreach (var pin in CustomPinList)
+            {
+                TimeSpan timeLeft = pin.EndTime - DateTime.Now.TimeOfDay;
+                int hours = timeLeft.Hours;
+                int minutes = timeLeft.Minutes;
+
+                if (hours >= 1) pin.TimeRemaining = hours + "h " + minutes + "m";
+                else pin.TimeRemaining = minutes + "m";
+            }
+        }
+
+        // Updates the form's visual state based on category and title inputs
+        void UpdateFormVisualState()
+        {
+            FormBackgroundColour = CategoryEntry;
+            if (CategoryEntry != null && TitleEntry != null && TitleEntry.Length > 0) IsConfirmButtonEnabled = true;
+            else IsConfirmButtonEnabled = false;
+        }
+
         // Reset form entry fields
         void ResetEntryFields()
         {
-            CategoryEntry = "default";
+            CategoryEntry = "";
             TitleEntry = "";
             ItemsEntry = "";
             DescriptionEntry = "";
 
-            int currentTime = DateTime.Now.ToLocalTime().Hour;
-            StartTimeEntry = TimeSpan.FromHours(currentTime);
-            EndTimeEntry = TimeSpan.FromHours(currentTime + 1);
+            // Default start time is at previous minute multiple of 10. Ending time is an hour after.
+            TimeSpan currentTime = DateTime.Now.TimeOfDay;
+            TimeSpan currentHour = TimeSpan.FromHours(currentTime.Hours);
+            TimeSpan flooredMinute = TimeSpan.FromMinutes(((int)Math.Floor((double)currentTime.Minutes / 10)) * 10);
+            StartTimeEntry = currentHour + flooredMinute;
+            EndTimeEntry = currentHour + flooredMinute + TimeSpan.FromHours(1);
         }
 
-        // Saves entry form inputs
+        // Saves entry form inputs in a new pin
         void SaveFormInfo()
         {
+            tempCustomPin.MarkerID = pinID;
+            tempCustomPin.Category = CategoryEntry;
             tempCustomPin.Label = TitleEntry;
+            tempCustomPin.Description = DescriptionEntry;
+            tempCustomPin.StartTime = StartTimeEntry;
+            tempCustomPin.EndTime = EndTimeEntry;
             tempCustomPin.Address = new ImageService().CategoryToImage(CategoryEntry);
             CustomPinList.Add(tempCustomPin);
-            PostInfoList.Add(new PostInfo(pinID, categoryEntry, titleEntry, itemsEntry, descriptionEntry, startTimeEntry, endTimeEntry));
             pinID += 1;
             ResetAll();
         }
