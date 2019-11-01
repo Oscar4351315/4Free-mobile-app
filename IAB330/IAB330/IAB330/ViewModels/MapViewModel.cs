@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 
+using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Internals;
 using Xamarin.Forms.Maps;
@@ -12,7 +15,6 @@ using Plugin.Permissions.Abstractions;
 
 using IAB330.Services;
 using CustomRenderer;
-using System.Diagnostics;
 
 namespace IAB330.ViewModels
 {
@@ -21,6 +23,7 @@ namespace IAB330.ViewModels
         public MapViewModel()
         {
             Title = "Map Page";
+            SortButtonText = "Distance";
             bool isAllowLocation = CheckLocationPermission();
 
             if (isAllowLocation)
@@ -30,12 +33,13 @@ namespace IAB330.ViewModels
                 CreateFakePins();
 
                 Map.MapClicked += OnMapClick;
-                ShowSettingsCommand = new Command(async () => await ShowSettings(), () => !IsBusy);
+                ShowSettingsCommand = new Command(() => ShowSettings(), () => !IsBusy);
                 ToggleQuickAccessCommand = new Command(() => ToggleQuickAccess(), () => !IsBusy);
                 TogglePostModeCommand = new Command(() => TogglePostMode(), () => !IsBusy);
                 ConfirmPinCommand = new Command(() => ConfirmPin(), () => !IsBusy);
                 CancelPinOrFormCommand = new Command(() => ResetAll(), () => !IsBusy);
                 SaveFormInfoCommand = new Command(() => SaveFormInfo(), () => !IsBusy);
+                SortButtonCommand = new Command(() => UpdateSort(true), () => !IsBusy);
             }
         }
 
@@ -45,9 +49,11 @@ namespace IAB330.ViewModels
         private bool isConfirmButtonEnabled;
         private bool isShowQuickAccess;
         private string formBackgroundColour;
+        private string sortButtonText;
         private CustomPin selectedPinListItem;
         private CustomPin tempCustomPin;
-        
+        private Position userPosition;
+
         // View bindings
         public CustomMap Map { get; set; }
         public ObservableCollection<CustomPin> CustomPinList { get; set; }
@@ -57,11 +63,13 @@ namespace IAB330.ViewModels
         public Command TogglePostModeCommand { get; }
         public Command CancelPinOrFormCommand { get; }
         public Command SaveFormInfoCommand { get; }
+        public Command SortButtonCommand { get; }
         public bool IsPinPlacing { get { return isPinPlacing; } set { SetProperty(ref isPinPlacing, value); } }
         public bool IsPinConfirm { get { return isPinConfirm; } set { SetProperty(ref isPinConfirm, value); } }
-        public bool IsShowQuickAccess { get { return isShowQuickAccess; } set { SetProperty(ref isShowQuickAccess, value); UpdatePinTimeRemaining(); } }
+        public bool IsShowQuickAccess { get { return isShowQuickAccess; } set { SetProperty(ref isShowQuickAccess, value); UpdatePinTimeRemaining(); UpdatePinDistance(); } }
         public bool IsConfirmButtonEnabled { get {  return isConfirmButtonEnabled; } set { SetProperty(ref isConfirmButtonEnabled, value); } }
         public string FormBackgroundColour { get { return formBackgroundColour; } set { SetProperty(ref formBackgroundColour, new ImageService().FormBackgroundColour(value)); } }
+        public string SortButtonText { get { return sortButtonText; } set { SetProperty(ref sortButtonText, value); } }
 
         // Repositions map when an item from quick access is selected
         public CustomPin SelectedPinListItem
@@ -71,7 +79,7 @@ namespace IAB330.ViewModels
             {
                 SetProperty(ref selectedPinListItem, value);
                 var pinPosition = selectedPinListItem.Position;
-                Map.MoveToRegion(MapSpan.FromCenterAndRadius(pinPosition, Distance.FromMeters(120)));
+                Map.MoveToRegion(MapSpan.FromCenterAndRadius(pinPosition, Distance.FromMeters(100)));
             }
         }
 
@@ -89,7 +97,7 @@ namespace IAB330.ViewModels
                 tempCustomPin = new CustomPin
                 {
                     Position = new Position(e.Position.Latitude, e.Position.Longitude),
-                    Label = " ",
+                    Label = "",
                     Address = new ImageService().CategoryToImage(CategoryEntry)
                 };
 
@@ -105,38 +113,45 @@ namespace IAB330.ViewModels
         {
             CrossPermissions.Current.RequestPermissionsAsync(Permission.Location);
             do { } while (CrossPermissions.Current.CheckPermissionStatusAsync(Permission.Location).Result != PermissionStatus.Granted);
+
             return true;
         }
 
         // Moves map to user location
         async void GetUserPosition()
         {
-            Map.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(-27.472831442, 153.023499906), Distance.FromMeters(120)));
-            //var location = CrossGeolocator.Current;
-            //var position = await location.GetPositionAsync();
-            //Map.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(position.Latitude, position.Longitude), Distance.FromMeters(120)));
+            var location = CrossGeolocator.Current;
+            var position = await location.GetPositionAsync();
+            userPosition = new Position(position.Latitude, position.Longitude);
+            Map.MoveToRegion(MapSpan.FromCenterAndRadius(userPosition, Distance.FromMeters(120)));
         }
 
-        // Create fake pins on the map for testing purposes
-        async Task CreateFakePins()
+        // Create fake pins from MockDataStore on the map
+        async void CreateFakePins()
         {
             CustomPinList = new ObservableCollection<CustomPin>();
             var mockPins = await DataStore.GetItemsAsync(true);
-            ResetAll();
-
+            
             foreach (var pin in mockPins)
             {
+                // MockPin's position and end time is an random offset. Add to current for randomness
+                double lat = pin.Position.Latitude + userPosition.Latitude;
+                double lng = pin.Position.Longitude + userPosition.Longitude;
+                pin.Position = new Position(lat, lng);
+                pin.EndTime += DateTime.Now.TimeOfDay;
+
                 pin.MarkerID = pinID;
                 CustomPinList.Add(pin);
-                Map.Pins.Add(pin);
                 pinID += 1;
             }
+
+            ResetAll();
         }
 
         // When the Settings button is pressed, displays message in popup window
-        async Task ShowSettings()
+        void ShowSettings()
         {
-            await Application.Current.MainPage.DisplayAlert("Settings", "4Free. Version 1.1\n\nDeveloped By:\nMarkus Henrikson, Steven Hua, & Oscar Li", "Close");
+            Application.Current.MainPage.DisplayAlert("Settings", "4Free. Version 1.1\n\nDeveloped By:\nMarkus Henrikson, Steven Hua, & Oscar Li", "Close");
         }
 
         // When '+' button is pressed, enters or leaves pin placement window
@@ -183,7 +198,9 @@ namespace IAB330.ViewModels
             Map.Pins.Clear();
             AddPinsToMap();
             ResetEntryFields();
+            UpdateSort();
         }
+
 
 
         // Form variable declarations
@@ -227,7 +244,7 @@ namespace IAB330.ViewModels
             EndTimeEntry = currentHour + flooredMinute + TimeSpan.FromHours(1);
         }
 
-        // Saves entry form inputs in a new pin
+        // Saves entry form inputs into a new pin
         void SaveFormInfo()
         {
             tempCustomPin.MarkerID = pinID;
@@ -242,7 +259,7 @@ namespace IAB330.ViewModels
             ResetAll();
         }
 
-        // String format of time remaining
+        // Formats time remaining as a string
         public string FormatTimeRemainingToString(TimeSpan end, TimeSpan start)
         {
             TimeSpan timeLeft = end - start;
@@ -250,8 +267,8 @@ namespace IAB330.ViewModels
             int minutes = timeLeft.Minutes;
 
             if (hours <= 0 && minutes <= 0) return "expired";
-            else if (hours >= 1) return hours + "h " + minutes + "m left";
-            else return minutes + "m left";
+            else if (hours >= 1) return hours + "hr " + minutes + "min left";
+            else return minutes + "min left";
         }
 
         // Updates all pins' remaining time. If 0, remove from list
@@ -260,16 +277,53 @@ namespace IAB330.ViewModels
             // Changing a property doesn't fire INotifyPropertyChange (dev bug), replacing pin does
             for (int i = 0; i < CustomPinList.Count; i++)
             {
-                CustomPin tempPin = CustomPinList[i];
-                string timeLeft = FormatTimeRemainingToString(tempPin.EndTime, DateTime.Now.TimeOfDay);
+                CustomPin pin = CustomPinList[i];
+                string timeLeft = FormatTimeRemainingToString(pin.EndTime, DateTime.Now.TimeOfDay);
 
                 if (timeLeft == "expired") CustomPinList.RemoveAt(i);
                 else
                 {
-                    tempPin.TimeRemaining = timeLeft;
-                    CustomPinList[i] = tempPin;
+                    pin.TimeRemaining = timeLeft;
+                    CustomPinList[i] = pin;
                 }
             }
+        }
+
+        // Formats the distance the user is from a pin as a string
+        public string FormatDistanceToString(Position src, Position dst)
+        {
+            double distanceKM = Location.CalculateDistance(src.Latitude, src.Longitude, dst.Latitude, dst.Longitude, 0);
+            int distanceM = (int)(distanceKM * 1000);
+            return distanceM.ToString() + 'm';
+        }
+
+        // Updates all pins' distance
+        public void UpdatePinDistance()
+        {
+            // Changing a property doesn't fire INotifyPropertyChange (dev bug), replacing pin does
+            for (int i = 0; i < CustomPinList.Count; i++)
+            {
+                CustomPin pin = CustomPinList[i];
+                pin.DistanceFromUser = FormatDistanceToString(userPosition, pin.Position).ToString() ;
+                CustomPinList[i] = pin;
+            }
+        }
+        public void UpdateSort(bool toggleMode = false)
+        {
+            List<CustomPin> tempList = CustomPinList.ToList();
+            List<CustomPin> sortedList = new List<CustomPin>();
+
+            if (toggleMode)
+            {
+                if (SortButtonText == "Time") SortButtonText = "Distance";
+                else if (SortButtonText == "Distance") SortButtonText = "Time";
+            }
+        
+            if (SortButtonText == "Time") sortedList = tempList.OrderBy(pin => Int32.Parse(pin.TimeRemaining.Replace("hr ", "0").Replace("min left", ""))).ToList();
+            else if (SortButtonText == "Distance") sortedList = tempList.OrderBy(pin => Int32.Parse(pin.DistanceFromUser.Trim('m'))).ToList();
+
+            CustomPinList.Clear();
+            sortedList.ForEach((pin) => CustomPinList.Add(pin));
         }
     }
 }

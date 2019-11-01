@@ -1,29 +1,52 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 using Xamarin.Forms.Maps;
+
 using CustomRenderer;
 
 namespace IAB330.Services
 {
     public class MockDataStore : IDataStore<CustomPin>
     {
-        List<CustomPin> customPinList;
+        public List<CustomPin> customPinList;
 
         public MockDataStore()
         {
             customPinList = new List<CustomPin>();
+
+            // Pre-defined items
             var mockPins = new List<CustomPin>
             {
-                new CustomPin() { Position = new Position(-27.472831, 153.023499), Label = "Bandaids", Address = "icon_health.png"},
-                new CustomPin() { Position = new Position(-27.473040, 153.024960), Label = "Plushies", Address = "icon_misc.png" },
-                new CustomPin() { Position = new Position(-27.471817, 153.023329), Label = "Redbull", Address = "icon_food.png"},
-                new CustomPin() { Position = new Position(-27.472831, 153.023699), Label = "Football", Address = "icon_sport.png"},
-                new CustomPin() { Position = new Position(-27.473040, 153.024910), Label = "Pens", Address = "icon_pen.png"},
-                new CustomPin() { Position = new Position(-27.473040, 153.023329), Label = "Panadol", Address = "icon_health.png"},
-                new CustomPin() { Position = new Position(-27.471817, 153.023499), Label = "Headbands", Address = "icon_misc.png"},
+                new CustomPin() { Label = "Bandaids", Address = "icon_health.png"},
+                new CustomPin() { Label = "Plushie", Address = "icon_misc.png" },
+                new CustomPin() { Label = "Redbull", Address = "icon_food.png"},
+                new CustomPin() { Label = "Frisbee", Address = "icon_sport.png"},
+                new CustomPin() { Label = "Pens", Address = "icon_pen.png"},
+                new CustomPin() { Label = "Panadol", Address = "icon_health.png"},
+                new CustomPin() { Label = "HairWax", Address = "icon_misc.png"},
+                new CustomPin() { Label = "Eraser", Address = "icon_pen.png"},
             };
+
+            // Giving mock pins random offsets for position and end time
+            // Used in conjunction with user's position and device time
+            foreach (CustomPin pin in mockPins)
+            {
+                Random random = new Random();
+
+                // Random position offset
+                int sign = random.Next(0, 2) * 2 - 1;
+                double lat = sign * (random.NextDouble() * 0.001303);
+                sign = random.Next(0, 2) * 2 - 1;
+                double lng = sign * (random.NextDouble() * 0.000519);
+                pin.Position = new Position(lat, lng);
+
+                // Random end time offset
+                int time = random.Next(5, 121);
+                pin.EndTime = TimeSpan.FromMinutes(time);
+            }
 
             mockPins.ForEach((pin) => customPinList.Add(pin));
         }

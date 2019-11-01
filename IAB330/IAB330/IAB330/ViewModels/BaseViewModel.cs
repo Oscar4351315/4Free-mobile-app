@@ -13,27 +13,15 @@ namespace IAB330.ViewModels
     public class BaseViewModel : INotifyPropertyChanged
     {
         public IDataStore<CustomPin> DataStore => DependencyService.Get<IDataStore<CustomPin>>() ?? new MockDataStore();
-
         bool isBusy = false;
-        public bool IsBusy
-        {
-            get { return isBusy; }
-            set { SetProperty(ref isBusy, value); }
-        }
-
         string title = string.Empty;
-        public string Title
-        {
-            get { return title; }
-            set { SetProperty(ref title, value); }
-        }
 
-        protected bool SetProperty<T>(ref T backingStore, T value,
-            [CallerMemberName]string propertyName = "",
-            Action onChanged = null)
+        public bool IsBusy { get { return isBusy; } set { SetProperty(ref isBusy, value); } }
+        public string Title { get { return title; } set { SetProperty(ref title, value); } }
+
+        protected bool SetProperty<T>(ref T backingStore, T value, [CallerMemberName]string propertyName = "", Action onChanged = null)
         {
-            if (EqualityComparer<T>.Default.Equals(backingStore, value))
-                return false;
+            if (EqualityComparer<T>.Default.Equals(backingStore, value)) return false;
 
             backingStore = value;
             onChanged?.Invoke();

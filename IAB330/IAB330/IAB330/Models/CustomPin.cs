@@ -13,5 +13,6 @@ namespace CustomRenderer
         public TimeSpan StartTime { get; set; }
         public TimeSpan EndTime { get; set; }
         public string TimeRemaining { get; set; }
+        public string DistanceFromUser { get; set; }
     }
 }

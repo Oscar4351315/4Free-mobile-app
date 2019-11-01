@@ -6,15 +6,8 @@ namespace IAB330
     {
         public App()
         {
-            try
-            {
-                InitializeComponent();
-                MainPage = new Views.MapPage();
-            }
-            catch
-            {
-                System.Diagnostics.Process.GetCurrentProcess().CloseMainWindow();
-            }
+            InitializeComponent();
+            MainPage = new Views.MapPage();
         }
 
         // Handle when your app starts
