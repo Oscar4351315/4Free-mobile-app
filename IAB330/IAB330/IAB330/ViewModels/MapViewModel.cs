@@ -12,6 +12,7 @@ using Plugin.Permissions.Abstractions;
 
 using IAB330.Services;
 using CustomRenderer;
+using System.Diagnostics;
 
 namespace IAB330.ViewModels
 {
@@ -58,7 +59,7 @@ namespace IAB330.ViewModels
         public Command SaveFormInfoCommand { get; }
         public bool IsPinPlacing { get { return isPinPlacing; } set { SetProperty(ref isPinPlacing, value); } }
         public bool IsPinConfirm { get { return isPinConfirm; } set { SetProperty(ref isPinConfirm, value); } }
-        public bool IsShowQuickAccess { get { return isShowQuickAccess; } set { SetProperty(ref isShowQuickAccess, value); } }
+        public bool IsShowQuickAccess { get { return isShowQuickAccess; } set { SetProperty(ref isShowQuickAccess, value); UpdatePinTimeRemaining(); } }
         public bool IsConfirmButtonEnabled { get {  return isConfirmButtonEnabled; } set { SetProperty(ref isConfirmButtonEnabled, value); } }
         public string FormBackgroundColour { get { return formBackgroundColour; } set { SetProperty(ref formBackgroundColour, new ImageService().FormBackgroundColour(value)); } }
 
@@ -125,6 +126,7 @@ namespace IAB330.ViewModels
 
             foreach (var pin in mockPins)
             {
+                pin.MarkerID = pinID;
                 CustomPinList.Add(pin);
                 Map.Pins.Add(pin);
                 pinID += 1;
@@ -181,7 +183,6 @@ namespace IAB330.ViewModels
             Map.Pins.Clear();
             AddPinsToMap();
             ResetEntryFields();
-            UpdatePinTimeRemaining();
         }
 
 
@@ -202,20 +203,6 @@ namespace IAB330.ViewModels
         public TimeSpan StartTimeEntry { get { return startTimeEntry; } set { SetProperty(ref startTimeEntry, value); } }
         public TimeSpan EndTimeEntry { get { return endTimeEntry; } set { SetProperty(ref endTimeEntry, value); } }
 
-        // Updates all pins' remaining time
-        public void UpdatePinTimeRemaining()
-        {
-            foreach (var pin in CustomPinList)
-            {
-                TimeSpan timeLeft = pin.EndTime - DateTime.Now.TimeOfDay;
-                int hours = timeLeft.Hours;
-                int minutes = timeLeft.Minutes;
-
-                if (hours >= 1) pin.TimeRemaining = hours + "h " + minutes + "m";
-                else pin.TimeRemaining = minutes + "m";
-            }
-        }
-
         // Updates the form's visual state based on category and title inputs
         void UpdateFormVisualState()
         {
@@ -232,7 +219,7 @@ namespace IAB330.ViewModels
             ItemsEntry = "";
             DescriptionEntry = "";
 
-            // Default start time is at previous minute multiple of 10. Ending time is an hour after.
+            // Default start time's minute is rounded floor to nearest 10. Ending time is an hour after.
             TimeSpan currentTime = DateTime.Now.TimeOfDay;
             TimeSpan currentHour = TimeSpan.FromHours(currentTime.Hours);
             TimeSpan flooredMinute = TimeSpan.FromMinutes(((int)Math.Floor((double)currentTime.Minutes / 10)) * 10);
@@ -253,6 +240,36 @@ namespace IAB330.ViewModels
             CustomPinList.Add(tempCustomPin);
             pinID += 1;
             ResetAll();
+        }
+
+        // String format of time remaining
+        public string FormatTimeRemainingToString(TimeSpan end, TimeSpan start)
+        {
+            TimeSpan timeLeft = end - start;
+            int hours = timeLeft.Hours;
+            int minutes = timeLeft.Minutes;
+
+            if (hours <= 0 && minutes <= 0) return "expired";
+            else if (hours >= 1) return hours + "h " + minutes + "m left";
+            else return minutes + "m left";
+        }
+
+        // Updates all pins' remaining time. If 0, remove from list
+        public void UpdatePinTimeRemaining()
+        {
+            // Changing a property doesn't fire INotifyPropertyChange (dev bug), replacing pin does
+            for (int i = 0; i < CustomPinList.Count; i++)
+            {
+                CustomPin tempPin = CustomPinList[i];
+                string timeLeft = FormatTimeRemainingToString(tempPin.EndTime, DateTime.Now.TimeOfDay);
+
+                if (timeLeft == "expired") CustomPinList.RemoveAt(i);
+                else
+                {
+                    tempPin.TimeRemaining = timeLeft;
+                    CustomPinList[i] = tempPin;
+                }
+            }
         }
     }
 }

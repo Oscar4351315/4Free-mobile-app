@@ -215,7 +215,8 @@
         <Label Text="Quick View" Grid.Row="7" Grid.Column="4" Grid.ColumnSpan="3" BackgroundColor="White" FontSize="Large" 
                HeightRequest="30"  HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Style="{StaticResource quickAccessBaseStyle}"/>
 
-        <ListView ItemsSource="{Binding CustomPinList}" SelectedItem="{Binding SelectedPinListItem, Mode=TwoWay}"
+        <ListView x:Name="QuickList" ItemsSource="{Binding CustomPinList}"
+                  SelectedItem="{Binding SelectedPinListItem, Mode=TwoWay}" 
                   Grid.Row="8" Grid.RowSpan="3" Grid.Column="4" Grid.ColumnSpan="3"
                   RowHeight="50" HeightRequest="250" BackgroundColor="White" Style="{StaticResource quickAccessBaseStyle}" >
             <ListView.ItemTemplate>
@@ -236,7 +237,7 @@
                             <Image Source="{Binding Address}" Grid.Row="0" Grid.RowSpan="2" Grid.Column="1"/>
                             <Label Text="{Binding Label}" Grid.Row="0" Grid.Column="2"  VerticalOptions="End" />
                             <Label Text="{Binding MarkerId}" Grid.Row="0" Grid.Column="3" VerticalOptions="End"/>
-                            <Label Text="{Binding Address}" Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2" VerticalOptions="Start" />
+                            <Label Text="{Binding TimeRemaining}" Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2" VerticalOptions="Start" />
                         </Grid>
                     </ViewCell>
                 </DataTemplate>
