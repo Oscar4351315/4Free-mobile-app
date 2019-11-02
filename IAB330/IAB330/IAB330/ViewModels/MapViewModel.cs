@@ -28,7 +28,12 @@ namespace IAB330.ViewModels
 
             if (isAllowLocation)
             {
-                SetupMap();
+                Map = new CustomMap { MapType = MapType.Street, IsShowingUser = true, };
+
+                Map.CustomPins = new List<CustomPin> {  };
+                CustomPinList = new ObservableCollection<CustomPin>();
+
+
                 GetUserPosition();
                 CreateFakePins();
 
@@ -71,8 +76,9 @@ namespace IAB330.ViewModels
         public string FormBackgroundColour { get { return formBackgroundColour; } set { SetProperty(ref formBackgroundColour, new ImageService().FormBackgroundColour(value)); } }
         public string SortButtonText { get { return sortButtonText; } set { SetProperty(ref sortButtonText, value); } }
 
-        // Repositions map when an item from quick access is selected
-        public CustomPin SelectedPinListItem
+
+    // Repositions map when an item from quick access is selected
+    public CustomPin SelectedPinListItem
         {
             get { return selectedPinListItem; }
             set
@@ -83,11 +89,8 @@ namespace IAB330.ViewModels
             }
         }
 
-        // Setup and draws map
-        void SetupMap()
-        {
-            Map = new CustomMap { MapType = MapType.Street, IsShowingUser = true, };
-        }
+
+    
 
         // Creates pin at location on map click
         void OnMapClick(object sender, MapClickedEventArgs e)
@@ -177,7 +180,10 @@ namespace IAB330.ViewModels
         // Displays all saved pins on map
         void AddPinsToMap()
         {
-            CustomPinList.ForEach((pin) => Map.Pins.Add(pin));
+            for (int i = 0; i < CustomPinList.Count; i++) {
+                Map.Pins.Add(CustomPinList[i]);
+                Map.CustomPins.Add(CustomPinList[i]);
+            }
         }
 
         // When confirmed is pressed on pin placement window
@@ -198,7 +204,7 @@ namespace IAB330.ViewModels
             Map.Pins.Clear();
             AddPinsToMap();
             ResetEntryFields();
-            UpdateSort();
+            //UpdateSort();
         }
 
 
@@ -304,7 +310,7 @@ namespace IAB330.ViewModels
             for (int i = 0; i < CustomPinList.Count; i++)
             {
                 CustomPin pin = CustomPinList[i];
-                pin.DistanceFromUser = FormatDistanceToString(userPosition, pin.Position).ToString() ;
+                pin.DistanceFromUser = FormatDistanceToString(userPosition, pin.Position).ToString();
                 CustomPinList[i] = pin;
             }
         }
@@ -318,7 +324,7 @@ namespace IAB330.ViewModels
                 if (SortButtonText == "Time") SortButtonText = "Distance";
                 else if (SortButtonText == "Distance") SortButtonText = "Time";
             }
-        
+
             if (SortButtonText == "Time") sortedList = tempList.OrderBy(pin => Int32.Parse(pin.TimeRemaining.Replace("hr ", "0").Replace("min left", ""))).ToList();
             else if (SortButtonText == "Distance") sortedList = tempList.OrderBy(pin => Int32.Parse(pin.DistanceFromUser.Trim('m'))).ToList();
 
