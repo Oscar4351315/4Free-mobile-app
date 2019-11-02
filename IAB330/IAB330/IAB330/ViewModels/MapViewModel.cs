@@ -1,14 +1,20 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
-using IAB330.Models;
+
+using Xamarin.Essentials;
 using Xamarin.Forms;
+using Xamarin.Forms.Internals;
 using Xamarin.Forms.Maps;
 using Plugin.Geolocator;
 using Plugin.Permissions;
 using Plugin.Permissions.Abstractions;
-using CustomRenderer;
-using System;
 
+using IAB330.Services;
+using CustomRenderer;
 
 namespace IAB330.ViewModels
 {
@@ -17,20 +23,23 @@ namespace IAB330.ViewModels
         public MapViewModel()
         {
             Title = "Map Page";
+            SortButtonText = "Distance";
             bool isAllowLocation = CheckLocationPermission();
 
             if (isAllowLocation)
             {
                 SetupMap();
                 GetUserPosition();
+                CreateFakePins();
 
                 Map.MapClicked += OnMapClick;
-                GeneralCommand = new Command(async () => await DoSomething(), () => !IsBusy);
+                ShowSettingsCommand = new Command(() => ShowSettings(), () => !IsBusy);
+                ToggleQuickAccessCommand = new Command(() => ToggleQuickAccess(), () => !IsBusy);
                 TogglePostModeCommand = new Command(() => TogglePostMode(), () => !IsBusy);
                 ConfirmPinCommand = new Command(() => ConfirmPin(), () => !IsBusy);
                 CancelPinOrFormCommand = new Command(() => ResetAll(), () => !IsBusy);
                 SaveFormInfoCommand = new Command(() => SaveFormInfo(), () => !IsBusy);
-
+                SortButtonCommand = new Command(() => UpdateSort(true), () => !IsBusy);
             }
         }
 
@@ -38,31 +47,65 @@ namespace IAB330.ViewModels
         private bool isPinPlacing;
         private bool isPinConfirm;
         private bool isConfirmButtonEnabled;
+        private bool isShowQuickAccess;
         private string formBackgroundColour;
-        private CustomPin TempCustomPin = new CustomPin();
-        private List<PostInfo> PostInfoList = new List<PostInfo>();
-        public List<CustomPin> CustomPinList = new List<CustomPin>();
+        private string sortButtonText;
+        private CustomPin selectedPinListItem;
+        private CustomPin tempCustomPin;
+        private Position userPosition;
 
         // View bindings
         public CustomMap Map { get; set; }
-        public Command GeneralCommand { get; }
+        public ObservableCollection<CustomPin> CustomPinList { get; set; }
         public Command ConfirmPinCommand { get; }
+        public Command ShowSettingsCommand { get; }
+        public Command ToggleQuickAccessCommand { get; }
         public Command TogglePostModeCommand { get; }
         public Command CancelPinOrFormCommand { get; }
-        public Command SaveFormInfoCommand { get; set; }
+        public Command SaveFormInfoCommand { get; }
+        public Command SortButtonCommand { get; }
         public bool IsPinPlacing { get { return isPinPlacing; } set { SetProperty(ref isPinPlacing, value); } }
         public bool IsPinConfirm { get { return isPinConfirm; } set { SetProperty(ref isPinConfirm, value); } }
+        public bool IsShowQuickAccess { get { return isShowQuickAccess; } set { SetProperty(ref isShowQuickAccess, value); UpdatePinTimeRemaining(); UpdatePinDistance(); } }
         public bool IsConfirmButtonEnabled { get {  return isConfirmButtonEnabled; } set { SetProperty(ref isConfirmButtonEnabled, value); } }
-        public string FormBackgroundColour { get { return formBackgroundColour; } set { SetProperty(ref formBackgroundColour, value); } }
+        public string FormBackgroundColour { get { return formBackgroundColour; } set { SetProperty(ref formBackgroundColour, new ImageService().FormBackgroundColour(value)); } }
+        public string SortButtonText { get { return sortButtonText; } set { SetProperty(ref sortButtonText, value); } }
+
+        // Repositions map when an item from quick access is selected
+        public CustomPin SelectedPinListItem
+        {
+            get { return selectedPinListItem; }
+            set
+            {
+                SetProperty(ref selectedPinListItem, value);
+                var pinPosition = selectedPinListItem.Position;
+                Map.MoveToRegion(MapSpan.FromCenterAndRadius(pinPosition, Distance.FromMeters(100)));
+            }
+        }
 
         // Setup and draws map
         void SetupMap()
         {
-            Map = new CustomMap
+            Map = new CustomMap { MapType = MapType.Street, IsShowingUser = true, };
+        }
+
+        // Creates pin at location on map click
+        void OnMapClick(object sender, MapClickedEventArgs e)
+        {
+            if (isPinPlacing)
             {
-                MapType = MapType.Street,
-                IsShowingUser = true,
-            };
+                tempCustomPin = new CustomPin
+                {
+                    Position = new Position(e.Position.Latitude, e.Position.Longitude),
+                    Label = "",
+                    Address = new ImageService().CategoryToImage(CategoryEntry)
+                };
+
+                Map.Pins.Clear();
+                Map.Pins.Add(tempCustomPin);
+                Map.MoveToRegion(MapSpan.FromCenterAndRadius(tempCustomPin.Position, Distance.FromMeters(120)));
+                IsConfirmButtonEnabled = true;
+            }
         }
 
         // Requests user for locations permission
@@ -70,6 +113,7 @@ namespace IAB330.ViewModels
         {
             CrossPermissions.Current.RequestPermissionsAsync(Permission.Location);
             do { } while (CrossPermissions.Current.CheckPermissionStatusAsync(Permission.Location).Result != PermissionStatus.Granted);
+
             return true;
         }
 
@@ -78,32 +122,56 @@ namespace IAB330.ViewModels
         {
             var location = CrossGeolocator.Current;
             var position = await location.GetPositionAsync();
-            Map.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(position.Latitude, position.Longitude), Distance.FromMeters(120)));
+            userPosition = new Position(position.Latitude, position.Longitude);
+            Map.MoveToRegion(MapSpan.FromCenterAndRadius(userPosition, Distance.FromMeters(120)));
         }
 
-        // Creates pin at location on map click
-        void OnMapClick(object sender, MapClickedEventArgs e)
+        // Create fake pins from MockDataStore on the map
+        async void CreateFakePins()
         {
-            if (isPinPlacing)
+            CustomPinList = new ObservableCollection<CustomPin>();
+            var mockPins = await DataStore.GetItemsAsync(true);
+            
+            foreach (var pin in mockPins)
             {
-                Map.Pins.Clear();
-                IsConfirmButtonEnabled = true;
-                TempCustomPin = new CustomPin(e.Position.Latitude, e.Position.Longitude, "Marker " + pinID, pinID);
-                Map.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(e.Position.Latitude, e.Position.Longitude), Distance.FromMeters(120)));
-                Map.Pins.Add(TempCustomPin);
+                // MockPin's position and end time is an random offset. Add to current for randomness
+                double lat = pin.Position.Latitude + userPosition.Latitude;
+                double lng = pin.Position.Longitude + userPosition.Longitude;
+                pin.Position = new Position(lat, lng);
+                pin.EndTime += DateTime.Now.TimeOfDay;
+
+                pin.MarkerID = pinID;
+                CustomPinList.Add(pin);
+                pinID += 1;
             }
+
+            ResetAll();
+        }
+
+        // When the Settings button is pressed, displays message in popup window
+        void ShowSettings()
+        {
+            Application.Current.MainPage.DisplayAlert("Settings", "4Free. Version 1.1\n\nDeveloped By:\nMarkus Henrikson, Steven Hua, & Oscar Li", "Close");
         }
 
         // When '+' button is pressed, enters or leaves pin placement window
         void TogglePostMode()
         {
-            Map.Pins.Clear();
-            ResetEntryFields();
             IsPinPlacing = !isPinPlacing;
             IsPinConfirm = false;
             IsConfirmButtonEnabled = false;
+            IsShowQuickAccess = false;
+            Map.Pins.Clear();
+            ResetEntryFields();
 
             if (!IsPinPlacing) AddPinsToMap();
+        }
+
+        // When the Quick Access button is pressed, toggles its visibility 
+        void ToggleQuickAccess()
+        {
+            if (!IsShowQuickAccess) { ResetAll(); IsShowQuickAccess = true; }
+            else IsShowQuickAccess = false;
         }
 
         // Displays all saved pins on map
@@ -115,12 +183,9 @@ namespace IAB330.ViewModels
         // When confirmed is pressed on pin placement window
         void ConfirmPin()
         {
-            if (Map.Pins.Count == 1)
-            {
-                IsPinPlacing = false;
-                IsPinConfirm = true;
-                IsConfirmButtonEnabled = false;
-            }
+            IsPinPlacing = false;
+            IsPinConfirm = true;
+            IsConfirmButtonEnabled = false;
         }
 
         // When cancel is pressed on pin placement/ form window
@@ -129,13 +194,17 @@ namespace IAB330.ViewModels
             IsPinPlacing = false;
             IsPinConfirm = false;
             IsConfirmButtonEnabled = false;
+            IsShowQuickAccess = false;
             Map.Pins.Clear();
-            ResetEntryFields();
             AddPinsToMap();
+            ResetEntryFields();
+            UpdateSort();
         }
 
-        // Form entry fields
-        private int pinID = 0;
+
+
+        // Form variable declarations
+        private int pinID = 1;
         private string categoryEntry;
         private string titleEntry;
         private string itemsEntry;
@@ -143,79 +212,118 @@ namespace IAB330.ViewModels
         private TimeSpan startTimeEntry;
         private TimeSpan endTimeEntry;
 
-        
-        // Get-set's for form data
-        public string CategoryEntry { get { return categoryEntry; } set { SetProperty(ref categoryEntry, value); FormBackgroundColour = categoryEntry; } }
-        public string TitleEntry { get { return titleEntry; } set { SetProperty(ref titleEntry, value); _ = (TitleEntry.Length > 0) ? IsConfirmButtonEnabled = true : IsConfirmButtonEnabled = false; } }
+        // Form view bindings
+        public string CategoryEntry { get { return categoryEntry; } set { SetProperty(ref categoryEntry, value); UpdateFormVisualState(); } }
+        public string TitleEntry { get { return titleEntry; } set { SetProperty(ref titleEntry, value); UpdateFormVisualState(); } }
         public string ItemsEntry { get { return itemsEntry; } set { SetProperty(ref itemsEntry, value); } }
         public string DescriptionEntry { get { return descriptionEntry; } set { SetProperty(ref descriptionEntry, value); } }
         public TimeSpan StartTimeEntry { get { return startTimeEntry; } set { SetProperty(ref startTimeEntry, value); } }
         public TimeSpan EndTimeEntry { get { return endTimeEntry; } set { SetProperty(ref endTimeEntry, value); } }
 
+        // Updates the form's visual state based on category and title inputs
+        void UpdateFormVisualState()
+        {
+            FormBackgroundColour = CategoryEntry;
+            if (CategoryEntry != null && TitleEntry != null && TitleEntry.Length > 0) IsConfirmButtonEnabled = true;
+            else IsConfirmButtonEnabled = false;
+        }
+
         // Reset form entry fields
         void ResetEntryFields()
         {
-            CategoryEntry = "default";
+            CategoryEntry = "";
             TitleEntry = "";
             ItemsEntry = "";
             DescriptionEntry = "";
-            StartTimeEntry = TimeSpan.Zero;
-            EndTimeEntry = TimeSpan.Zero;
+
+            // Default start time's minute is rounded floor to nearest 10. Ending time is an hour after.
+            TimeSpan currentTime = DateTime.Now.TimeOfDay;
+            TimeSpan currentHour = TimeSpan.FromHours(currentTime.Hours);
+            TimeSpan flooredMinute = TimeSpan.FromMinutes(((int)Math.Floor((double)currentTime.Minutes / 10)) * 10);
+            StartTimeEntry = currentHour + flooredMinute;
+            EndTimeEntry = currentHour + flooredMinute + TimeSpan.FromHours(1);
         }
 
-        // Saves entry form inputs
+        // Saves entry form inputs into a new pin
         void SaveFormInfo()
         {
-            PostInfo newPost = new PostInfo(pinID, categoryEntry, titleEntry, itemsEntry, descriptionEntry, startTimeEntry, endTimeEntry);
+            tempCustomPin.MarkerID = pinID;
+            tempCustomPin.Category = CategoryEntry;
+            tempCustomPin.Label = TitleEntry;
+            tempCustomPin.Description = DescriptionEntry;
+            tempCustomPin.StartTime = StartTimeEntry;
+            tempCustomPin.EndTime = EndTimeEntry;
+            tempCustomPin.Address = new ImageService().CategoryToImage(CategoryEntry);
+            CustomPinList.Add(tempCustomPin);
+            pinID += 1;
+            ResetAll();
+        }
 
-            if (newPost.TitleEntry != null && newPost.TitleEntry.Length > 0) // checks title exists
+        // Formats time remaining as a string
+        public string FormatTimeRemainingToString(TimeSpan end, TimeSpan start)
+        {
+            TimeSpan timeLeft = end - start;
+            int hours = timeLeft.Hours;
+            int minutes = timeLeft.Minutes;
+
+            if (hours <= 0 && minutes <= 0) return "expired";
+            else if (hours >= 1) return hours + "hr " + minutes + "min left";
+            else return minutes + "min left";
+        }
+
+        // Updates all pins' remaining time. If 0, remove from list
+        public void UpdatePinTimeRemaining()
+        {
+            // Changing a property doesn't fire INotifyPropertyChange (dev bug), replacing pin does
+            for (int i = 0; i < CustomPinList.Count; i++)
             {
+                CustomPin pin = CustomPinList[i];
+                string timeLeft = FormatTimeRemainingToString(pin.EndTime, DateTime.Now.TimeOfDay);
 
-                // Add data to the pin from the entry form
-                TempCustomPin.Label = newPost.TitleEntry;
-                string png = CategoryToImage(newPost.CategoryEntry);
-                TempCustomPin.Address = png;
-
-
-                // Add pin and post to the lists
-                PostInfoList.Add(newPost);
-                CustomPinList.Add(TempCustomPin);
-                pinID += 1;
-
-                ResetAll();
+                if (timeLeft == "expired") CustomPinList.RemoveAt(i);
+                else
+                {
+                    pin.TimeRemaining = timeLeft;
+                    CustomPinList[i] = pin;
+                }
             }
         }
 
-        // Retrives category from entry form and returns the corresponding image filename
-        string CategoryToImage(string category)
+        // Formats the distance the user is from a pin as a string
+        public string FormatDistanceToString(Position src, Position dst)
         {
-            string png = "pin.png";
-            switch (category)
-            {
-                case ("Food / Drink"):
-                    png = "food_icon.png";
-                    break;
-                case ("Health"):
-                    png = "health_icon.png";
-                    break;
-                case ("Stationary"):
-                    png = "pen_icon.png";
-                    break;
-                case ("Sports"):
-                    png = "sport_icon.png";
-                    break;
-                case ("Misc"):
-                    png = "misc_icon.png";
-                    break;
-            }
-
-            return png;
+            double distanceKM = Location.CalculateDistance(src.Latitude, src.Longitude, dst.Latitude, dst.Longitude, 0);
+            int distanceM = (int)(distanceKM * 1000);
+            return distanceM.ToString() + 'm';
         }
 
-        // Generic command
-        async Task DoSomething()
+        // Updates all pins' distance
+        public void UpdatePinDistance()
         {
-            await Application.Current.MainPage.DisplayAlert("Notice", "Feature not yet implemented", "Close");
+            // Changing a property doesn't fire INotifyPropertyChange (dev bug), replacing pin does
+            for (int i = 0; i < CustomPinList.Count; i++)
+            {
+                CustomPin pin = CustomPinList[i];
+                pin.DistanceFromUser = FormatDistanceToString(userPosition, pin.Position).ToString() ;
+                CustomPinList[i] = pin;
+            }
+        }
+        public void UpdateSort(bool toggleMode = false)
+        {
+            List<CustomPin> tempList = CustomPinList.ToList();
+            List<CustomPin> sortedList = new List<CustomPin>();
+
+            if (toggleMode)
+            {
+                if (SortButtonText == "Time") SortButtonText = "Distance";
+                else if (SortButtonText == "Distance") SortButtonText = "Time";
+            }
+        
+            if (SortButtonText == "Time") sortedList = tempList.OrderBy(pin => Int32.Parse(pin.TimeRemaining.Replace("hr ", "0").Replace("min left", ""))).ToList();
+            else if (SortButtonText == "Distance") sortedList = tempList.OrderBy(pin => Int32.Parse(pin.DistanceFromUser.Trim('m'))).ToList();
+
+            CustomPinList.Clear();
+            sortedList.ForEach((pin) => CustomPinList.Add(pin));
         }
     }
 }
