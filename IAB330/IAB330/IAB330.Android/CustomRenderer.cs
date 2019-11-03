@@ -28,6 +28,7 @@ namespace CustomRenderer.Droid
         List<CustomPin> customPins;
         public CustomMapRenderer(Context context) : base(context) { }
 
+        // OnElementChanged method retrieves the list of custom pins from the control
         protected override void OnElementChanged(Xamarin.Forms.Platform.Android.ElementChangedEventArgs<Map> e)
         {
             base.OnElementChanged(e);
@@ -70,16 +71,14 @@ namespace CustomRenderer.Droid
 
 
         
-
+        // When user taps on marker, custom content is displayed via a view, only works when GetInfoWindow returns null
         public Android.Views.View GetInfoContents(Marker marker)
         {
-            Console.WriteLine("Calledlmao");
+
             var inflater = Android.App.Application.Context.GetSystemService(Context.LayoutInflaterService) as Android.Views.LayoutInflater;
             if (inflater != null)
             {
                 Android.Views.View view;
-
-
                 var customPin = GetCustomPin(marker);
 
                 if (customPin == null)
@@ -87,11 +86,7 @@ namespace CustomRenderer.Droid
                     throw new Exception("Custom pin not found");
                 }
 
-
                 view = inflater.Inflate(Resource.Layout.InfoWindow, null);
-
-
-
                 var infoTitle = view.FindViewById<TextView>(Resource.Id.InfoWindowTitle);
                 var infoSubtitle = view.FindViewById<TextView>(Resource.Id.InfoWindowSubtitle);
 
@@ -115,6 +110,7 @@ namespace CustomRenderer.Droid
             return null;
         }
 
+        // Gets the marker object that user clicked on
         CustomPin GetCustomPin(Marker annotation)
         {
             var position = new Position(annotation.Position.Latitude, annotation.Position.Longitude);
