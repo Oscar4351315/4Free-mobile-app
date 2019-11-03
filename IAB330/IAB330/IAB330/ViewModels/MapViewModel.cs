@@ -23,13 +23,12 @@ namespace IAB330.ViewModels
         public MapViewModel()
         {
             Title = "Map Page";
-            SortButtonText = "Distance";
+            SortButtonText = "Sort By: Distance";
             bool isAllowLocation = CheckLocationPermission();
 
             if (isAllowLocation)
             {
                 Map = new CustomMap { MapType = MapType.Street, IsShowingUser = true, };
-
                 Map.CustomPins = new List<CustomPin> {  };
                 CustomPinList = new ObservableCollection<CustomPin>();
 
@@ -79,8 +78,8 @@ namespace IAB330.ViewModels
         public string SortButtonText { get { return sortButtonText; } set { SetProperty(ref sortButtonText, value); } }
 
 
-    // Repositions map when an item from quick access is selected
-    public CustomPin SelectedPinListItem
+        // Repositions map when an item from quick access is selected
+        public CustomPin SelectedPinListItem
         {
             get { return selectedPinListItem; }
             set
@@ -90,9 +89,6 @@ namespace IAB330.ViewModels
                 Map.MoveToRegion(MapSpan.FromCenterAndRadius(pinPosition, Distance.FromMeters(100)));
             }
         }
-
-
-    
 
         // Creates pin at location on map click
         void OnMapClick(object sender, MapClickedEventArgs e)
@@ -300,6 +296,8 @@ namespace IAB330.ViewModels
                 CustomPinList[i] = pin;
             }
         }
+
+        // Reorders the quick view list based on the sort category selected
         public void UpdateSort(bool toggleMode = false)
         {
             List<CustomPin> tempList = CustomPinList.ToList();
@@ -307,12 +305,18 @@ namespace IAB330.ViewModels
 
             if (toggleMode)
             {
-                if (SortButtonText == "Time") SortButtonText = "Distance";
-                else if (SortButtonText == "Distance") SortButtonText = "Time";
+                if (SortButtonText == "Sort By: Time") SortButtonText = "Sort By: Distance";
+                else if (SortButtonText == "Sort By: Distance") SortButtonText = "Sort By: Time";
             }
 
-            if (SortButtonText == "Time") sortedList = tempList.OrderBy(pin => Int32.Parse(pin.TimeRemaining.Replace("hr ", "0").Replace("min left", ""))).ToList();
-            else if (SortButtonText == "Distance") sortedList = tempList.OrderBy(pin => Int32.Parse(pin.DistanceFromUser.Trim('m'))).ToList();
+            if (SortButtonText == "Sort By: Time")
+            {
+                sortedList = tempList.OrderBy(pin => Int32.Parse(pin.TimeRemaining.Replace("hr ", "0").Replace("min left", ""))).ToList();
+            }
+            else if (SortButtonText == "Sort By: Distance")
+            {
+                sortedList = tempList.OrderBy(pin => Int32.Parse(pin.DistanceFromUser.Trim('m'))).ToList();
+            }
 
             CustomPinList.Clear();
             sortedList.ForEach((pin) => CustomPinList.Add(pin));
