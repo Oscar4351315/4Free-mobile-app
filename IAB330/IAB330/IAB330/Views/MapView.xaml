@@ -70,17 +70,17 @@
 
             <Style x:Key="formPickerStyle" BasedOn="{StaticResource formInputBaseStyle}" TargetType="Picker" >
                 <Setter Property="FontFamily" Value="Arial" />
-                <Setter Property="FontSize" Value="Body" />
+                <Setter Property="FontSize" Value="Medium" />
             </Style>
 
             <Style x:Key="formTimePickerStyle" BasedOn="{StaticResource formInputBaseStyle}" TargetType="TimePicker" >
                 <Setter Property="FontFamily" Value="Arial" />
-                <Setter Property="FontSize" Value="Body" />
+                <Setter Property="FontSize" Value="Medium" />
             </Style>
 
             <Style x:Key="formEntryStyle" BasedOn="{StaticResource formInputBaseStyle}" TargetType="Entry">
                 <Setter Property="FontFamily" Value="Arial" />
-                <Setter Property="FontSize" Value="Body" />
+                <Setter Property="FontSize" Value="Medium" />
             </Style>
 
             <!-- Button -->
@@ -107,17 +107,27 @@
 
             <!-- Quick Access Window -->
             <!-- Base -->
-            <Style x:Key="quickAccessBaseStyle" TargetType="View">
+            <Style x:Key="qaBaseStyle" TargetType="View">
                 <Setter Property="IsVisible" Value="{Binding IsShowQuickAccess}" />
+                <Setter Property="BackgroundColor" Value="{StaticResource bgColour}" />
+                <Setter Property="Grid.ColumnSpan" Value="3" />
             </Style>
-            
+
             <!-- Label-->
-            <Style x:Key="quickAccessLabelStyle" BasedOn="{StaticResource quickAccessBaseStyle}" TargetType="Label">
+            <Style x:Key="qaLabelStyle" BasedOn="{StaticResource qaBaseStyle}" TargetType="Label">
                 <Setter Property="HorizontalTextAlignment" Value="Center" />
                 <Setter Property="VerticalTextAlignment" Value="Center" />
-                <Setter Property="BackgroundColor" Value="{StaticResource bgColour}" />
-                <Setter Property="FontSize" Value="Large" />
                 <Setter Property="HeightRequest" Value="30" />
+                <Setter Property="FontAttributes" Value="None" />
+                <Setter Property="FontFamily" Value="Arial" />
+                <Setter Property="FontSize" Value="Medium" />
+            </Style>
+
+            <!-- Label-->
+            <Style x:Key="qaListStyle" BasedOn="{StaticResource qaBaseStyle}" TargetType="ListView">
+                <Setter Property="Grid.RowSpan" Value="3" />
+                <Setter Property="RowHeight" Value="50" />
+                <Setter Property="HeightRequest" Value="250" />
             </Style>
         </ResourceDictionary>
     </ContentPage.Resources>
@@ -213,17 +223,42 @@
 
 
         <!-- Quick Access Window Pin List -->
-        <Label Text="Sorted By" Grid.Row="8" Grid.RowSpan="2" Grid.Column="0" Grid.ColumnSpan="3" 
-               Style="{StaticResource quickAccessLabelStyle}" Margin="0, 165, 0, 0" />
-        <Button Text="{Binding SortButtonText}" BackgroundColor="{StaticResource bgColour}" 
-                Grid.Row="10" Grid.Column="0" Grid.ColumnSpan="3" TextColor="Gray"
-                Command="{Binding SortButtonCommand}" Style="{StaticResource quickAccessBaseStyle}" />
-
-        <Label Text="Quick View" Grid.Row="7" Grid.Column="4" Grid.ColumnSpan="3" 
-               Style="{StaticResource quickAccessLabelStyle}"/>
+        <!-- Left Side 
+        <Label Text="FILTER BY" Grid.Row="7" Grid.Column="0" Style="{StaticResource qaLabelStyle}" />
+        
         <ListView ItemsSource="{Binding CustomPinList}" SelectedItem="{Binding SelectedPinListItem, Mode=TwoWay}" 
-                  Grid.Row="8" Grid.RowSpan="3" Grid.Column="4" Grid.ColumnSpan="3"
-                  RowHeight="50" HeightRequest="250" BackgroundColor="{StaticResource bgColour}" Style="{StaticResource quickAccessBaseStyle}" >
+                  Grid.Row="8" Grid.Column="0" Style="{StaticResource qaListStyle}" >
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <Grid HorizontalOptions="Center">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="0" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <Image Source="{Binding Address}" Grid.Row="0" Grid.RowSpan="2" Grid.Column="1"/>
+                        </Grid>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView> -->
+
+        <!-- Right Side -->
+        <Label Text="QUICK VIEW" Grid.Row="6" Grid.Column="4" Style="{StaticResource qaLabelStyle}" />
+        
+        <Button Text="{Binding SortButtonText}" TextColor="Gray" HeightRequest="40" 
+                Grid.Row="7" Grid.Column="4" FontFamily="Arial" FontAttributes="None" FontSize="Medium"
+                Command="{Binding SortButtonCommand}" Style="{StaticResource qaBaseStyle}" />
+        
+        <ListView ItemsSource="{Binding CustomPinList}" SelectedItem="{Binding SelectedPinListItem, Mode=TwoWay}" 
+                  Grid.Row="8" Grid.Column="4" Style="{StaticResource qaListStyle}" >
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
