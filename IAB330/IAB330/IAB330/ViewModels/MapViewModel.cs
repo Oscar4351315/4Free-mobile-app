@@ -47,6 +47,8 @@ namespace IAB330.ViewModels
             }
         }
 
+
+
         // Variable declarations
         private bool isPinPlacing;
         private bool isPinConfirm;
@@ -200,7 +202,7 @@ namespace IAB330.ViewModels
             Map.Pins.Clear();
             AddPinsToMap();
             ResetEntryFields();
-            //UpdateSort();
+            UpdateSort();
         }
 
 
@@ -261,17 +263,7 @@ namespace IAB330.ViewModels
             ResetAll();
         }
 
-        // Formats time remaining as a string
-        public string FormatTimeRemainingToString(TimeSpan end, TimeSpan start)
-        {
-            TimeSpan timeLeft = end - start;
-            int hours = timeLeft.Hours;
-            int minutes = timeLeft.Minutes;
-
-            if (hours <= 0 && minutes <= 0) return "expired";
-            else if (hours >= 1) return hours + "hr " + minutes + "min left";
-            else return minutes + "min left";
-        }
+        
 
         // Updates all pins' remaining time. If 0, remove from list
         public void UpdatePinTimeRemaining()
@@ -280,7 +272,7 @@ namespace IAB330.ViewModels
             for (int i = 0; i < CustomPinList.Count; i++)
             {
                 CustomPin pin = CustomPinList[i];
-                string timeLeft = FormatTimeRemainingToString(pin.EndTime, DateTime.Now.TimeOfDay);
+                string timeLeft = new FormatService().FormatTimeRemainingToString(pin.EndTime, DateTime.Now.TimeOfDay);
 
                 if (timeLeft == "expired") CustomPinList.RemoveAt(i);
                 else
@@ -291,13 +283,7 @@ namespace IAB330.ViewModels
             }
         }
 
-        // Formats the distance the user is from a pin as a string
-        public string FormatDistanceToString(Position src, Position dst)
-        {
-            double distanceKM = Location.CalculateDistance(src.Latitude, src.Longitude, dst.Latitude, dst.Longitude, 0);
-            int distanceM = (int)(distanceKM * 1000);
-            return distanceM.ToString() + 'm';
-        }
+        
 
         // Updates all pins' distance
         public void UpdatePinDistance()
@@ -306,7 +292,7 @@ namespace IAB330.ViewModels
             for (int i = 0; i < CustomPinList.Count; i++)
             {
                 CustomPin pin = CustomPinList[i];
-                pin.DistanceFromUser = FormatDistanceToString(userPosition, pin.Position);
+                pin.DistanceFromUser = new FormatService().FormatDistanceToString(userPosition, pin.Position).ToString();
                 CustomPinList[i] = pin;
             }
         }
