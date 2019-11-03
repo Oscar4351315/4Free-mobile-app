@@ -99,7 +99,7 @@ namespace IAB330.ViewModels
                     SetProperty(ref categoriesToShow, categoriesToShowObj.Category);
                     Debugger.Log(1, "functions", "new category");
                 }
-                
+                AddPinsToMap();
             }
         }
 
