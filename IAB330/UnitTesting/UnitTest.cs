@@ -1,9 +1,5 @@
-using IAB330.ViewModels;
-using IAB330.Models;
 using IAB330.Services;
-using IAB330.Interfaces;
 //using NUnit.Framework;
-using Xamarin.Forms.Maps;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using CustomRenderer;
 
@@ -21,14 +17,14 @@ namespace UnitTesting
 
             var pin = new CustomPin
             {
-                TitleEntry = "snickers",
-                CategoryEntry = "Health"
+                Label = "snickers",
+                Category = "Health"
                 
             };
 
             //Act
             //Assert
-            Assert.IsTrue(pin.TitleEntry == "snickers", "title is wrong!, is actually" + pin.TitleEntry);
+            Assert.IsTrue(pin.Label == "snickers", "title is wrong!, is actually" + pin.Label);
 
         }
 
@@ -39,14 +35,14 @@ namespace UnitTesting
 
             var pin = new CustomPin
             {
-                TitleEntry = "snickers",
-                CategoryEntry = "Health",
+                Label = "snickers",
+                Category = "Health",
                 Address = "pin.png"
             };
             //Act
             pin.Address = new ImageService().CategoryToImage("Sports");
             //Assert
-            Assert.IsTrue(pin.Address == "sport_icon.png", "address is wrong!, is actually" + pin.Address);
+            Assert.IsTrue(pin.Address == "icon_sport.png", "address is wrong!, is actually" + pin.Address);
         }
 
 
