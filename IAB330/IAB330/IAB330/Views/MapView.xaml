@@ -256,7 +256,7 @@
         <Button Text="{Binding SortButtonText}" TextColor="Gray" HeightRequest="40" 
                 Grid.Row="7" Grid.Column="4" FontFamily="Arial" FontAttributes="None" FontSize="Medium"
                 Command="{Binding SortButtonCommand}" Style="{StaticResource qaBaseStyle}" />
-        
+
         <ListView ItemsSource="{Binding CustomPinList}" SelectedItem="{Binding SelectedPinListItem, Mode=TwoWay}" 
                   Grid.Row="8" Grid.Column="4" Style="{StaticResource qaListStyle}" >
             <ListView.ItemTemplate>
@@ -282,6 +282,31 @@
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>
+        </ListView>
+
+
+        <ListView ItemsSource="{Binding Categories}" SelectedItem="{Binding CategoriesToShowObj, Mode=TwoWay}" 
+                  Grid.Row="6" Grid.RowSpan="3" Grid.Column="1" Grid.ColumnSpan="2"
+                  RowHeight="50" HeightRequest="252" BackgroundColor="Transparent" Style="{StaticResource qaListStyle}" >
+        <ListView.ItemTemplate>
+            <DataTemplate>
+                <ViewCell>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0" />
+                            <ColumnDefinition Width="auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <Image Source="{Binding Address}" Grid.Row="0" Grid.RowSpan="2" Grid.Column="1"/>
+                        <!--<Label Text="{Binding Label}" Grid.Row="0" Grid.Column="2"  VerticalOptions="End" />-->
+                    </Grid>
+                </ViewCell>
+            </DataTemplate>
+        </ListView.ItemTemplate>
         </ListView>
     </Grid>
 </ContentPage>
