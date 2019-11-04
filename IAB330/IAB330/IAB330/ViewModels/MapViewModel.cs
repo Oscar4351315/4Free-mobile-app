@@ -32,8 +32,7 @@ namespace IAB330.ViewModels
                 Map.CustomPins = new List<CustomPin> {  };
                 CustomPinList = new ObservableCollection<CustomPin>();
                 PermanentCustomPinList = new ObservableCollection<CustomPin>();
-                Categories = new List<CustomPin>();
-
+                CategoryList = new List<CustomPin>();
 
                 GetUserPosition();
                 CreateFakePins();
@@ -46,7 +45,7 @@ namespace IAB330.ViewModels
                 ConfirmPinCommand = new Command(() => ConfirmPin(), () => !IsBusy);
                 CancelPinOrFormCommand = new Command(() => ResetAll(), () => !IsBusy);
                 SaveFormInfoCommand = new Command(() => SaveFormInfo(), () => !IsBusy);
-                SortButtonCommand = new Command(() => UpdateSort(true), () => !IsBusy);
+                SortButtonCommand = new Command(() => UpdateQuickView(true), () => !IsBusy);
                 ShowAllCategoriesCommand = new Command(() => ShowAllCategories(), () => !IsBusy);
             }
         }
@@ -60,20 +59,17 @@ namespace IAB330.ViewModels
         private bool isShowQuickAccess;
         private string formBackgroundColour;
         private string sortButtonText;
+        private string categoriesToShow = "all";
+        private CustomPin selectedFilterCategory;
         private CustomPin selectedPinListItem;
         private CustomPin tempCustomPin;
         private Position userPosition;
-        private CustomPin categoriesToShowObj;
-        private string categoriesToShow = "all";
-
-        public List<CustomPin> Categories { get; set; }
-
-
-
+        
         // View bindings
         public CustomMap Map { get; set; }
         public ObservableCollection<CustomPin> CustomPinList { get; set; }
         public ObservableCollection<CustomPin> PermanentCustomPinList { get; set; }
+        public List<CustomPin> CategoryList { get; set; }
         public Command ConfirmPinCommand { get; }
         public Command ShowSettingsCommand { get; }
         public Command ToggleQuickAccessCommand { get; }
@@ -89,22 +85,15 @@ namespace IAB330.ViewModels
         public string FormBackgroundColour { get { return formBackgroundColour; } set { SetProperty(ref formBackgroundColour, new ImageService().FormBackgroundColour(value)); } }
         public string SortButtonText { get { return sortButtonText; } set { SetProperty(ref sortButtonText, value); } }
 
-        public CustomPin CategoriesToShowObj
+        // Updates the map pins and quick view list when a filter is pressed
+        public CustomPin SelectedFilterCategory
         {
-            get { return categoriesToShowObj; }
+            get { return selectedFilterCategory; }
             set
             {
-                SetProperty(ref categoriesToShowObj, value);
-                if (categoriesToShow == categoriesToShowObj.Category)
-                {
-                    categoriesToShow = "all";
-                    
-                } else
-                {
-                    SetProperty(ref categoriesToShow, categoriesToShowObj.Category);
-                }
-                UpdateSort();
-                AddPinsToMap();
+                SetProperty(ref selectedFilterCategory, value);
+                categoriesToShow = SelectedFilterCategory.Category;
+                UpdateQuickView();
             }
         }
 
@@ -117,18 +106,6 @@ namespace IAB330.ViewModels
                 SetProperty(ref selectedPinListItem, value);
                 var pinPosition = selectedPinListItem.Position;
                 Map.MoveToRegion(MapSpan.FromCenterAndRadius(pinPosition, Distance.FromMeters(100)));
-            }
-        }
-
-        void AddCategoriesToList()
-        {
-            string[] _categories = { "Food / Drink", "Health", "Stationary", "Sports", "Misc" };
-            for (int i = 0; i < 5; ++i)
-            {
-                CustomPin temp = new CustomPin();
-                temp.Category = _categories[i];
-                temp.Address = new ImageService().CategoryToImage(_categories[i]);
-                Categories.Add(temp);
             }
         }
 
@@ -172,7 +149,6 @@ namespace IAB330.ViewModels
         // Create fake pins from MockDataStore on the map
         async void CreateFakePins()
         {
-            CustomPinList = new ObservableCollection<CustomPin>();
             var mockPins = await DataStore.GetItemsAsync(true);
             
             foreach (var pin in mockPins)
@@ -223,25 +199,11 @@ namespace IAB330.ViewModels
         {
             Map.CustomPins.Clear();
             Map.Pins.Clear();
-            Debugger.Log(1, "functions", "pins added to map");
-            if (categoriesToShow == "all")
+
+            foreach (CustomPin pin in CustomPinList)
             {
-                for (int i = 0; i < CustomPinList.Count; i++)
-                {
-                    Map.Pins.Add(CustomPinList[i]);
-                    Map.CustomPins.Add(CustomPinList[i]);
-                }
-            } else
-            {
-                Debugger.Log(1, "functions, category", categoriesToShow);
-                for (int i = 0; i < CustomPinList.Count; i++)
-                {
-                    if (CustomPinList[i].Category == categoriesToShow)
-                    {
-                        Map.Pins.Add(CustomPinList[i]);
-                        Map.CustomPins.Add(CustomPinList[i]);
-                    }
-                }
+                Map.Pins.Add(pin);
+                Map.CustomPins.Add(pin);
             }
         }
 
@@ -263,7 +225,7 @@ namespace IAB330.ViewModels
             Map.Pins.Clear();
             AddPinsToMap();
             ResetEntryFields();
-            UpdateSort();
+            UpdateQuickView();
         }
 
 
@@ -325,52 +287,66 @@ namespace IAB330.ViewModels
             ResetAll();
         }
 
+
+
+        // The available filter categories
+        void AddCategoriesToList()
+        {
+            string[] categories = { "Food / Drink", "Health", "Stationary", "Sports", "Misc" };
+            foreach (string category in categories)
+            {
+                CategoryList.Add(new CustomPin()
+                {
+                    Category = category,
+                    Address = new ImageService().CategoryToImage(category)
+                });
+            }
+        }
+
+        // When the show all button is pressed
         void ShowAllCategories()
         {
             categoriesToShow = "all";
-            UpdateSort();
-            AddPinsToMap();
+            UpdateQuickView();
         }
         
-
         // Updates all pins' remaining time. If 0, remove from list
         public void UpdatePinTimeRemaining()
         {
             // Changing a property doesn't fire INotifyPropertyChange (dev bug), replacing pin does
-            for (int i = 0; i < CustomPinList.Count; i++)
+            for (int i = 0; i < PermanentCustomPinList.Count; i++)
             {
-                CustomPin pin = CustomPinList[i];
+                CustomPin pin = PermanentCustomPinList[i];
                 string timeLeft = new FormatService().FormatTimeRemainingToString(pin.EndTime, DateTime.Now.TimeOfDay);
 
-                if (timeLeft == "expired") CustomPinList.RemoveAt(i);
+                if (timeLeft == "expired") PermanentCustomPinList.RemoveAt(i);
                 else
                 {
                     pin.TimeRemaining = timeLeft;
-                    CustomPinList[i] = pin;
+                    PermanentCustomPinList[i] = pin;
                 }
             }
         }
-
-        
 
         // Updates all pins' distance
         public void UpdatePinDistance()
         {
             // Changing a property doesn't fire INotifyPropertyChange (dev bug), replacing pin does
-            for (int i = 0; i < CustomPinList.Count; i++)
+            for (int i = 0; i < PermanentCustomPinList.Count; i++)
             {
-                CustomPin pin = CustomPinList[i];
+                CustomPin pin = PermanentCustomPinList[i];
                 pin.DistanceFromUser = new FormatService().FormatDistanceToString(userPosition, pin.Position).ToString();
-                CustomPinList[i] = pin;
+                PermanentCustomPinList[i] = pin;
             }
         }
 
         // Reorders the quick view list based on the sort category selected
-        public void UpdateSort(bool toggleMode = false)
+        public void UpdateQuickView(bool toggleMode = false)
         {
             List<CustomPin> tempList = PermanentCustomPinList.ToList();
             List<CustomPin> sortedList = new List<CustomPin>();
 
+            // Sort-By feature
             if (toggleMode)
             {
                 if (SortButtonText == "Sort By: Time") SortButtonText = "Sort By: Distance";
@@ -383,23 +359,25 @@ namespace IAB330.ViewModels
             }
             else if (SortButtonText == "Sort By: Distance")
             {
-                sortedList = tempList.OrderBy(pin => Int32.Parse(pin.DistanceFromUser.Trim('m'))).ToList();
+                sortedList = tempList.OrderBy(pin => Int32.Parse(pin.DistanceFromUser.Replace("m", ""))).ToList();
             }
+
+            // Filter feature
             CustomPinList.Clear();
+
             if (categoriesToShow == "all")
             {
                 sortedList.ForEach((pin) => CustomPinList.Add(pin));
-            } else {
+            }
+            else
+            {
                 foreach (CustomPin pin in sortedList)
                 {
-                    if (pin.Category == categoriesToShow)
-                    {
-                        CustomPinList.Add(pin);
-                    }
+                    if (pin.Category == categoriesToShow) CustomPinList.Add(pin);
                 }
             }
+
             AddPinsToMap();
-        
         }
     }
 }

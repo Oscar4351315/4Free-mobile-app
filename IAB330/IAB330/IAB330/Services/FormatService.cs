@@ -21,7 +21,6 @@ namespace IAB330.Services
             else return minutes + "min left";
         }
 
-
         // Formats the distance the user is from a pin as a string
         public string FormatDistanceToString(Position src, Position dst)
         {
@@ -29,7 +28,5 @@ namespace IAB330.Services
             int distanceM = (int)(distanceKM * 1000);
             return distanceM.ToString() + 'm';
         }
-
-
     }
 }

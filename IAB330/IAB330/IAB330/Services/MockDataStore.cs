@@ -46,6 +46,7 @@ namespace IAB330.Services
                 // Random end time offset
                 int time = random.Next(5, 121);
                 pin.EndTime = TimeSpan.FromMinutes(time);
+                pin.DistanceFromUser = "0m";
             }
 
             mockPins.ForEach((pin) => customPinList.Add(pin));
