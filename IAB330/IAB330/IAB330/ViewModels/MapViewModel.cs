@@ -102,7 +102,6 @@ namespace IAB330.ViewModels
                 } else
                 {
                     SetProperty(ref categoriesToShow, categoriesToShowObj.Category);
-                    Debugger.Log(1, "functions", "new category");
                 }
                 UpdateSort();
                 AddPinsToMap();
@@ -131,7 +130,6 @@ namespace IAB330.ViewModels
                 temp.Address = new ImageService().CategoryToImage(_categories[i]);
                 Categories.Add(temp);
             }
-            Debugger.Log(1, "functions", Categories.Count().ToString());
         }
 
         // Creates pin at location on map click
@@ -371,24 +369,7 @@ namespace IAB330.ViewModels
         public void UpdateSort(bool toggleMode = false)
         {
             List<CustomPin> tempList = PermanentCustomPinList.ToList();
-            /*List<CustomPin> tempList = new List<CustomPin>();
-            if (categoriesToShow == "all")
-            {
-                CustomPinList.ForEach((pin) => tempList.Add(pin));
-            }
-            else
-            {
-                foreach (CustomPin pin in tempList)
-                {
-                    if (pin.Category == categoriesToShow)
-                    {
-                        CustomPinList.Add(pin);
-                    }
-                }
-            }*/
-            //List<CustomPin> tempList = CustomPinList.ToList();
             List<CustomPin> sortedList = new List<CustomPin>();
-            //List<CustomPin> tempList = PermanentCustomPinList.ToList();
 
             if (toggleMode)
             {
