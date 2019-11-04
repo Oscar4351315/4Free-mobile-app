@@ -70,17 +70,17 @@
 
             <Style x:Key="formPickerStyle" BasedOn="{StaticResource formInputBaseStyle}" TargetType="Picker" >
                 <Setter Property="FontFamily" Value="Arial" />
-                <Setter Property="FontSize" Value="Medium" />
+                <Setter Property="FontSize" Value="Default" />
             </Style>
 
             <Style x:Key="formTimePickerStyle" BasedOn="{StaticResource formInputBaseStyle}" TargetType="TimePicker" >
                 <Setter Property="FontFamily" Value="Arial" />
-                <Setter Property="FontSize" Value="Medium" />
+                <Setter Property="FontSize" Value="Default" />
             </Style>
 
             <Style x:Key="formEntryStyle" BasedOn="{StaticResource formInputBaseStyle}" TargetType="Entry">
                 <Setter Property="FontFamily" Value="Arial" />
-                <Setter Property="FontSize" Value="Medium" />
+                <Setter Property="FontSize" Value="Default" />
             </Style>
 
             <!-- Button -->
@@ -233,9 +233,10 @@
         <!-- Left Side -->
         <Label Text="FILTER BY" Grid.Row="6" Grid.Column="0" Style="{StaticResource qaLabelStyle}" />
 
-        <Button Text="Show All" Grid.Row="7" Grid.Column="0" Command="{Binding ShowAllCategoriesCommand}" Style="{StaticResource qaBtnStyle}" />
+        <Button x:Name="FilterBtn" Text="Show All" Grid.Row="7" Grid.Column="0" Command="{Binding ShowAllCategoriesCommand}" 
+                Clicked="FilterBtn_Clicked" Style="{StaticResource qaBtnStyle}" />
 
-        <ListView ItemsSource="{Binding CategoryList}" SelectedItem="{Binding SelectedFilterCategory, Mode=TwoWay}" 
+        <ListView x:Name="FilterListView" ItemsSource="{Binding CategoryList}" SelectedItem="{Binding SelectedFilterCategory, Mode=TwoWay}" 
                   Grid.Row="8" Grid.Column="0" Style="{StaticResource qaListStyle}" >
             <ListView.ItemTemplate>
                 <DataTemplate>

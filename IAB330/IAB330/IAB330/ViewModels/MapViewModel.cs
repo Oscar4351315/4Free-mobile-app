@@ -355,7 +355,7 @@ namespace IAB330.ViewModels
 
             if (SortButtonText == "Sort By: Time")
             {
-                sortedList = tempList.OrderBy(pin => Int32.Parse(pin.TimeRemaining.Replace("hr ", "0").Replace("min left", ""))).ToList();
+                sortedList = tempList.OrderBy(pin => Int32.Parse(pin.TimeRemaining.Replace("h ", "0").Replace("min left", ""))).ToList();
             }
             else if (SortButtonText == "Sort By: Distance")
             {

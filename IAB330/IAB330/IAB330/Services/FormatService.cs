@@ -17,7 +17,7 @@ namespace IAB330.Services
             int minutes = timeLeft.Minutes;
 
             if (hours <= 0 && minutes <= 0) return "expired";
-            else if (hours >= 1) return hours + "hr " + minutes + "min left";
+            else if (hours >= 1) return hours + "h " + minutes + "min left";
             else return minutes + "min left";
         }
 
