@@ -12,5 +12,11 @@ namespace IAB330.Views
             InitializeComponent();
             BindingContext = new MapViewModel();
         }
+
+        // Deselects listview highlight when pressed
+        private void FilterBtn_Clicked(object sender, System.EventArgs e)
+        {
+            FilterListView.SelectedItem = "all";
+        }
     }
 }

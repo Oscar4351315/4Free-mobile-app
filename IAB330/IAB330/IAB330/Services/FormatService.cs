@@ -17,10 +17,9 @@ namespace IAB330.Services
             int minutes = timeLeft.Minutes;
 
             if (hours <= 0 && minutes <= 0) return "expired";
-            else if (hours >= 1) return hours + "hr " + minutes + "min left";
+            else if (hours >= 1) return hours + "h " + minutes + "min left";
             else return minutes + "min left";
         }
-
 
         // Formats the distance the user is from a pin as a string
         public string FormatDistanceToString(Position src, Position dst)
@@ -29,7 +28,5 @@ namespace IAB330.Services
             int distanceM = (int)(distanceKM * 1000);
             return distanceM.ToString() + 'm';
         }
-
-
     }
 }
