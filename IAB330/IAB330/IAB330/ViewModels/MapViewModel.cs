@@ -98,6 +98,7 @@ namespace IAB330.ViewModels
                 if (categoriesToShow == categoriesToShowObj.Category)
                 {
                     categoriesToShow = "all";
+                    
                 } else
                 {
                     SetProperty(ref categoriesToShow, categoriesToShowObj.Category);
