@@ -1,46 +1,41 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+
+using Android.Content;
+using Android.Gms.Maps;
+using Android.Gms.Maps.Model;
+using Android.Widget;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
 using Xamarin.Forms.Maps.Android;
-using Android.Gms.Maps;
-using Android.Content;
-using Android.Gms.Maps.Model;
-using CustomRenderer.Droid;
-using CustomRenderer;
 
+using CustomRenderer;
+using CustomRenderer.Droid;
+using IAB330.Droid;
+using IAB330.ViewModels;
 
 [assembly: ExportRenderer(typeof(CustomMap), typeof(CustomMapRenderer))]
 namespace CustomRenderer.Droid
 {
     public class CustomMapRenderer : MapRenderer, GoogleMap.IInfoWindowAdapter
     {
+
+
         List<CustomPin> customPins;
+        public CustomMapRenderer(Context context) : base(context) { }
 
-        public CustomMapRenderer(Context context) : base(context)
-        {
-        }
-
-        public Android.Views.View GetInfoContents(Marker marker)
-        {
-            //Application.Current.MainPage.DisplayAlert("Marker Info Window", "Feature not yet implemented", "Close");
-            return null;
-        }
-
-        public Android.Views.View GetInfoWindow(Marker marker)
-        {
-            return null;
-        }
-
+        // OnElementChanged method retrieves the list of custom pins from the control
         protected override void OnElementChanged(Xamarin.Forms.Platform.Android.ElementChangedEventArgs<Map> e)
         {
             base.OnElementChanged(e);
 
             if (e.OldElement != null)
             {
-                // do something when info window is clicked
-                //NativeMap.InfoWindowClick -= OnInfoWindowClick;
+                ;
             }
 
             if (e.NewElement != null)
@@ -51,43 +46,85 @@ namespace CustomRenderer.Droid
             }
         }
 
+
+        
+
+        // Disables default controls
         protected override void OnMapReady(GoogleMap map)
         {
             base.OnMapReady(map);
-            
-            // do something when the info window is clicked
-            //NativeMap.InfoWindowClick += OnInfoWindowClick;
             NativeMap.SetInfoWindowAdapter(this);
-
             map.UiSettings.ZoomControlsEnabled = false;
+            map.UiSettings.MapToolbarEnabled = false;
         }
 
-        // this function is called automatically when the Add(pin) is used to add pins to the map
-        protected override MarkerOptions CreateMarker(Pin CustomPin)
+        // Automatically called when new pin is added to map
+        protected override MarkerOptions CreateMarker(Pin annotation)
         {
             var marker = new MarkerOptions();
-            marker.SetPosition(new LatLng(CustomPin.Position.Latitude, CustomPin.Position.Longitude));
-            marker.SetTitle(CustomPin.Label);
-            //marker.SetSnippet(CustomPin.Address);
-            //marker.SetIcon(CustomPin.Icon);
-            // address is actually the image name for the image to use for the pin
-            marker.SetIcon(BitmapDescriptorFactory.FromAsset(CustomPin.Address));
-            //marker.SetIcon(BitmapDescriptorFactory.FromAsset("icon_food.png"));
+            marker.SetPosition(new LatLng(annotation.Position.Latitude, annotation.Position.Longitude));
+            marker.SetTitle(annotation.Label);
+            marker.SetIcon(BitmapDescriptorFactory.FromAsset(annotation.Address)); // Address is actually the image name for the pin
             return marker;
         }
 
-        // self made function, not useful at all
-        MarkerOptions CreateCustomMarker(CustomPin customPin)
+
+
+        
+        // When user taps on marker, custom content is displayed via a view, only works when GetInfoWindow returns null
+        public Android.Views.View GetInfoContents(Marker marker)
         {
-            var marker = new MarkerOptions();
-            marker.SetPosition(new LatLng(customPin.Position.Latitude, customPin.Position.Longitude));
-            marker.SetTitle(customPin.Label);
-            marker.SetSnippet(customPin.Address);
-            //marker.SetIcon(CustomPin.Icon);
-            marker.SetIcon(BitmapDescriptorFactory.FromAsset(customPin.Icon));
-            //marker.SetIcon(BitmapDescriptorFactory.FromAsset("icon_food.png"));
-            return marker;
+
+            var inflater = Android.App.Application.Context.GetSystemService(Context.LayoutInflaterService) as Android.Views.LayoutInflater;
+            if (inflater != null)
+            {
+                Android.Views.View view;
+                var customPin = GetCustomPin(marker);
+
+                if (customPin == null)
+                {
+                    throw new Exception("Custom pin not found");
+                }
+
+                view = inflater.Inflate(Resource.Layout.InfoWindow, null);
+                var infoTitle = view.FindViewById<TextView>(Resource.Id.InfoWindowTitle);
+                var infoSubtitle = view.FindViewById<TextView>(Resource.Id.InfoWindowSubtitle);
+
+                if (infoTitle != null)
+                {
+                    infoTitle.Text = customPin.Label;
+                }
+                if (infoSubtitle != null)
+                {
+                    infoSubtitle.Text = customPin.Description + "\n" + customPin.TimeRemaining;
+                }
+
+                return view;
+            }
+
+            return null;
         }
 
+        public Android.Views.View GetInfoWindow(Marker marker)
+        {
+            return null;
+        }
+
+        // Gets the marker object that user clicked on
+        CustomPin GetCustomPin(Marker annotation)
+        {
+            var position = new Position(annotation.Position.Latitude, annotation.Position.Longitude);
+            foreach (var pin in customPins)
+            {
+                if (pin.Position == position)
+                {
+                    return pin;
+                }
+            }
+            return null;
+        }
+
+
+ 
     }
 }
