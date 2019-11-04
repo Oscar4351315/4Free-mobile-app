@@ -46,6 +46,7 @@ namespace IAB330.ViewModels
                 CancelPinOrFormCommand = new Command(() => ResetAll(), () => !IsBusy);
                 SaveFormInfoCommand = new Command(() => SaveFormInfo(), () => !IsBusy);
                 SortButtonCommand = new Command(() => UpdateSort(true), () => !IsBusy);
+                ShowAllCategoriesCommand = new Command(() => ShowAllCategories(), () => !IsBusy);
             }
         }
 
@@ -77,6 +78,7 @@ namespace IAB330.ViewModels
         public Command TogglePostModeCommand { get; }
         public Command CancelPinOrFormCommand { get; }
         public Command SaveFormInfoCommand { get; }
+        public Command ShowAllCategoriesCommand { get; }
         public Command SortButtonCommand { get; }
         public bool IsPinPlacing { get { return isPinPlacing; } set { SetProperty(ref isPinPlacing, value); } }
         public bool IsPinConfirm { get { return isPinConfirm; } set { SetProperty(ref isPinConfirm, value); } }
@@ -319,6 +321,11 @@ namespace IAB330.ViewModels
             ResetAll();
         }
 
+        void ShowAllCategories()
+        {
+            categoriesToShow = "all";
+            AddPinsToMap();
+        }
         
 
         // Updates all pins' remaining time. If 0, remove from list
@@ -357,6 +364,22 @@ namespace IAB330.ViewModels
         public void UpdateSort(bool toggleMode = false)
         {
             List<CustomPin> tempList = CustomPinList.ToList();
+            /*List<CustomPin> tempList = new List<CustomPin>();
+            if (categoriesToShow == "all")
+            {
+                CustomPinList.ForEach((pin) => tempList.Add(pin));
+            }
+            else
+            {
+                foreach (CustomPin pin in tempList)
+                {
+                    if (pin.Category == categoriesToShow)
+                    {
+                        CustomPinList.Add(pin);
+                    }
+                }
+            }*/
+            //List<CustomPin> tempList = CustomPinList.ToList();
             List<CustomPin> sortedList = new List<CustomPin>();
 
             if (toggleMode)
@@ -374,7 +397,18 @@ namespace IAB330.ViewModels
                 sortedList = tempList.OrderBy(pin => Int32.Parse(pin.DistanceFromUser.Trim('m'))).ToList();
             }
             CustomPinList.Clear();
-            sortedList.ForEach((pin) => CustomPinList.Add(pin));
+           /* if (categoriesToShow == "all")
+            {*/
+                sortedList.ForEach((pin) => CustomPinList.Add(pin));
+            /*} else {
+                foreach (CustomPin pin in sortedList)
+                {
+                    if (pin.Category == categoriesToShow)
+                    {
+                        CustomPinList.Add(pin);
+                    }
+                }
+            }*/
             AddPinsToMap();
         
         }
