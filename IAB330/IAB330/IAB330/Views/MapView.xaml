@@ -252,11 +252,11 @@
 
         <!-- Right Side -->
         <Label Text="QUICK VIEW" Grid.Row="6" Grid.Column="4" Style="{StaticResource qaLabelStyle}" />
-        
+
         <Button Text="{Binding SortButtonText}" TextColor="Gray" HeightRequest="40" 
                 Grid.Row="7" Grid.Column="4" FontFamily="Arial" FontAttributes="None" FontSize="Medium"
                 Command="{Binding SortButtonCommand}" Style="{StaticResource qaBaseStyle}" />
-        
+
         <ListView ItemsSource="{Binding CustomPinList}" SelectedItem="{Binding SelectedPinListItem, Mode=TwoWay}" 
                   Grid.Row="8" Grid.Column="4" Style="{StaticResource qaListStyle}" >
             <ListView.ItemTemplate>
@@ -283,5 +283,32 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+        <!-- category list-->
+        <ListView ItemsSource="{Binding Categories}" SelectedItem="{Binding CategoriesToShowObj, Mode=TwoWay}" 
+                  Grid.Row="6" Grid.RowSpan="3" Grid.Column="1" Grid.ColumnSpan="2"
+                  RowHeight="50" HeightRequest="252" BackgroundColor="Transparent" Style="{StaticResource qaListStyle}" >
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <Image Source="{Binding Address}" Grid.Row="0" Grid.RowSpan="2" Grid.Column="1"/>
+                            <!--<Label Text="{Binding Label}" Grid.Row="0" Grid.Column="2"  VerticalOptions="End" />-->
+                        </Grid>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <Button Text="Show All" TextColor="Gray" HeightRequest="40" 
+                Grid.Row="9" Grid.RowSpan="2" Grid.Column="1" Grid.ColumnSpan="2" FontFamily="Arial" FontAttributes="None" FontSize="Medium"
+                Command="{Binding ShowAllCategoriesCommand}" IsVisible="{Binding IsShowQuickAccess}" />
     </Grid>
 </ContentPage>

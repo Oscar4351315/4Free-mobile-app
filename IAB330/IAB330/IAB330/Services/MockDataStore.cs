@@ -20,14 +20,14 @@ namespace IAB330.Services
             // Pre-defined items
             var mockPins = new List<CustomPin>
             {
-                new CustomPin() { Label = "Bandaids", Address = "icon_health.png"},
-                new CustomPin() { Label = "Plushie", Address = "icon_misc.png" },
-                new CustomPin() { Label = "Redbull", Address = "icon_food.png"},
-                new CustomPin() { Label = "Frisbee", Address = "icon_sport.png"},
-                new CustomPin() { Label = "Pens", Address = "icon_pen.png"},
-                new CustomPin() { Label = "Panadol", Address = "icon_health.png"},
-                new CustomPin() { Label = "HairWax", Address = "icon_misc.png"},
-                new CustomPin() { Label = "Eraser", Address = "icon_pen.png"},
+                new CustomPin() { Label = "Bandaids", Address = "icon_health.png", Category = "Health"},
+                new CustomPin() { Label = "Plushie", Address = "icon_misc.png", Category = "Misc" },
+                new CustomPin() { Label = "Redbull", Address = "icon_food.png", Category = "Food / Drink"},
+                new CustomPin() { Label = "Frisbee", Address = "icon_sport.png", Category = "Sports"},
+                new CustomPin() { Label = "Pens", Address = "icon_pen.png", Category = "Stationary"},
+                new CustomPin() { Label = "Panadol", Address = "icon_health.png", Category = "Health"},
+                new CustomPin() { Label = "HairWax", Address = "icon_misc.png", Category = "Misc"},
+                new CustomPin() { Label = "Eraser", Address = "icon_pen.png", Category = "Stationary"},
             };
 
             // Giving mock pins random offsets for position and end time
