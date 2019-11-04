@@ -284,7 +284,7 @@
             </ListView.ItemTemplate>
         </ListView>
         <!-- category list-->
-        <ListView ItemsSource="{Binding Categories}" SelectedItem="{Binding CategoriesToShow, Mode=TwoWay}" 
+        <ListView ItemsSource="{Binding Categories}" SelectedItem="{Binding CategoriesToShowObj, Mode=TwoWay}" 
                   Grid.Row="6" Grid.RowSpan="3" Grid.Column="1" Grid.ColumnSpan="2"
                   RowHeight="50" HeightRequest="252" BackgroundColor="Transparent" Style="{StaticResource qaListStyle}" >
             <ListView.ItemTemplate>

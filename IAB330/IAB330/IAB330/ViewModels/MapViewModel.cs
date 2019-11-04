@@ -31,6 +31,7 @@ namespace IAB330.ViewModels
                 Map = new CustomMap { MapType = MapType.Street, IsShowingUser = true, };
                 Map.CustomPins = new List<CustomPin> {  };
                 CustomPinList = new ObservableCollection<CustomPin>();
+                PermanentCustomPinList = new ObservableCollection<CustomPin>();
                 Categories = new List<CustomPin>();
 
 
@@ -72,6 +73,7 @@ namespace IAB330.ViewModels
         // View bindings
         public CustomMap Map { get; set; }
         public ObservableCollection<CustomPin> CustomPinList { get; set; }
+        public ObservableCollection<CustomPin> PermanentCustomPinList { get; set; }
         public Command ConfirmPinCommand { get; }
         public Command ShowSettingsCommand { get; }
         public Command ToggleQuickAccessCommand { get; }
@@ -101,6 +103,7 @@ namespace IAB330.ViewModels
                     SetProperty(ref categoriesToShow, categoriesToShowObj.Category);
                     Debugger.Log(1, "functions", "new category");
                 }
+                UpdateSort();
                 AddPinsToMap();
             }
         }
@@ -183,6 +186,7 @@ namespace IAB330.ViewModels
 
                 pin.MarkerID = pinID;
                 CustomPinList.Add(pin);
+                PermanentCustomPinList.Add(pin);
                 pinID += 1;
             }
 
@@ -317,6 +321,7 @@ namespace IAB330.ViewModels
             tempCustomPin.EndTime = EndTimeEntry;
             tempCustomPin.Address = new ImageService().CategoryToImage(CategoryEntry);
             CustomPinList.Add(tempCustomPin);
+            PermanentCustomPinList.Add(tempCustomPin);
             pinID += 1;
             ResetAll();
         }
@@ -324,6 +329,7 @@ namespace IAB330.ViewModels
         void ShowAllCategories()
         {
             categoriesToShow = "all";
+            UpdateSort();
             AddPinsToMap();
         }
         
@@ -363,7 +369,7 @@ namespace IAB330.ViewModels
         // Reorders the quick view list based on the sort category selected
         public void UpdateSort(bool toggleMode = false)
         {
-            List<CustomPin> tempList = CustomPinList.ToList();
+            List<CustomPin> tempList = PermanentCustomPinList.ToList();
             /*List<CustomPin> tempList = new List<CustomPin>();
             if (categoriesToShow == "all")
             {
@@ -381,6 +387,7 @@ namespace IAB330.ViewModels
             }*/
             //List<CustomPin> tempList = CustomPinList.ToList();
             List<CustomPin> sortedList = new List<CustomPin>();
+            //List<CustomPin> tempList = PermanentCustomPinList.ToList();
 
             if (toggleMode)
             {
@@ -397,10 +404,10 @@ namespace IAB330.ViewModels
                 sortedList = tempList.OrderBy(pin => Int32.Parse(pin.DistanceFromUser.Trim('m'))).ToList();
             }
             CustomPinList.Clear();
-           /* if (categoriesToShow == "all")
-            {*/
+            if (categoriesToShow == "all")
+            {
                 sortedList.ForEach((pin) => CustomPinList.Add(pin));
-            /*} else {
+            } else {
                 foreach (CustomPin pin in sortedList)
                 {
                     if (pin.Category == categoriesToShow)
@@ -408,7 +415,7 @@ namespace IAB330.ViewModels
                         CustomPinList.Add(pin);
                     }
                 }
-            }*/
+            }
             AddPinsToMap();
         
         }
