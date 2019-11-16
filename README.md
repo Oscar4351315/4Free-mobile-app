@@ -1,9 +1,16 @@
-**IAB330 Assessment 3**
+# IAB330 Assessment 3  
+Assignment for QUT IAB330 Unit (Mobile Application Development).  
+Used Xamarin for cross-platform mobile app development.
 
-**App name - 4Free**
+## Project Team
+Oscar Li
+Steven Hua
+Markus Henriksen Fossnes
 
-**Group members:**
+## App name - 4Free
+The purpose of our mobile app is to serve as a platform for users to connect and share information about local events that are giving away free items. It can also be a starting point for people to find free items.
 
-Oscar Li - n9706909  
-Steven Hua - n10317601  
-Markus Henriksen Fossnes - n10305343  
+
+
+
+
